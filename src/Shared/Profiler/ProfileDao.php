@@ -26,7 +26,7 @@ class ProfileDao
      */
     public function query(string $query, array $binds): void
     {
-        $this->data->add('dao.query', [
+        $this->data->add('shared.dao.query', [
             'query' => substr($query, 0, 1000),
             'binds' => $binds,
             'duration' => $this->timer->get(),

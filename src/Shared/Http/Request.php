@@ -10,8 +10,10 @@ use Laminas\Diactoros\ServerRequest;
 use Xtompie\Result\ErrorCollection;
 use Xtompie\Typed\Typed;
 
-class Request extends ServerRequest implements Provider
+final class Request extends ServerRequest implements Provider
 {
+    private ?array $resolvedBody = null;
+
     public static function provide(string $abstract, Container $container): object
     {
         return ServerRequestFactory::fromGlobals(
@@ -46,22 +48,22 @@ class Request extends ServerRequest implements Provider
     }
 
     /**
-     * @return array<string, mixed>|object|null
+     * @return array<string, mixed>
      */
-    public function body(): null|array|object
+    public function body(): array
     {
-        $parsed = $this->getParsedBody();
-        if ($parsed) {
-            return $parsed;
+        if ($this->resolvedBody === null) {
+            $parsed = $this->getParsedBody();
+            if (is_array($parsed) && $parsed) {
+                $this->resolvedBody = $parsed;
+            } else {
+                $body = $this->getBody()->getContents();
+                $data = json_decode($body, true);
+                $this->resolvedBody = is_array($data) ? $data : [];
+            }
         }
 
-        $body = $this->getBody()->getContents();
-        $data = json_decode($body, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return [];
-        }
-
-        return $data;
+        return $this->resolvedBody;
     }
 
     /**

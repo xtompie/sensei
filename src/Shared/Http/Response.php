@@ -178,7 +178,7 @@ final class Response extends DiactorosResponse
         return static::redirect($url, $status, $headers);
     }
 
-    public static function badRequest(?ErrorCollection $errors = null): Response
+    public static function errors(?ErrorCollection $errors = null, ?int $status = 400, ?string $msg = null): Response
     {
         if ($errors !== null) {
             return Response::json(
@@ -191,10 +191,15 @@ final class Response extends DiactorosResponse
                         ]
                     ),
                 ],
-                status: 400
+                status: $status,
             );
         }
-        return Response::new(body: '400 Bad Request', status: 400);
+        return Response::new(body: $msg ?: 'Error ' . $status, status: $status);
+    }
+
+    public static function badRequest(?ErrorCollection $errors = null, ?int $status = 400): Response
+    {
+        return static::errors(errors: $errors, status: $status, msg: '400 Bad Request');
     }
 
     public static function unauthorized(): Response
@@ -214,7 +219,12 @@ final class Response extends DiactorosResponse
 
     public static function methodNotAllowed(): Response
     {
-        return Response::new(body: '405 Method Not Allowed', status: 405);
+        return static::new(body: '405 Method Not Allowed', status: 405);
+    }
+
+    public static function conflict(?ErrorCollection $errors = null, ?int $status = 409): Response
+    {
+        return static::errors(errors: $errors, status: $status, msg: '409 Conflict');
     }
 
     public static function InternalServerError(): Response

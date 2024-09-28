@@ -23,6 +23,8 @@ use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
+use Xtompie\Result\Error;
+use Xtompie\Result\ErrorCollection;
 
 final class Kernel
 {
@@ -56,6 +58,14 @@ final class Kernel
     {
         if ($output instanceof Response) {
             return $output;
+        }
+
+        if ($output instanceof ErrorCollection) {
+            return Response::badRequest(errors: $output);
+        }
+
+        if ($output instanceof Error) {
+            return Response::badRequest(errors: ErrorCollection::ofError($output));
         }
 
         if (is_string($output)) {
