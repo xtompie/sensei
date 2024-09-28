@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Schema\Type;
+namespace App\Shared\Db\Schema;
 
 class IntegerType extends Type
 {

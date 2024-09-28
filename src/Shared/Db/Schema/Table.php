@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Schema\Table;
-
-use App\Shared\Db\Schema\Column\Column;
-use App\Shared\Db\Schema\Index\Index;
+namespace App\Shared\Db\Schema;
 
 class Table
 {

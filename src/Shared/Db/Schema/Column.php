@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Schema\Column;
-
-use App\Shared\Db\Schema\Type\Type;
+namespace App\Shared\Db\Schema;
 
 class Column
 {

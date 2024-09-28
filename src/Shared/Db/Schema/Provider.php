@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Schema\Provider;
+namespace App\Shared\Db\Schema;
 
 use App\Registry\Db;
-use App\Shared\Db\Schema\Column\Column;
-use App\Shared\Db\Schema\Table\Table;
 use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
 use Doctrine\DBAL\Schema\Table as DoctrineTable;
 use Doctrine\Migrations\Provider\SchemaProvider;

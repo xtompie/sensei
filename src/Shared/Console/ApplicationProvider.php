@@ -9,7 +9,7 @@ use App\Shared\Console\Signature\Argument as AttributeArgument;
 use App\Shared\Console\Signature\Description as AttributeDescription;
 use App\Shared\Console\Signature\Name as AttributeName;
 use App\Shared\Console\Signature\Option as AttributeOption;
-use App\Shared\Db\Schema\Provider\Provider;
+use App\Shared\Db\Schema\Provider;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
 use Doctrine\DBAL\DriverManager;

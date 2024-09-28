@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Schema\Index;
+namespace App\Shared\Db\Schema;
 
 class Index
 {

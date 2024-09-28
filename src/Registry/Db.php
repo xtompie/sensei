@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Registry;
 
-use App\Shared\Db\Schema\Table\Table;
+use App\Shared\Db\Schema\Table;
 use Generator;
 
 class Db
