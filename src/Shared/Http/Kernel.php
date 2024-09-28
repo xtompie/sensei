@@ -62,6 +62,10 @@ final class Kernel
             return Response::new(body: $output);
         }
 
+        if (is_array($output)) {
+            return Response::json(body: $output);
+        }
+
         throw new Exception('Invalid response');
     }
 
