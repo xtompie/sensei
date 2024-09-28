@@ -50,7 +50,18 @@ class Request extends ServerRequest implements Provider
      */
     public function body(): null|array|object
     {
-        return $this->getParsedBody();
+        $parsed = $this->getParsedBody();
+        if ($parsed) {
+            return $parsed;
+        }
+
+        $body = $this->getBody()->getContents();
+        $data = json_decode($body, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return [];
+        }
+
+        return $data;
     }
 
     /**
