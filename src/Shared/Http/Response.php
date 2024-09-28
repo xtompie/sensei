@@ -107,6 +107,40 @@ final class Response extends DiactorosResponse
     }
 
     /**
+     * Create a created response (HTTP 201).
+     *
+     * @param string|null $location The location header (optional)
+     * @param array<string, string|array<string>> $headers The response headers
+     * @return Response
+     *
+     * @example
+     * Response::created('/resources/1234');
+     */
+    public static function created(?string $location = null, array $headers = []): Response
+    {
+        if ($location !== null) {
+            $headers['Location'] = $location;
+        }
+
+        return new Response(status: 201, headers: $headers);
+    }
+
+    /**
+     * Create a no content response (HTTP 204).
+     *
+     * @param int $status The HTTP status code (default: 204)
+     * @param array<string, string|array<string>> $headers The response headers
+     * @return Response
+     *
+     * @example
+     * Response::noContent(204);
+     */
+    public static function noContent(int $status = 204, array $headers = []): Response
+    {
+        return new Response(status: $status, headers: $headers);
+    }
+
+    /**
      * Create a redirect response.
      *
      * @param string $url The redirect URL
@@ -186,21 +220,6 @@ final class Response extends DiactorosResponse
     public static function InternalServerError(): Response
     {
         return Container::container()->get(InternalServerError::class)->__invoke();
-    }
-
-    /**
-     * Create a no content response (HTTP 204).
-     *
-     * @param int $status The HTTP status code (default: 204)
-     * @param array<string, string|array<string>> $headers The response headers
-     * @return Response
-     *
-     * @example
-     * Response::noContent(204);
-     */
-    public static function noContent(int $status = 204, array $headers = []): Response
-    {
-        return new Response(status: $status, headers: $headers);
     }
 
     /**
