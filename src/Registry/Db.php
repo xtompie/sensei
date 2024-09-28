@@ -7,7 +7,7 @@ namespace App\Registry;
 use App\Shared\Db\Schema\Table\Table;
 use Generator;
 
-class DbSchema
+class Db
 {
     /**
      * @return Generator<Table>

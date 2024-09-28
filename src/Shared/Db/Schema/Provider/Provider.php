@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Db\Schema\Provider;
 
-use App\Registry\DbSchema;
+use App\Registry\Db;
 use App\Shared\Db\Schema\Column\Column;
 use App\Shared\Db\Schema\Table\Table;
 use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
@@ -16,7 +16,7 @@ class Provider implements SchemaProvider
     public function createSchema(): DoctrineSchema
     {
         $doctrineSchema = new DoctrineSchema();
-        $this->tables(iterator_to_array(DbSchema::tables()), $doctrineSchema);
+        $this->tables(iterator_to_array(Db::tables()), $doctrineSchema);
         return $doctrineSchema;
     }
 
