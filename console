@@ -1,0 +1,10 @@
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+use App\Shared\Container\Container;
+use App\Shared\Console\Kernel as ConsoleKernel;
+use App\Shared\Kernel\Kernel as MainKernel;
+
+Container::container()->get(MainKernel::class)->__invoke(appDir: __DIR__);
+exit(Container::container()->get(ConsoleKernel::class)->__invoke());

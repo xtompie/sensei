@@ -1,0 +1,7 @@
+parameters:
+    errorFormat: raw
+    level: 9
+    paths:
+        - ../../src
+    excludePaths:
+        - '**/*.tpl.php'

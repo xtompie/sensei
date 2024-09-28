@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+      "pwarchol.vscode-php-file-link",
+      "neilbrayfield.php-docblocker",
+      "sleistner.vscode-fileutils",
+      "Cardinal90.multi-cursor-case-preserve",
+      "richie5um2.vscode-sort-json"
+    ]
+  }

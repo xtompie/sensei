@@ -1,0 +1,100 @@
+{
+	"phpclass": {
+		"prefix": "phpclass",
+		"scope": "php",
+		"body": [
+			"php",
+			"",
+			"declare(strict_types=1);",
+			"",
+			"namespace App\\\\${TM_DIRECTORY/(?:.*[\\/\\\\])?src[\\/\\\\]([^\\/\\\\]*)[\\/\\\\]?|[\\/\\\\]([^\\/\\\\]*)/$1\\$2/g};",
+			"",
+			"class ${TM_FILENAME_BASE}",
+			"{",
+			"\tpublic function __construct(",
+			"\t\t$1",
+			"\t) {",
+			"\t}",
+			"",
+			"\tpublic function __invoke($2)$3",
+			"\t{",
+			"\t\t$0",
+			"\t}",
+			"}",
+			"",
+		]
+	},
+	"phpinterface": {
+		"prefix": "phpinterface",
+		"scope": "php",
+		"body": [
+			"php",
+			"",
+			"declare(strict_types=1);",
+			"",
+			"namespace App\\\\${TM_DIRECTORY/(?:.*[\\/\\\\])?src[\\/\\\\]([^\\/\\\\]*)[\\/\\\\]?|[\\/\\\\]([^\\/\\\\]*)/$1\\$2/g};",
+			"",
+			"interface ${TM_FILENAME_BASE}",
+			"{",
+			"\t$0",
+			"}",
+			"",
+		]
+	},
+	"phpresult": {
+		"prefix": "phpresult",
+		"scope": "php",
+		"body": [
+			"php",
+			"",
+			"declare(strict_types=1);",
+			"",
+			"namespace App\\\\${TM_DIRECTORY/(?:.*[\\/\\\\])?src[\\/\\\\]([^\\/\\\\]*)[\\/\\\\]?|[\\/\\\\]([^\\/\\\\]*)/$1\\$2/g};",
+			"",
+			"use Xtompie\\Result\\Result;",
+			"",
+			"class ${TM_FILENAME_BASE} extends Result",
+			"{",
+			"\tpublic static function of${1/(.)(.*)/${1:/upcase}$2/}(${2:Object} \\$${1/(.)(.*)/${1:/downcase}$2/}): static",
+			"\t{",
+			"\t\treturn static::ofValue(\\$${1/(.)(.*)/${1:/downcase}$2/});",
+			"\t}",
+			"",
+			"\tpublic function ${1/(.)(.*)/${1:/downcase}$2/}(): ${2:Object}",
+			"\t{",
+			"\t\treturn \\$this->value();",
+			"\t}",
+			"}",
+			"$0",
+		]
+	},
+	"namespace": {
+		"prefix": "namespace",
+		"scope": "php",
+		"body": [
+			"namespace App\\\\${TM_DIRECTORY/(?:.*[\\/\\\\])?src[\\/\\\\]([^\\/\\\\]*)[\\/\\\\]?|[\\/\\\\]([^\\/\\\\]*)/$1\\$2/g};",
+		]
+	},
+	"construct": {
+		"prefix": "construct",
+		"scope": "php",
+		"body": [
+			"public function __construct(",
+			"\t$0",
+			"\t) {",
+			"\t}",
+		]
+	},
+	"with": {
+		"prefix": "with",
+		"scope": "php",
+		"body": [
+			"public function with${1/(.)(.*)/${1:/upcase}$2/}($2 \\$${1/(.)(.*)/${1:/downcase}$2/}): static",
+			"{",
+			"\t\\$new = clone \\$this;",
+			"\t\\$new->${1/(.)(.*)/${1:/downcase}$2/} = \\$${1/(.)(.*)/${1:/downcase}$2/};",
+			"\treturn \\$new;",
+			"}$0",
+		]
+	},
+}

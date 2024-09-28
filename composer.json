@@ -1,0 +1,83 @@
+{
+    "name": "xtompie/sensei",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        },
+        "exclude-from-classmap": [
+            "./src/Shared/Db/Migrations/"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Tomasz Pielczyk",
+            "email": "tomasz.pielczyk@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "doctrine/migrations": "^3.8",
+        "filp/whoops": "^2.15",
+        "laminas/laminas-diactoros": "^3.4",
+        "laminas/laminas-httphandlerrunner": "^2.10",
+        "psr/http-message": "^2.0",
+        "ramsey/uuid": "^4.7",
+        "symfony/cache": "^7.1",
+        "symfony/console": "^7.1",
+        "symfony/routing": "^7.1",
+        "symfony/var-dumper": "^7.1",
+        "xtompie/container": "^1.0",
+        "xtompie/dao": "^1.6",
+        "xtompie/monitor": "^1.3",
+        "xtompie/result": "^1.7",
+        "xtompie/tpl": "^1.0",
+        "xtompie/typed": "^4.0",
+        "xtompie/validation": "^4.2"
+    },
+    "scripts": {
+        "check-psr4": "composer dump-autoload --strict-psr --optimize",
+        "db:diff": "php console app:db:diff",
+        "db:migrate": "php console app:db:migrate",
+        "db:migrate-no-i": "php console app:db:migrate --no-interaction --allow-no-migration",
+        "mrd": "php tools/mrd/mrd.php",
+        "php-cs-fixer": "tools/php-cs-fixer/vendor/bin/php-cs-fixer --config=tools/php-cs-fixer/.php-cs-fixer.php fix src",
+        "php-cs-fixer-install": "composer install --working-dir=tools/php-cs-fixer",
+        "phpstan": "./tools/phpstan/vendor/bin/phpstan analyse --memory-limit=2G --configuration=tools/phpstan/phpstan.neon",
+        "phpstan-install": "composer install --working-dir=tools/phpstan",
+        "phpstan-clear": "./tools/phpstan/vendor/bin/phpstan clear-result-cache",
+        "precommit": [
+            "composer php-cs-fixer",
+            "composer tpl-cs-fixer",
+            "composer tpl-audit",
+            "composer check-psr4",
+            "composer phpstan"
+        ],
+        "pc": "composer precommit",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "php -S 127.0.0.1:8000 -t public"
+        ],
+        "setup": "composer install && composer app:env::",
+        "test": "./vendor/bin/pest",
+        "tpl-audit": "./vendor/bin/xtompie-tpl-audit.sh -p src -s .tpl.php",
+        "tpl-cs-fixer": "tools/tpl-cs-fixer/vendor/bin/php-cs-fixer --config=tools/tpl-cs-fixer/.php-cs-fixer.php fix",
+        "tpl-cs-fixer-install": "composer install --working-dir=tools/tpl-cs-fixer",
+        "up": [
+            "composer install",
+            "composer phpstan-install",
+            "composer php-cs-fixer-install",
+            "composer tpl-cs-fixer-install",
+            "composer db:migrate-no-i"
+        ]
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
