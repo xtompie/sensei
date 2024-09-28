@@ -12,6 +12,9 @@ use Xtompie\Typed\Typed;
 
 final class Request extends ServerRequest implements Provider
 {
+    /**
+     * @var array<string, mixed>|null
+     */
     private ?array $resolvedBody = null;
 
     public static function provide(string $abstract, Container $container): object
