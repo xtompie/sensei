@@ -42,6 +42,21 @@ final class Response extends DiactorosResponse
     }
 
     /**
+     * Create an OK response (HTTP 200).
+     *
+     * @param string $body The response body content
+     * @param array<string, string|array<string>> $headers The response headers
+     * @return Response
+     *
+     * @example
+     * Response::ok('OK');
+     */
+    public static function ok(string $body = '', array $headers = []): Response
+    {
+        return static::new(body: $body, status: 200, headers: $headers);
+    }
+
+    /**
      * Create an HTML response.
      *
      * @param string $body The HTML content to be sent
@@ -123,6 +138,25 @@ final class Response extends DiactorosResponse
         }
 
         return new Response(status: 201, headers: $headers);
+    }
+
+    /**
+     * Create an accepted response (HTTP 202).
+     *
+     * @param string|null $location The location header (optional)
+     * @param array<string, string|array<string>> $headers The response headers
+     * @return Response
+     *
+     * @example
+     * Response::accepted('/statuses/1234');
+     */
+    public static function accepted(?string $location = null, array $headers = []): Response
+    {
+        if ($location !== null) {
+            $headers['Location'] = $location;
+        }
+
+        return new Response(status: 202, headers: $headers);
     }
 
     /**
