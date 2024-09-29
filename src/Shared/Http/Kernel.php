@@ -8,8 +8,8 @@ use App\Shared\Aop\Advice;
 use App\Shared\Aop\Aop;
 use App\Shared\Container\Container;
 use App\Shared\Http\Aop\CsrfVerify;
-use App\Shared\Http\Contract\RequestBody;
-use App\Shared\Http\Contract\RequestQuery;
+use App\Shared\Http\Contract\Body;
+use App\Shared\Http\Contract\Query;
 use App\Shared\Kernel\Debug;
 use App\Shared\Profiler\HttpReporter;
 use App\Shared\Profiler\ProfileHttpRequest;
@@ -149,10 +149,10 @@ final class Kernel
         if ($class === null) {
             return null;
         }
-        if ($class->implementsInterface(RequestBody::class)) {
+        if ($class->implementsInterface(Body::class)) {
             return fn () => $this->request->bodyTyped($abstract);
         }
-        if ($class->implementsInterface(RequestQuery::class)) {
+        if ($class->implementsInterface(Query::class)) {
             return fn () => $this->request->queryTyped($abstract);
         }
         return null;
