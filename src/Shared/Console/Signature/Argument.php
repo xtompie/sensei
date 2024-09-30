@@ -8,7 +8,7 @@ use App\Shared\Console\Argument as ConsoleArgument;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
-final readonly class Argument
+final class Argument
 {
     public function __construct(
         private string $name,

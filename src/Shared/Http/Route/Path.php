@@ -7,7 +7,7 @@ namespace App\Shared\Http\Route;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-final readonly class Path
+final class Path
 {
     public function __construct(
         public string $path,

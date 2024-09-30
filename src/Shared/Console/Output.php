@@ -54,12 +54,21 @@ class Output
     public function result(Result $result): int
     {
         if ($result->success()) {
-            $this->infoln('OK');
+            $value = $result->value();
+            if ($value !== null) {
+                if (is_scalar($value) || (is_object($value) && method_exists($value, '__toString'))) {
+                    $this->writeln((string) $value);
+                } else {
+                    $this->writeln(print_r($value, true));
+                }
+            }
             return 0;
         }
         $this->errorln('ERROR');
         $result->errors()->each(
-            fn (Error $error) => $this->errorln($error->space() . ': ' . $error->message())
+            fn (Error $error) => $this->errorln(
+                $error->space() . ': ' . implode(' - ', array_filter([$error->key(), $error->message()]))
+            )
         );
         return 1;
     }
@@ -68,15 +77,17 @@ class Output
      * @param array<array<string, string>> $data
      * @param boolean $header
      * @param array<'center'|'left'|'right'> $align
+     * @param 'default'|'compact'|'borderless'|'box'|'symfony-style-guide' $style
      * @return void
      */
-    public function table(array $data, bool $header = true, array $align = []): void
+    public function table(array $data, bool $header = true, array $align = [], string $style = 'default'): void
     {
         Container::container()->get(TableOutput::class)->__invoke(
             output: $this->output(),
             data: $data,
             header: $header,
             align: $align,
+            style: $style,
         );
     }
 }

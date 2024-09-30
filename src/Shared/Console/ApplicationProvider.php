@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Shared\Console;
 
 use App\Registry\Console;
-use App\Shared\Console\Signature\Argument as AttributeArgument;
-use App\Shared\Console\Signature\Description as AttributeDescription;
-use App\Shared\Console\Signature\Name as AttributeName;
-use App\Shared\Console\Signature\Option as AttributeOption;
+use App\Shared\Console\Signature\Argument as SignatureArgument;
+use App\Shared\Console\Signature\Description as SignatureDescription;
+use App\Shared\Console\Signature\Name as SignatureName;
+use App\Shared\Console\Signature\Option as SignatureOption;
 use App\Shared\Db\Schema\Provider;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
@@ -213,16 +213,16 @@ final class ApplicationProvider
 
         foreach ($reflectionClass->getMethod('__invoke')->getAttributes() as $attribute) {
             $attr = $attribute->newInstance();
-            if ($attr instanceof AttributeName) {
+            if ($attr instanceof SignatureName) {
                 $name = (string) $attr;
             }
-            if ($attr instanceof AttributeDescription) {
+            if ($attr instanceof SignatureDescription) {
                 $description = (string) $attr;
             }
-            if ($attr instanceof AttributeArgument) {
+            if ($attr instanceof SignatureArgument) {
                 $arguments[] = $attr->toArgument();
             }
-            if ($attr instanceof AttributeOption) {
+            if ($attr instanceof SignatureOption) {
                 $options[] = $attr->toOption();
             }
         }

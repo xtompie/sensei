@@ -7,7 +7,7 @@ namespace App\Shared\Console\Signature;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-final readonly class Name
+final class Name
 {
     public function __construct(
         private string $name,

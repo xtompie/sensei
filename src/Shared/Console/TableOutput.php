@@ -16,6 +16,7 @@ class TableOutput
      * @param array<array<string, string>> $data
      * @param boolean $header
      * @param array<'center'|'left'|'right'> $align
+     * @param 'default'|'compact'|'borderless'|'box'|'symfony-style-guide' $style
      * @return void
      */
     public function __invoke(
@@ -23,8 +24,11 @@ class TableOutput
         array $data,
         bool $header = true,
         array $align = [],
+        string $style = 'default',
     ): void {
         $table = new Table($output);
+        $table->setStyle($style);
+
         if ($header && count($data) > 0) {
             $table->setHeaders(array_keys($data[0]));
         }

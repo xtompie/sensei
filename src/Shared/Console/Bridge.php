@@ -12,6 +12,9 @@ use Exception;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Xtompie\Result\Error;
+use Xtompie\Result\ErrorCollection;
+use Xtompie\Result\Result;
 
 class Bridge extends SymfonyCommand
 {
@@ -21,9 +24,10 @@ class Bridge extends SymfonyCommand
      * @param Command $command
      */
     public function __construct(
+        protected Command $command,
         protected Context $context,
         protected Debug $debug,
-        protected Command $command,
+        protected Output $output,
     ) {
         parent::__construct();
     }
@@ -49,18 +53,64 @@ class Bridge extends SymfonyCommand
             throw new Exception('Invalid command');
         }
 
-        $args = Container::container()->callArgs([$this->command->command(), '__invoke']);
-        $exitCode = Aop::aop(
+        $args = Container::container()->callArgs([$this->command->command(), '__invoke'], $this->args($input));
+        $result = Aop::aop(
             method: "{$this->command->command()}::__invoke",
             args: $args,
             main: fn (...$args) => $command(...$args),
         );
 
-        if (!is_int($exitCode)) {
-            $exitCode = $this->context->exitCode();
-        }
+        $exitCode = $this->result($result);
+
         $this->context->pop();
 
         return $exitCode;
+    }
+
+    private function result(mixed $result): int
+    {
+        if ($result instanceof Result) {
+            return $this->output->result($result);
+        }
+
+        if ($result instanceof ErrorCollection) {
+            return $this->output->result(Result::ofErrors($result));
+        }
+
+        if ($result instanceof Error) {
+            return $this->output->result(Result::ofError($result));
+        }
+
+        if (is_bool($result)) {
+            return $result ? 0 : 1;
+        }
+
+        if (is_int($result)) {
+            return $result;
+        }
+
+        return $this->context->exitCode();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function args(InputInterface $input): array
+    {
+        $args = $input->getArguments();
+
+        foreach ($input->getOptions() as $name => $value) {
+            if ($input->hasParameterOption('--' . $name)) {
+                if ($input->getOption($name) === null) {
+                    $args[$name] = true;
+                } elseif ($input->getOption($name) === '') {
+                    $args[$name] = '';
+                } else {
+                    $args[$name] = $value;
+                }
+            }
+        }
+
+        return $args;
     }
 }
