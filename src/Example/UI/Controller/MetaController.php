@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace App\Example\UI\Controller;
 
 use App\Shared\Http\Controller;
+use App\Shared\Http\ControllerMeta;
+use App\Shared\Http\ControllerWithMeta;
 use App\Shared\Http\Response;
 
-class DefineController
+class MetaController implements Controller, ControllerWithMeta
 {
-    public static function controller(): Controller
+    public static function controllerMeta(): ControllerMeta
     {
-        return new Controller(path: '/example/define');
+        return new ControllerMeta(path: '/example/meta');
     }
 
     public function __invoke(): Response

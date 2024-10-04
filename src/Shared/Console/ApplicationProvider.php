@@ -18,9 +18,13 @@ use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Provider\SchemaProvider;
 use Doctrine\Migrations\Tools\Console\Command as DoctrineCommand;
+use Exception;
 use Generator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionClass;
-use ReflectionNamedType;
+use RegexIterator;
+use SplFileInfo;
 use Symfony\Component\Console\Command\Command as SymfonyCommnd;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,18 +32,23 @@ use Xtompie\Container\Container;
 
 final class ApplicationProvider
 {
-    public static function provide(): Application
+    public function __construct(
+        private AppDir $appDir,
+    ) {
+    }
+
+    public function __invoke(): Application
     {
         $application = new Application();
         $application->setAutoExit(false);
-        foreach (static::commands() as $command) {
-            $application->add(static::symfony($command));
+        foreach ($this->commands() as $command) {
+            $application->add($this->symfony($command));
         }
-        static::doctrine($application);
+        $this->doctrine($application);
         return $application;
     }
 
-    private static function symfony(Command $definition): SymfonyCommnd
+    private function symfony(CommandMeta $definition): SymfonyCommnd
     {
         /** @var Bridge $bridge */
         $bridge = Container::container()->resolve(
@@ -76,7 +85,7 @@ final class ApplicationProvider
         return $bridge;
     }
 
-    private static function doctrine(Application $application): void
+    private function doctrine(Application $application): void
     {
         $container = Container::container();
         $appDir = $container->get(AppDir::class);
@@ -133,69 +142,101 @@ final class ApplicationProvider
     }
 
     /**
-     * @return Generator<Command>
+     * @return Generator<class-string>
      */
-    private static function commands(): Generator
+    private function classesUsingRegistry(): Generator
     {
-        foreach (Console::commands() as $class) {
-            if (!class_exists($class)) {
-                return throw new \InvalidArgumentException('Controller must be a valid class-string.');
-            }
+        yield from Console::commands();
+    }
 
-            $command = static::commandUsingStatic($class);
-
-            if (!$command) {
-                $command = static::comamndUsingAttributes($class);
-            }
-
-            if ($command === null) {
+    /**
+     * @return Generator<class-string>
+     */
+    private function classesUsingFind(): Generator
+    {
+        $src = $this->appDir->__invoke() . '/src';
+        $directory = new RecursiveDirectoryIterator($src);
+        $iterator = new RecursiveIteratorIterator($directory);
+        $files = new RegexIterator($iterator, '/Command\.php$/');
+        $cutStart = strlen("$src/");
+        $cutEnd = strlen('.php');
+        foreach ($files as $file) {
+            if (!$file instanceof SplFileInfo) {
                 continue;
             }
+            if (!$file->isFile()) {
+                continue;
+            }
+            $class = substr($file->getPathname(), $cutStart);
+            $class = substr($class, 0, -$cutEnd);
+            $class = str_replace('/', '\\', $class);
+            $class = 'App\\' . $class;
+            if (!class_exists($class)) {
+                continue;
+            }
+            if (!in_array(Command::class, class_implements($class))) {
+                continue;
+            }
+            yield $class;
+        }
+    }
 
+    /**
+     * @return Generator<class-string>
+     */
+    private function classes(): Generator
+    {
+        yield from $this->classesUsingRegistry();
+        yield from $this->classesUsingFind();
+    }
+
+    /**
+     * @return Generator<CommandMeta>
+     */
+    private function commands(): Generator
+    {
+        $unique = [];
+        foreach ($this->classes() as $class) {
+            if (isset($unique[$class])) {
+                continue;
+            }
+            $unique[$class] = true;
+            if (!class_exists($class)) {
+                return throw new \InvalidArgumentException('Command must be a valid class-string.');
+            }
+            $command = $this->commandUsingStatic($class);
+            if (!$command) {
+                $command = $this->comamndUsingAttributes($class);
+            }
+            if (!$command) {
+                throw new Exception("Command $class cannot be resolved using meta or attributes.");
+            }
             yield $command;
         }
     }
 
-    private static function commandUsingStatic(string $class): ?Command
+    private function commandUsingStatic(string $class): ?CommandMeta
     {
         if (!class_exists($class)) {
             return null;
         }
 
         $reflectionClass = new ReflectionClass($class);
-
-        if (!$reflectionClass->hasMethod('command')) {
+        if (!$reflectionClass->implementsInterface(CommandWithMeta::class)) {
             return null;
         }
 
-        $method = $reflectionClass->getMethod('command');
-
-        if (!$method->isPublic() || !$method->isStatic()) {
+        $command = $class::commandMeta();
+        if (!$command instanceof CommandMeta) {
             return null;
         }
 
-        if ($method->getNumberOfRequiredParameters() > 0) {
-            return null;
-        }
+        $command->setCommand($class);
 
-        $returnType = $method->getReturnType();
-
-        if (!$returnType instanceof ReflectionNamedType || $returnType->isBuiltin()) {
-            return null;
-        }
-
-        $controller = $class::command();
-
-        if (!$controller instanceof Command) {
-            return null;
-        }
-
-        $controller->setCommand($class);
-
-        return $controller;
+        return $command;
     }
 
-    private static function comamndUsingAttributes(string $class): ?Command
+    private function comamndUsingAttributes(string $class): ?CommandMeta
     {
         if (!class_exists($class)) {
             return null;
@@ -205,7 +246,6 @@ final class ApplicationProvider
         if (!$reflectionClass->hasMethod('__invoke')) {
             return null;
         }
-
         $name = null;
         $description = null;
         $arguments = [];
@@ -231,7 +271,7 @@ final class ApplicationProvider
             return null;
         }
 
-        return new Command(
+        return new CommandMeta(
             name: $name,
             command: $class,
             description: $description,

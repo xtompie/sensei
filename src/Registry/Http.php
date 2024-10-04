@@ -13,6 +13,6 @@ class Http
      */
     public static function controllers(): Generator
     {
-        yield from \App\Example\Registry\Http::controllers();
+        yield from [];
     }
 }

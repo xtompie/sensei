@@ -13,6 +13,6 @@ class Console
      */
     public static function commands(): Generator
     {
-        yield from \App\Shared\Registry\Console::commands();
+        yield from [];
     }
 }

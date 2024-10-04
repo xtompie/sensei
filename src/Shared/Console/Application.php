@@ -12,6 +12,6 @@ class Application extends BaseApplication implements Provider
 {
     public static function provide(string $abstract, Container $container): object
     {
-        return ApplicationProvider::provide();
+        return Container::container()->get(ApplicationProvider::class)->__invoke();
     }
 }

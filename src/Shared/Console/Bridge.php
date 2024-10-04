@@ -18,13 +18,8 @@ use Xtompie\Result\Result;
 
 class Bridge extends SymfonyCommand
 {
-    /**
-     * @param Context $context
-     * @param Debug $debug
-     * @param Command $command
-     */
     public function __construct(
-        protected Command $command,
+        protected CommandMeta $command,
         protected Context $context,
         protected Debug $debug,
         protected Output $output,

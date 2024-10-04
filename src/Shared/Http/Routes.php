@@ -8,9 +8,13 @@ use App\Registry\Http;
 use App\Shared\Http\Route\Method;
 use App\Shared\Http\Route\Path;
 use App\Shared\Kernel\AppDir;
+use Exception;
 use Generator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ReflectionClass;
-use ReflectionNamedType;
+use RegexIterator;
+use SplFileInfo;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -102,60 +106,92 @@ final class Routes
     }
 
     /**
-     * @return Generator<Controller>
+     * @return Generator<class-string>
+     */
+    private function classesUsingRegistry(): Generator
+    {
+        yield from Http::controllers();
+    }
+
+    /**
+     * @return Generator<class-string>
+     */
+    private function classesUsingFind(): Generator
+    {
+        $src = $this->appDir->__invoke() . '/src';
+        $directory = new RecursiveDirectoryIterator($src);
+        $iterator = new RecursiveIteratorIterator($directory);
+        $files = new RegexIterator($iterator, '/Controller\.php$/');
+        $cutStart = strlen($src . '/');
+        $cutEnd = strlen('.php');
+        foreach ($files as $file) {
+            if (!$file instanceof SplFileInfo) {
+                continue;
+            }
+            if (!$file->isFile()) {
+                continue;
+            }
+            $class = substr($file->getPathname(), $cutStart);
+            $class = substr($class, 0, -$cutEnd);
+            $class = str_replace('/', '\\', $class);
+            $class = 'App\\' . $class;
+            if (!class_exists($class)) {
+                continue;
+            }
+            if (!in_array(Controller::class, class_implements($class))) {
+                continue;
+            }
+            yield $class;
+        }
+    }
+
+    /**
+     * @return Generator<class-string>
+     */
+    private function classes(): Generator
+    {
+        yield from $this->classesUsingRegistry();
+        yield from $this->classesUsingFind();
+    }
+
+    /**
+     * @return Generator<ControllerMeta>
      */
     private function controllers(): Generator
     {
-        foreach (Http::controllers() as $class) {
+        $unique = [];
+        foreach ($this->classes() as $class) {
+            if (isset($unique[$class])) {
+                continue;
+            }
+            $unique[$class] = true;
             if (!class_exists($class)) {
                 return throw new \InvalidArgumentException('Controller must be a valid class-string.');
             }
-
             $controller = $this->controllerUsingStatic($class);
-
             if (!$controller) {
                 $controller = $this->controllerUsingAttributes($class);
             }
-
-            if ($controller === null) {
-                continue;
+            if (!$controller) {
+                throw new Exception("Controller $class cannot be resolved using meta or attributes.");
             }
-
             yield $controller;
         }
     }
 
-    private function controllerUsingStatic(string $class): ?Controller
+    private static function controllerUsingStatic(string $class): ?ControllerMeta
     {
         if (!class_exists($class)) {
             return null;
         }
 
         $reflectionClass = new ReflectionClass($class);
-
-        if (!$reflectionClass->hasMethod('controller')) {
+        if (!$reflectionClass->implementsInterface(ControllerWithMeta::class)) {
             return null;
         }
 
-        $method = $reflectionClass->getMethod('controller');
-
-        if (!$method->isPublic() || !$method->isStatic()) {
-            return null;
-        }
-
-        if ($method->getNumberOfRequiredParameters() > 0) {
-            return null;
-        }
-
-        $returnType = $method->getReturnType();
-
-        if (!$returnType instanceof ReflectionNamedType || $returnType->isBuiltin()) {
-            return null;
-        }
-
-        $controller = $class::controller();
-
-        if (!$controller instanceof Controller) {
+        $controller = $class::controllerMeta();
+        if (!$controller instanceof ControllerMeta) {
             return null;
         }
 
@@ -164,7 +200,7 @@ final class Routes
         return $controller;
     }
 
-    private function controllerUsingAttributes(string $class): ?Controller
+    private function controllerUsingAttributes(string $class): ?ControllerMeta
     {
         if (!class_exists($class)) {
             return null;
@@ -193,7 +229,7 @@ final class Routes
             return null;
         }
 
-        return new Controller(
+        return new ControllerMeta(
             path: $path,
             controller: $class,
             methods: $methods ?: ['GET'],
