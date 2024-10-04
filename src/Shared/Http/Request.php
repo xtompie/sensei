@@ -87,4 +87,20 @@ final class Request extends ServerRequest implements Provider
     {
         return $this->getMethod() === 'POST';
     }
+
+    public function bearer(): ?string
+    {
+        $header = $this->getHeaderLine('Authorization');
+        if (!str_starts_with($header, 'Bearer ')) {
+            return null;
+        }
+
+        $bearer = substr($header, 7);
+
+        if ($bearer === '') {
+            return null;
+        }
+
+        return substr($header, 7);
+    }
 }
