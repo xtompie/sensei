@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5dcdbaced6f3fe50ea13d61e1a34384a",
+    "content-hash": "20c9b2113b05f0fa6c37d10f947320af",
     "packages": [
         {
             "name": "brick/math",
@@ -2304,6 +2304,95 @@
                 "source": "https://github.com/xtompie/aql/tree/5.1.1"
             },
             "time": "2024-09-05T09:23:58+00:00"
+        },
+        {
+            "name": "xtompie/collection",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xtompie/collection.git",
+                "reference": "1deb16f603238eebd4e497e0f02e8959e3a0377d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xtompie/collection/zipball/1deb16f603238eebd4e497e0f02e8959e3a0377d",
+                "reference": "1deb16f603238eebd4e497e0f02e8959e3a0377d",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Xtompie\\Collection\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomasz Pielczyk",
+                    "email": "tomasz.pielczyk@gmail.com"
+                }
+            ],
+            "description": "Array wrapper",
+            "keywords": [
+                "array",
+                "collection"
+            ],
+            "support": {
+                "issues": "https://github.com/xtompie/collection/issues",
+                "source": "https://github.com/xtompie/collection/tree/1.0"
+            },
+            "time": "2024-05-24T19:43:32+00:00"
+        },
+        {
+            "name": "xtompie/collection-trait",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/xtompie/collection-trait.git",
+                "reference": "a90704949e2b6f55100a0c4fbddb1f4b39e4593a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/xtompie/collection-trait/zipball/a90704949e2b6f55100a0c4fbddb1f4b39e4593a",
+                "reference": "a90704949e2b6f55100a0c4fbddb1f4b39e4593a",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Xtompie\\CollectionTrait\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomasz Pielczyk",
+                    "email": "tomasz.pielczyk@gmail.com"
+                }
+            ],
+            "description": "Traits to build collections of specific objects",
+            "keywords": [
+                "array",
+                "collection",
+                "trait"
+            ],
+            "support": {
+                "issues": "https://github.com/xtompie/collection-trait/issues",
+                "source": "https://github.com/xtompie/collection-trait/tree/2.1.0"
+            },
+            "time": "2024-09-29T09:30:37+00:00"
         },
         {
             "name": "xtompie/container",
