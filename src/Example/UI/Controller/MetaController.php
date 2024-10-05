@@ -18,6 +18,6 @@ class MetaController implements Controller, ControllerWithMeta
 
     public function __invoke(): Response
     {
-        return Response::html('<h1>DefineController</h1>');
+        return Response::html('<h1>MetaController</h1>');
     }
 }
