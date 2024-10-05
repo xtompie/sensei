@@ -27,7 +27,7 @@ final class Env
     }
 
     /**
-     * @return Generator<int, Entry>
+     * @return Generator<Entry>
      */
     public function entries(): Generator
     {
@@ -37,7 +37,6 @@ final class Env
         yield new Entry('APP_DB_USER', 'Database user');
         yield new Entry('APP_DEBUG', 'Debug mode', default: '0');
         yield new Entry('APP_KERNEL_WHOOPS_EDITOR', 'Whoops editor: phpstorm, vscode, ...', optional: true, default: 'vscode');
-        yield new Entry('APP_SECRET', 'Secret key', );
     }
 
     public function APP_DB_HOST(): string

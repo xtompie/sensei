@@ -5,17 +5,35 @@ declare(strict_types=1);
 namespace App\Shared\Db\Schema;
 
 use App\Registry\Db;
+use App\Shared\Kernel\Discover;
 use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
 use Doctrine\DBAL\Schema\Table as DoctrineTable;
 use Doctrine\Migrations\Provider\SchemaProvider;
+use Generator;
 
 class Provider implements SchemaProvider
 {
+    public function __construct(
+        private Discover $discover,
+    ) {
+    }
+
     public function createSchema(): DoctrineSchema
     {
         $doctrineSchema = new DoctrineSchema();
-        $this->tables(iterator_to_array(Db::tables()), $doctrineSchema);
+        $this->tables(iterator_to_array($this->schema()), $doctrineSchema);
         return $doctrineSchema;
+    }
+
+    /**
+     * @return Generator<Table>
+     */
+    private function schema(): Generator
+    {
+        yield from Db::tables();
+        foreach ($this->discover->instances(implements: Schema::class, suffix: 'Schema') as $schema) {
+            yield from $schema->__invoke();
+        }
     }
 
     /**

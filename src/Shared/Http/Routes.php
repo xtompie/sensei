@@ -8,13 +8,10 @@ use App\Registry\Http;
 use App\Shared\Http\Route\Method;
 use App\Shared\Http\Route\Path;
 use App\Shared\Kernel\AppDir;
+use App\Shared\Kernel\Discover;
 use Exception;
 use Generator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use ReflectionClass;
-use RegexIterator;
-use SplFileInfo;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -23,6 +20,7 @@ final class Routes
 {
     public function __construct(
         private AppDir $appDir,
+        private Discover $discover,
         private ?RouteCollection $source = null,
         private ?RouteCollection $routes = null,
     ) {
@@ -108,50 +106,10 @@ final class Routes
     /**
      * @return Generator<class-string>
      */
-    private function classesUsingRegistry(): Generator
-    {
-        yield from Http::controllers();
-    }
-
-    /**
-     * @return Generator<class-string>
-     */
-    private function classesUsingFind(): Generator
-    {
-        $src = $this->appDir->__invoke() . '/src';
-        $directory = new RecursiveDirectoryIterator($src);
-        $iterator = new RecursiveIteratorIterator($directory);
-        $files = new RegexIterator($iterator, '/Controller\.php$/');
-        $cutStart = strlen($src . '/');
-        $cutEnd = strlen('.php');
-        foreach ($files as $file) {
-            if (!$file instanceof SplFileInfo) {
-                continue;
-            }
-            if (!$file->isFile()) {
-                continue;
-            }
-            $class = substr($file->getPathname(), $cutStart);
-            $class = substr($class, 0, -$cutEnd);
-            $class = str_replace('/', '\\', $class);
-            $class = 'App\\' . $class;
-            if (!class_exists($class)) {
-                continue;
-            }
-            if (!in_array(Controller::class, class_implements($class))) {
-                continue;
-            }
-            yield $class;
-        }
-    }
-
-    /**
-     * @return Generator<class-string>
-     */
     private function classes(): Generator
     {
-        yield from $this->classesUsingRegistry();
-        yield from $this->classesUsingFind();
+        yield from Http::controllers();
+        yield from $this->discover->classes(implements: Controller::class, suffix: 'Controller');
     }
 
     /**

@@ -9,22 +9,19 @@ use App\Shared\Console\Signature\Argument as SignatureArgument;
 use App\Shared\Console\Signature\Description as SignatureDescription;
 use App\Shared\Console\Signature\Name as SignatureName;
 use App\Shared\Console\Signature\Option as SignatureOption;
-use App\Shared\Db\Schema\Provider;
+use App\Shared\Db\Schema\Provider as SchemaProvider;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
+use App\Shared\Kernel\Discover;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
 use Doctrine\Migrations\DependencyFactory;
-use Doctrine\Migrations\Provider\SchemaProvider;
+use Doctrine\Migrations\Provider\SchemaProvider as DoctrineSchemaProvider;
 use Doctrine\Migrations\Tools\Console\Command as DoctrineCommand;
 use Exception;
 use Generator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use ReflectionClass;
-use RegexIterator;
-use SplFileInfo;
 use Symfony\Component\Console\Command\Command as SymfonyCommnd;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,7 +30,8 @@ use Xtompie\Container\Container;
 final class ApplicationProvider
 {
     public function __construct(
-        private AppDir $appDir,
+        private Discover $discover,
+        private SchemaProvider $schemaProvider,
     ) {
     }
 
@@ -123,8 +121,8 @@ final class ApplicationProvider
             ),
         );
         $di->setDefinition(
-            id: SchemaProvider::class,
-            service: static fn () => new Provider()
+            id: DoctrineSchemaProvider::class,
+            service: fn () => $this->schemaProvider,
         );
         $application->addCommands([
             (new DoctrineCommand\DiffCommand($di))->setName('app:db:diff'),
@@ -144,50 +142,10 @@ final class ApplicationProvider
     /**
      * @return Generator<class-string>
      */
-    private function classesUsingRegistry(): Generator
-    {
-        yield from Console::commands();
-    }
-
-    /**
-     * @return Generator<class-string>
-     */
-    private function classesUsingFind(): Generator
-    {
-        $src = $this->appDir->__invoke() . '/src';
-        $directory = new RecursiveDirectoryIterator($src);
-        $iterator = new RecursiveIteratorIterator($directory);
-        $files = new RegexIterator($iterator, '/Command\.php$/');
-        $cutStart = strlen("$src/");
-        $cutEnd = strlen('.php');
-        foreach ($files as $file) {
-            if (!$file instanceof SplFileInfo) {
-                continue;
-            }
-            if (!$file->isFile()) {
-                continue;
-            }
-            $class = substr($file->getPathname(), $cutStart);
-            $class = substr($class, 0, -$cutEnd);
-            $class = str_replace('/', '\\', $class);
-            $class = 'App\\' . $class;
-            if (!class_exists($class)) {
-                continue;
-            }
-            if (!in_array(Command::class, class_implements($class))) {
-                continue;
-            }
-            yield $class;
-        }
-    }
-
-    /**
-     * @return Generator<class-string>
-     */
     private function classes(): Generator
     {
-        yield from $this->classesUsingRegistry();
-        yield from $this->classesUsingFind();
+        yield from Console::commands();
+        yield from $this->discover->classes(implements: Command::class, suffix: 'Command');
     }
 
     /**
