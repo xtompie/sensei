@@ -10,7 +10,7 @@ use App\Shared\Memento\Memento;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-class MementoRemember implements Advice
+class Forget implements Advice
 {
     public function __construct(
         private string $space,
@@ -19,10 +19,8 @@ class MementoRemember implements Advice
 
     public function __invoke(Invocation $invocation, Memento $memento): mixed
     {
-        return $memento->resolve(
-            space: $this->space,
-            key: $invocation->hash(),
-            data: fn () => $invocation(),
-        );
+        $memento->clear($this->space);
+
+        return $invocation();
     }
 }
