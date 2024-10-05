@@ -32,7 +32,7 @@ class Provider implements SchemaProvider
     {
         yield from Db::tables();
         foreach ($this->discover->instances(implements: Schema::class, suffix: 'Schema') as $schema) {
-            yield from $schema->__invoke();
+            yield from $schema->tables();
         }
     }
 

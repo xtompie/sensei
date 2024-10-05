@@ -11,5 +11,5 @@ interface Schema
     /**
      * @return Generator<Table>
      */
-    public function __invoke(): Generator;
+    public function tables(): Generator;
 }
