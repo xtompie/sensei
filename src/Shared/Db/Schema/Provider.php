@@ -21,7 +21,7 @@ class Provider implements SchemaProvider
     public function createSchema(): DoctrineSchema
     {
         $doctrineSchema = new DoctrineSchema();
-        $this->tables(iterator_to_array($this->schema()), $doctrineSchema);
+        $this->tables($this->schema(), $doctrineSchema);
         return $doctrineSchema;
     }
 
@@ -37,9 +37,9 @@ class Provider implements SchemaProvider
     }
 
     /**
-     * @param Table[] $tables
+     * @param Generator<Table> $tables
      */
-    protected function tables(array $tables, DoctrineSchema $doctrineSchema): void
+    protected function tables(Generator $tables, DoctrineSchema $doctrineSchema): void
     {
         foreach ($tables as $table) {
             $this->table($table, $doctrineSchema);

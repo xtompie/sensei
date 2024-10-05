@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Shared\Kernel;
 
 use App\Shared\Container\Container;
-use Exception;
 use Generator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -45,7 +44,7 @@ class Discover
             $class = str_replace('/', '\\', $class);
             $class = 'App\\' . $class;
             if (!class_exists($class)) {
-                throw new Exception("Class $class does not exist");
+                continue;
             }
             if (!in_array($implements, class_implements($class))) {
                 continue;

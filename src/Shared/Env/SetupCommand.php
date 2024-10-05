@@ -10,6 +10,8 @@ use App\Shared\Console\Signature\Description;
 use App\Shared\Console\Signature\Name;
 use App\Shared\Kernel\AppDir;
 
+#[Name('app:env:setup')]
+#[Description('Setup environment variables')]
 class SetupCommand implements Command
 {
     public function __construct(
@@ -19,8 +21,6 @@ class SetupCommand implements Command
     ) {
     }
 
-    #[Name('app:env:setup')]
-    #[Description('Setup environment variables')]
     public function __invoke(): int
     {
         $file = $this->appDir->__invoke() . '/.env';

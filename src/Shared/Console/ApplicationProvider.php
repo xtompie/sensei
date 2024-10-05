@@ -9,6 +9,7 @@ use App\Shared\Console\Signature\Argument as SignatureArgument;
 use App\Shared\Console\Signature\Description as SignatureDescription;
 use App\Shared\Console\Signature\Name as SignatureName;
 use App\Shared\Console\Signature\Option as SignatureOption;
+use App\Shared\Console\Signature\Signature;
 use App\Shared\Db\Schema\Provider as SchemaProvider;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
@@ -21,6 +22,7 @@ use Doctrine\Migrations\Provider\SchemaProvider as DoctrineSchemaProvider;
 use Doctrine\Migrations\Tools\Console\Command as DoctrineCommand;
 use Exception;
 use Generator;
+use ReflectionAttribute;
 use ReflectionClass;
 use Symfony\Component\Console\Command\Command as SymfonyCommnd;
 use Symfony\Component\Console\Input\InputArgument;
@@ -164,7 +166,7 @@ final class ApplicationProvider
             }
             $command = $this->commandUsingStatic($class);
             if (!$command) {
-                $command = $this->comamndUsingAttributes($class);
+                $command = $this->commandUsingAttributes($class);
             }
             if (!$command) {
                 throw new Exception("Command $class cannot be resolved using meta or attributes.");
@@ -194,22 +196,20 @@ final class ApplicationProvider
         return $command;
     }
 
-    private function comamndUsingAttributes(string $class): ?CommandMeta
+    private function commandUsingAttributes(string $class): ?CommandMeta
     {
         if (!class_exists($class)) {
             return null;
         }
 
         $reflectionClass = new ReflectionClass($class);
-        if (!$reflectionClass->hasMethod('__invoke')) {
-            return null;
-        }
+
         $name = null;
         $description = null;
         $arguments = [];
         $options = [];
 
-        foreach ($reflectionClass->getMethod('__invoke')->getAttributes() as $attribute) {
+        foreach ($reflectionClass->getAttributes(Signature::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
             $attr = $attribute->newInstance();
             if ($attr instanceof SignatureName) {
                 $name = (string) $attr;

@@ -9,6 +9,8 @@ use App\Shared\Console\Output;
 use App\Shared\Console\Signature\Description;
 use App\Shared\Console\Signature\Name;
 
+#[Name('app:env:check')]
+#[Description('Check environment variables')]
 class CheckCommand implements Command
 {
     public function __construct(
@@ -17,8 +19,6 @@ class CheckCommand implements Command
     ) {
     }
 
-    #[Name('app:env:check')]
-    #[Description('Check environment variables')]
     public function __invoke(): int
     {
         return $this->output->result($this->validator->__invoke());

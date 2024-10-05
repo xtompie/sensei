@@ -6,8 +6,8 @@ namespace App\Shared\Console\Signature;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_METHOD)]
-final class Name
+#[Attribute(Attribute::TARGET_CLASS)]
+final class Name implements Signature
 {
     public function __construct(
         private string $name,

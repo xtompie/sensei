@@ -7,7 +7,7 @@ namespace App\Shared\Console\Signature;
 use App\Shared\Console\Option as ConsoleOption;
 use Attribute;
 
-#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 final class OptionEmpty implements Option
 {
     public function __construct(

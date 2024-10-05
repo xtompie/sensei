@@ -7,8 +7,8 @@ namespace App\Shared\Console\Signature;
 use App\Shared\Console\Argument as ConsoleArgument;
 use Attribute;
 
-#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
-final class Argument
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
+final class Argument implements Signature
 {
     public function __construct(
         private string $name,

@@ -7,22 +7,24 @@ namespace App\Shared\Http;
 use App\Registry\Http;
 use App\Shared\Http\Route\Method;
 use App\Shared\Http\Route\Path;
+use App\Shared\Http\Route\Route;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Kernel\Discover;
 use Exception;
 use Generator;
+use ReflectionAttribute;
 use ReflectionClass;
-use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper as SymfonyCompiledUrlMatcherDumper;
+use Symfony\Component\Routing\Route as SymfonyRoute;
+use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 
 final class Routes
 {
     public function __construct(
         private AppDir $appDir,
         private Discover $discover,
-        private ?RouteCollection $source = null,
-        private ?RouteCollection $routes = null,
+        private ?SymfonyRouteCollection $source = null,
+        private ?SymfonyRouteCollection $routes = null,
     ) {
     }
 
@@ -31,10 +33,10 @@ final class Routes
         file_put_contents($this->cache(), $this->dumper()->dump());
     }
 
-    public function routes(): RouteCollection
+    public function routes(): SymfonyRouteCollection
     {
         if ($this->routes === null) {
-            $this->routes = new RouteCollection();
+            $this->routes = new SymfonyRouteCollection();
             foreach ($this->compiled() as $name => $routeData) {
                 if (
                     !isset($routeData['path']) || !is_string($routeData['path'])
@@ -42,7 +44,7 @@ final class Routes
                 ) {
                     continue;
                 }
-                $this->routes->add($name, new Route(
+                $this->routes->add($name, new SymfonyRoute(
                     path: $routeData['path'],
                     defaults: $routeData['defaults'],
                     requirements: $routeData['requirements'] ?? [],
@@ -69,9 +71,9 @@ final class Routes
         return $this->dumper()->getCompiledRoutes();
     }
 
-    private function dumper(): CompiledUrlMatcherDumper
+    private function dumper(): SymfonyCompiledUrlMatcherDumper
     {
-        return new CompiledUrlMatcherDumper($this->source());
+        return new SymfonyCompiledUrlMatcherDumper($this->source());
     }
 
     private function cache(): string
@@ -79,17 +81,17 @@ final class Routes
         return $this->appDir->__invoke() . '/optimize/http_router.php';
     }
 
-    private function source(): RouteCollection
+    private function source(): SymfonyRouteCollection
     {
         if ($this->source === null) {
-            $this->source = new RouteCollection();
+            $this->source = new SymfonyRouteCollection();
             foreach ($this->controllers() as $controller) {
                 if (!$controller->controller()) {
                     continue;
                 }
                 $this->source->add(
                     $controller->controller(),
-                    new Route(
+                    new SymfonyRoute(
                         path: $controller->path(),
                         defaults: [
                             ...$controller->defaults(),
@@ -165,15 +167,12 @@ final class Routes
         }
 
         $reflectionClass = new ReflectionClass($class);
-        if (!$reflectionClass->hasMethod('__invoke')) {
-            return null;
-        }
 
         $path = null;
         $methods = [];
         $defaults = [];
 
-        foreach ($reflectionClass->getMethod('__invoke')->getAttributes() as $attribute) {
+        foreach ($reflectionClass->getAttributes(Route::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
             $attr = $attribute->newInstance();
             if ($attr instanceof Path) {
                 $path = $attr->path;

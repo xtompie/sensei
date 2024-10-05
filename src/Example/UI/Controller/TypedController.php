@@ -8,9 +8,9 @@ use App\Shared\Http\Controller;
 use App\Shared\Http\Response;
 use App\Shared\Http\Route\Path;
 
+#[Path('/example/typed')]
 class TypedController implements Controller
 {
-    #[Path('/example/typed')]
     public function __invoke(TypedQuery $query): Response
     {
         return Response::json(['title' => $query->title()]);

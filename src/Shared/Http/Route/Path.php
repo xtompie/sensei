@@ -6,8 +6,8 @@ namespace App\Shared\Http\Route;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_METHOD)]
-final class Path
+#[Attribute(Attribute::TARGET_CLASS)]
+final class Path implements Route
 {
     public function __construct(
         public string $path,
