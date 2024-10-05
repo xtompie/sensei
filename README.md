@@ -41,9 +41,7 @@ composer setup
 
 The Env mechanism manages environment variables through a `.env` file. It allows configuration of variables such as database credentials or API keys without altering the source code.
 
-All variables are defined in `App\Shared\Env\Env` ([App\Shared\Env\Env](https://github.com/xtompie/sensei/tree/master/src/Shared/Env/Env.php)).
-
-There are two commands related to environment management:
+All variables are defined in [App\Shared\Env\Env](https://github.com/xtompie/sensei/tree/master/src/Shared/Env/Env.php).
 
 - `php console app:env:setup`: Initializes environment variables then they must be filled.
 - `php console app:env:check`: Validates that the required environment variables are properly set.
@@ -54,13 +52,13 @@ Dependencies are resolved automatically by the container. It is enough to declar
 
 The container used in the system is [xtompie/container](https://github.com/xtompie/container). Services are shared by default.
 
-The container is connected to the system through `App\Shared\Container\Container` ([App\Shared\Container\Container](https://github.com/xtompie/sensei/tree/master/src/App/Shared/Container/Container.php)), where bindings and providers are defined.
+The container is connected to the system through [App\Shared\Container\Container](https://github.com/xtompie/sensei/tree/master/src/App/Shared/Container/Container.php), where bindings and providers are defined.
 
 ### Discovery
 
 The Discovery mechanism scans the source code for classes with names that end with a specific suffix and that implement a given interface.
 
-For controllers, discovery looks for classes in the `src/` directory with names ending in `Controller` that implement the interface `App\Shared\Http\Controller`. This allows automatic discovery of new controllers by simply adding a class.
+For controllers, discovery looks for classes in the `src/` directory with names ending in `Controller` that implement the interface [App\Shared\Http\Controller](https://github.com/xtompie/sensei/tree/master/src/App/Shared/Http/Controller.php). This allows automatic discovery of new controllers by only adding one new file into code base.
 
 ### Controller
 
