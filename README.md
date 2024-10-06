@@ -1,5 +1,4 @@
-
-Sensei is a modular first flexible system with no framework, built on minimalism, low abstraction, and simple logic.
+Sensei is a modular-first, flexible system with no framework, built on minimalism, low abstraction, and simple logic.
 
 ```php
 use App\Shared\Http\Controller;
@@ -19,15 +18,11 @@ class LuckyController implements Controller
 
 ### Foundation
 
-Sensei is a flexible system built using external libraries, allowing for easy customization of its core functions.
-
-The system is designed with minimal abstraction, using simple code and a straightforward application flow.
-
-The project uses a **modular-first** approach. Each module has its own folder in the `src` directory, making it easy to manage and expand the application.
-
-The source code is strictly typed, and the project is configured with PHPStan at level 9, ensuring early error detection and better integration with IDEs.
-
-There are also predefined commands check composer.json -> scripts.
+Sensei is a flexible system built with external libraries, enabling easy customization of its core functions.
+The system is designed with minimal abstraction, focusing on simple code and a straightforward application flow.
+The project follows a modular-first approach, with each module having its own folder in the src directory for easier management and expansion.
+The source code is strictly typed, with PHPStan set to level 9 for early error detection and better IDE integration.
+Predefined commands can be found in composer.json under the scripts section.
 
 ### Installation
 
@@ -39,26 +34,26 @@ composer setup
 
 ### Env
 
-The Env mechanism manages environment variables through a `.env` file. It allows configuration of variables such as database credentials or API keys without altering the source code.
+The Env mechanism handles environment variables via a .env file, enabling configuration of items like database credentials or API keys without changing the source code.
 
-All variables are defined in [App\Shared\Env\Env](https://github.com/xtompie/sensei/tree/master/src/Shared/Env/Env.php).
+All variables are defined in [App\Shared\Env\Env](https://github.com/xtompie/sensei/blob/master/src/Shared/Env/Env.php).
 
 - `php console app:env:setup`: Initializes environment variables then they must be filled.
 - `php console app:env:check`: Validates that the required environment variables are properly set.
 
 ### Container
 
-Dependencies are resolved automatically by the container. It is enough to declare them in the constructor, and the container will handle the rest.
+Dependencies are automatically resolved by the container. Simply declare them in the constructor, and the container takes care of the rest.
 
 The container used in the system is [xtompie/container](https://github.com/xtompie/container). Services are shared by default.
 
-The container is connected to the system through [App\Shared\Container\Container](https://github.com/xtompie/sensei/tree/master/src/App/Shared/Container/Container.php), where bindings and providers are defined.
+The container is connected to the system through [App\Shared\Container\Container](https://github.com/xtompie/sensei/blob/master/src/Shared/Container/Container.php), where bindings and providers are defined.
 
 ### Discovery
 
 The Discovery mechanism scans the source code for classes with names that end with a specific suffix and that implement a given interface.
 
-For controllers, discovery looks for classes in the `src/` directory with names ending in `Controller` that implement the interface [App\Shared\Http\Controller](https://github.com/xtompie/sensei/tree/master/src/App/Shared/Http/Controller.php). This allows automatic discovery of new controllers by only adding one new file into code base.
+For console commands, discovery looks for classes in the `src/` directory with names ending in `Command` that implement the interface [App\Shared\Console\Command](https://github.com/xtompie/sensei/blob/master/src/Shared/Console/Command.php). This allows automatic discovery of new controllers by only adding one new file into code base.
 
 ### Controller
 
@@ -85,16 +80,99 @@ class ArticleController implements Controller
 
 Controllers are resolved through `App\Registry\Http::controllers()` and the Discovery mechanism, which searches for classes with the suffix `Controller` that implement `App\Shared\Http\Controller`.
 
-Routing is handled using the `symfony/routing` package ([Symfony Routing Documentation](https://symfony.com/doc/current/routing.html)).
+Controllers are Single Action Controllers.
 
-Routes can be defined either via `ControllerMeta` e.g., [MetaController](https://github.com/xtompie/sensei/blob/master/src/Example/UI/Controller/MetaController.php) or with attributes like code above.
+Routing is handled using the [symfony/routing](https://symfony.com/doc/current/routing.html).
 
-The `__invoke()` method can request any dependencies from the container.
+Routes can be defined either via [ControllerMeta](https://github.com/xtompie/sensei/blob/master/src/Example/UI/Controller/MetaController.php) or with [Routing attributes](https://github.com/xtompie/sensei/blob/master/src/Shared/Http/Route) targeting class like code above.
 
-Parameters from the route can be accessed by defining them as arguments in the `__invoke()` method or by calling `$request->getAttribute(string $name)`.
+The `__invoke()` method of a controller can request any dependencies from the container. If multiple methods need dependencies, it's better to inject them through the constructor. If only the `__invoke` method needs them, pass them as arguments to that method.
 
-The request and response follows the PSR-7 standard.
+Route parameters can be accessed by defining them as arguments in the `__invoke()` method or by using `$request->getAttribute(string $name)`.
 
-To create responses, use the methods available in `App\Shared\Http\Response::*`.
+The request and response follow the [PSR-7](https://www.php-fig.org/psr/psr-7/) standard.
 
-Response generation can be further modified in [App\Shared\Http\Kernel->response()](https://github.com/xtompie/sensei/tree/master/src/Shared/Http/Kernel.php).
+To create responses, use the methods in [App\Shared\Http\Response::*](https://github.com/xtompie/sensei/blob/master/src/Shared/Http/Response.php).
+
+Response generation can be further modified in [App\Shared\Http\Kernel->response()](https://github.com/xtompie/sensei/blob/master/src/Shared/Http/Kernel.php).
+
+### Typed Request
+
+We have a DTO class which can be created from primitive using [xtompie/type](https://github.com/xtompie/typed)
+
+```php
+use Xtompie\Typed\Max;
+use Xtompie\Typed\Min;
+use Xtompie\Typed\NotBlank;
+use Xtompie\Typed\Typed;
+
+class CatBody
+{
+    public function __construct(
+        #[NotBlank]
+        protected string $name,
+
+        #[NotBlank]
+        #[Min(0)]
+        #[Max(30)]
+        protected int $age,
+    ) {}
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function age(): int
+    {
+        return $this->age;
+    }
+}
+```
+
+In controller we handle it:
+
+```php
+use App\Shared\Http\Controller;
+use App\Shared\Http\Request;
+use App\Shared\Http\Response;
+use App\Shared\Http\Route\Path;
+
+#[Path('/example/typed')]
+class TypedController implements Controller
+{
+    public function __invoke(Request $request): Response
+    {
+        $pet = Typed::object(CatBody::class, $request->body());
+        if ($pet instanceof ErrorCollection) {
+            Resposne::badRequest(errors: $pet);
+        }
+
+        return Response::json(['age' => $pet->age()]);
+    }
+}
+```
+
+The `__invoke` argument automatically resolves typed objects of type `App\Shared\Http\Contract\Body` and `App\Shared\Http\Contract\Query`.
+If a typed argument cannot be resolved, a bad request response with errors is returned, and `__invoke` is not called.
+
+```php
+// ...
+use App\Shared\Http\Contract\Body;
+
+class PetBody implements Body
+{
+    // ...
+}
+
+// ...
+
+#[Path('/example/typed')]
+class TypedController implements Controller
+{
+    public function __invoke(PetBody $pet): Response
+    {
+        return Response::json(['age' => $pet->age()]);
+    }
+}
+```
