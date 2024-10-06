@@ -16,6 +16,14 @@ class LuckyController implements Controller
 }
 ```
 
+- [Foundation](#foundation)
+- [Installation](#installation)
+- [Env](#env)
+- [Container](#container)
+- [Discovery](#discovery)
+- [Controller](#controller)
+- [Typed Request](#typed-request)
+
 ### Foundation
 
 Sensei is a flexible system built with external libraries, enabling easy customization of its core functions.
