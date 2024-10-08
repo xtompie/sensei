@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Media\Application\Service\GenerateId;
 
+use App\Media\Application\Model\MediaType;
 use App\Shared\Gen\Gen;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -14,7 +15,7 @@ class GenerateId
     ) {
     }
 
-    public function __invoke(string $type, string $space, string $name): string
+    public function __invoke(MediaType $type, string $space, string $name): string
     {
         $uuid = Gen::uuid4();
         $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
