@@ -27,5 +27,6 @@ class TypedCollection
     use None;
     /** @use ToArray<T> */
     use ToArray;
+    /** @use To<T> */
     use To;
 }

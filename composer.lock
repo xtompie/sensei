@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "20c9b2113b05f0fa6c37d10f947320af",
+    "content-hash": "4a230330df81bc85a92286fb76a3e38a",
     "packages": [
         {
             "name": "brick/math",
@@ -2100,6 +2100,84 @@
             "time": "2024-09-20T08:28:38+00:00"
         },
         {
+            "name": "symfony/translation-contracts",
+            "version": "v3.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation-contracts.git",
+                "reference": "b9d2189887bb6b2e0367a9fc7136c5239ab9b05a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/b9d2189887bb6b2e0367a9fc7136c5239ab9b05a",
+                "reference": "b9d2189887bb6b2e0367a9fc7136c5239ab9b05a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.5-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Translation\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Test/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to translation",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/translation-contracts/tree/v3.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-04-18T09:32:20+00:00"
+        },
+        {
             "name": "symfony/var-dumper",
             "version": "v7.1.5",
             "source": {
@@ -2351,16 +2429,16 @@
         },
         {
             "name": "xtompie/collection-trait",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xtompie/collection-trait.git",
-                "reference": "a90704949e2b6f55100a0c4fbddb1f4b39e4593a"
+                "reference": "8612afa0f7e95438c2483adfd975ae251741c64e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xtompie/collection-trait/zipball/a90704949e2b6f55100a0c4fbddb1f4b39e4593a",
-                "reference": "a90704949e2b6f55100a0c4fbddb1f4b39e4593a",
+                "url": "https://api.github.com/repos/xtompie/collection-trait/zipball/8612afa0f7e95438c2483adfd975ae251741c64e",
+                "reference": "8612afa0f7e95438c2483adfd975ae251741c64e",
                 "shasum": ""
             },
             "require-dev": {
@@ -2390,9 +2468,9 @@
             ],
             "support": {
                 "issues": "https://github.com/xtompie/collection-trait/issues",
-                "source": "https://github.com/xtompie/collection-trait/tree/2.1.0"
+                "source": "https://github.com/xtompie/collection-trait/tree/2.2.0"
             },
-            "time": "2024-09-29T09:30:37+00:00"
+            "time": "2024-10-08T21:59:04+00:00"
         },
         {
             "name": "xtompie/container",
