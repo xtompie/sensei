@@ -6,20 +6,25 @@ namespace App\Shared\Type;
 
 abstract class ValueId
 {
-    protected string $id;
+    protected string $value;
 
-    public function __construct(string $id)
+    public function __construct(string $value)
     {
-        $this->id = $id;
+        $this->value = $value;
     }
 
     public function __toString(): string
     {
-        return $this->id;
+        return $this->value();
     }
 
-    public function equals(ValueId $id): bool
+    public function value(): string
     {
-        return $this->id === $id->id && static::class === get_class($id);
+        return $this->value;
+    }
+
+    public function equals(ValueId $value): bool
+    {
+        return $this->value === $value->value && static::class === get_class($value);
     }
 }

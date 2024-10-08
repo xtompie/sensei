@@ -11,34 +11,20 @@ namespace App\Shared\Type;
 abstract class EnumId extends ValueId
 {
     /**
-     * @var class-string<TypedCollection<T>>
-     */
-    protected static string $collection;
-
-    /**
      * @var array<string>
      */
     protected static array $valid = [];
 
-    public function __construct(string $id)
+    public function __construct(string $value)
     {
-        if (!in_array($id, static::$valid, true)) {
-            throw new \InvalidArgumentException("Invalid value for EnumId: $id");
+        if (!in_array($value, static::$valid, true)) {
+            throw new \InvalidArgumentException("Invalid value for EnumId: $value");
         }
-        parent::__construct($id);
+        parent::__construct(value: $value);
     }
 
     public static function tryFrom(string $value): ?static
     {
         return in_array($value, static::$valid, true) ? new static($value) : null;
-    }
-
-    /**
-     * @return TypedCollection<T>
-     */
-    public static function cases(): object
-    {
-        $objects = array_map(fn ($value) => new static($value), static::$valid);
-        return new static::$collection($objects);
     }
 }
