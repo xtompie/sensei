@@ -8,10 +8,10 @@ use App\Media\Application\Model\MediaType;
 use App\Shared\Gen\Gen;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
-class GenerateId
+final class GenerateId
 {
     public function __construct(
-        protected AsciiSlugger $asciiSlugger,
+        private AsciiSlugger $asciiSlugger,
     ) {
     }
 
@@ -32,7 +32,7 @@ class GenerateId
         ;
     }
 
-    protected function slug(string $string): string
+    private function slug(string $string): string
     {
         return $this->asciiSlugger->slug($string, '-', 'de')->__toString();
     }

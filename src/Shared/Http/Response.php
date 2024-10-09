@@ -337,7 +337,7 @@ final class Response extends DiactorosResponse
     /**
      * Returns a response for serving a file from the file system.
      *
-     * @param string $filePath The absolute path to the file on the file system
+     * @param string $path The absolute path to the file on the file system
      * @param string $filename The name of the file to be used in the Content-Disposition header
      * @param array<string, string|array<string>> $headers Optional additional headers to include in the response
      * @return Response The response serving the file
@@ -345,16 +345,24 @@ final class Response extends DiactorosResponse
      * @example
      * Response::file('path/to/file.pdf', 'downloaded-file.pdf', ['Content-Type' => 'application/pdf']);
      */
-    public static function file(string $filePath, string $filename, array $headers = []): Response
+    public static function file(string $path, ?string $filename = null, array $headers = [], bool $attachment = true): Response
     {
-        $resource = fopen($filePath, 'rb');
+        $resource = fopen($path, 'rb');
         if ($resource === false) {
-            throw new RuntimeException('Unable to open file: ' . $filePath);
+            throw new RuntimeException('Unable to open file: ' . $path);
         }
         $stream = new Stream($resource);
 
-        $headers['Content-Length'] = (string) filesize($filePath);
-        $headers['Content-Disposition'] = 'attachment; filename="' . $filename . '"';
+        if ($filename === null) {
+            $filename = basename($path);
+        }
+
+        $headers = [
+            ...HeaderSet::contentLengthByFilePath($path),
+            ...HeaderSet::contentTypeByFilePath($path),
+            ...($attachment ? HeaderSet::contentDispositionAttachment($filename) : []),
+            ...(!$attachment ? HeaderSet::contentDispositionInline($filename) : []),
+        ];
 
         return new Response($stream, 200, $headers);
     }

@@ -9,12 +9,14 @@ class ControllerMeta
     /**
      * @param string $path
      * @param string $controller
+     * @param array<string, string> $requirements
      * @param array<string> $methods
      * @param array<string, mixed> $defaults
      */
     public function __construct(
         protected string $path,
         protected ?string $controller = null,
+        protected array $requirements = [],
         protected array $methods = [],
         protected array $defaults = [],
     ) {
@@ -33,6 +35,14 @@ class ControllerMeta
     public function setController(string $controller): void
     {
         $this->controller = $controller;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function requirements(): array
+    {
+        return $this->requirements;
     }
 
     /**

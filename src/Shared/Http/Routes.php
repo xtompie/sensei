@@ -93,6 +93,7 @@ final class Routes
                     $controller->controller(),
                     new SymfonyRoute(
                         path: $controller->path(),
+                        requirements: $controller->requirements(),
                         defaults: [
                             ...$controller->defaults(),
                             '_controller' => $controller->controller(),
@@ -115,7 +116,7 @@ final class Routes
     }
 
     /**
-     * @return Generator<ControllerMeta>
+     * @return Generator<int, ControllerMeta>
      */
     private function controllers(): Generator
     {
@@ -169,6 +170,7 @@ final class Routes
         $reflectionClass = new ReflectionClass($class);
 
         $path = null;
+        $requirements = [];
         $methods = [];
         $defaults = [];
 
@@ -176,6 +178,7 @@ final class Routes
             $attr = $attribute->newInstance();
             if ($attr instanceof Path) {
                 $path = $attr->path;
+                $requirements = $attr->requirements;
             }
             if ($attr instanceof Method) {
                 $methods[] = (string) $attr;
@@ -189,6 +192,7 @@ final class Routes
         return new ControllerMeta(
             path: $path,
             controller: $class,
+            requirements: $requirements,
             methods: $methods ?: ['GET'],
             defaults: $defaults
         );

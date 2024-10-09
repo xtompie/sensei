@@ -11,4 +11,8 @@ use App\Shared\Type\TypedCollection;
  */
 final class ImageVariantCollection extends TypedCollection
 {
+    public function filterByPreset(ImagePreset $preset): static
+    {
+        return $this->filter(fn (ImageVariant $variant) => $variant->preset()->equals($preset));
+    }
 }

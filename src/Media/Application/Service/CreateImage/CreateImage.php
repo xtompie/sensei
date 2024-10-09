@@ -12,15 +12,23 @@ use App\Shared\Gen\Gen;
 use App\Shared\Kernel\Dir;
 use Xtompie\Result\Error;
 
-class CreateImage
+final class CreateImage
 {
     public function __construct(
-        protected GenerateId $generateId,
+        private GenerateId $generateId,
     ) {
     }
 
-    public function __invoke(string $pathOrUrl, ?string $name = null): string|Error
+    public function __invoke(string $pathOrUrl, ?string $name = null, string $space = 'default'): Image|Error
     {
+        if (strlen($space) === 0) {
+            return Error::of('Space cannot be empty', 'invalid_space', 'space');
+        }
+
+        if ($name !== null && strlen($name) === 0) {
+            return Error::of('Name cannot be empty', 'invalid_name', 'name');
+        }
+
         $tmp = sys_get_temp_dir() . '/' . Gen::uuid4();
 
         if (!@copy($pathOrUrl, $tmp)) {
@@ -39,13 +47,13 @@ class CreateImage
             return Error::of('Invalid mime type', 'invalid_mime_type');
         }
 
-        $image = new Image(
-            id: $this->generateId->__invoke(
-                type: MediaType::image(),
-                space: 'default',
-                name: $this->resolveName($mimeType, $pathOrUrl, $name)
-            )
+        $id = $this->generateId->__invoke(
+            type: MediaType::image(),
+            space: $space,
+            name: $this->resolveName($mimeType, $pathOrUrl, $name)
         );
+
+        $image = new Image(id: $id);
 
         Dir::ensureForFile($image->path());
 
@@ -55,7 +63,7 @@ class CreateImage
         }
         unlink($tmp);
 
-        return $image->id();
+        return $image;
     }
 
     protected function resolveName(ImageMimeType $mimeType, string $fallback, ?string $name): string
