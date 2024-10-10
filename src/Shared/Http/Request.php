@@ -7,6 +7,9 @@ namespace App\Shared\Http;
 use Xtompie\Container\Container;
 use Xtompie\Container\Provider;
 use Laminas\Diactoros\ServerRequest;
+use Laminas\Diactoros\UploadedFile;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Xtompie\Result\ErrorCollection;
 use Xtompie\Typed\Typed;
 
@@ -102,5 +105,22 @@ final class Request extends ServerRequest implements Provider
         }
 
         return substr($header, 7);
+    }
+
+    public function upload(): ?UploadedFile
+    {
+        $uploadedFiles = $this->getUploadedFiles();
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveArrayIterator($uploadedFiles)
+        );
+
+        foreach ($iterator as $file) {
+            if ($file instanceof UploadedFile) {
+                return $file;
+            }
+        }
+
+        return null;
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Media\Application\Service\CreateImageVariant;
+namespace App\Media\Application\Service\CreateImageVariantById;
 
 use App\Media\Application\Model\ImageVariant;
 use App\Shared\Kernel\Dir;
@@ -10,7 +10,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Xtompie\Result\Error;
 
-final class CreateImageVariant
+final class CreateImageVariantById
 {
     public function __invoke(string $id): ImageVariant|Error
     {

@@ -2,29 +2,26 @@
 
 declare(strict_types=1);
 
-namespace App\Media\Application\Service\CreateImage;
+namespace App\Media\Application\Service\CreateImageByPathOrUrl;
 
 use App\Media\Application\Model\Image;
 use App\Media\Application\Model\ImageMimeType;
+use App\Media\Application\Model\ImageSpace;
 use App\Media\Application\Model\MediaType;
 use App\Media\Application\Service\GenerateId\GenerateId;
 use App\Shared\Gen\Gen;
 use App\Shared\Kernel\Dir;
 use Xtompie\Result\Error;
 
-final class CreateImage
+final class CreateImageByPathOrUrl
 {
     public function __construct(
         private GenerateId $generateId,
     ) {
     }
 
-    public function __invoke(string $pathOrUrl, ?string $name = null, string $space = 'default'): Image|Error
+    public function __invoke(string $pathOrUrl, ?string $name = null, ?ImageSpace $space = null): Image|Error
     {
-        if (strlen($space) === 0) {
-            return Error::of('Space cannot be empty', 'invalid_space', 'space');
-        }
-
         if ($name !== null && strlen($name) === 0) {
             return Error::of('Name cannot be empty', 'invalid_name', 'name');
         }
@@ -47,11 +44,7 @@ final class CreateImage
             return Error::of('Invalid mime type', 'invalid_mime_type');
         }
 
-        $id = $this->generateId->__invoke(
-            type: MediaType::image(),
-            space: $space,
-            name: $this->resolveName($mimeType, $pathOrUrl, $name)
-        );
+        $id = $this->generateId(space: $space, mimeType: $mimeType, pathOrUrl: $pathOrUrl, name: $name);
 
         $image = new Image(id: $id);
 
@@ -66,23 +59,18 @@ final class CreateImage
         return $image;
     }
 
-    protected function resolveName(ImageMimeType $mimeType, string $fallback, ?string $name): string
+    private function generateId(?ImageSpace $space, ImageMimeType $mimeType, string $pathOrUrl, ?string $name): string
     {
-        [$fallback] = explode('?', $fallback, 2);
-        $name = $name ?: $fallback;
-        if ($this->extension($name) !== $mimeType->extension()->value()) {
-            $name = $this->nameWithoutExtension($name) . '.' . $mimeType->extension()->value();
+        if ($name === null) {
+            [$fallback] = explode('?', $pathOrUrl, 2);
+            $name = pathinfo($fallback, PATHINFO_FILENAME);
         }
-        return $name;
-    }
 
-    protected function extension(string $name): string
-    {
-        return pathinfo($name, PATHINFO_EXTENSION);
-    }
-
-    protected function nameWithoutExtension(string $name): string
-    {
-        return pathinfo($name, PATHINFO_FILENAME);
+        return $this->generateId->__invoke(
+            type: MediaType::image(),
+            space: $space ?? ImageSpace::default(),
+            name: $name,
+            extension: $mimeType->extension()->value(),
+        );
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Media\Application\Service\GenerateId;
 
+use App\Media\Application\Model\ImageSpace;
 use App\Media\Application\Model\MediaType;
 use App\Shared\Gen\Gen;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -15,20 +16,18 @@ final class GenerateId
     ) {
     }
 
-    public function __invoke(MediaType $type, string $space, string $name): string
+    public function __invoke(MediaType $type, ImageSpace $space, string $name, string $extension): string
     {
         $uuid = Gen::uuid4();
-        $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-        $name = substr($name, 0, -(strlen($ext) + 1));
 
         return
             $type
-            . '/' . $this->slug($space)
+            . '/' . $space->value()
             . '/' . $uuid[0] . $uuid[1]
             . '/' . $uuid[2] . $uuid[3]
             . '/' . $uuid
             . '.' . $this->slug($name)
-            . '.' . $this->slug($ext)
+            . '.' . $extension
         ;
     }
 

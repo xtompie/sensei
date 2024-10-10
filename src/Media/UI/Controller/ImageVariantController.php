@@ -6,7 +6,7 @@ namespace App\Media\UI\Controller;
 
 use App\Media\Application\Model\ImageVariant;
 use App\Media\Application\Model\MediaType;
-use App\Media\Application\Service\CreateImageVariant\CreateImageVariant;
+use App\Media\Application\Service\CreateImageVariantById\CreateImageVariantById;
 use App\Shared\Http\Controller;
 use App\Shared\Http\Response;
 use App\Shared\Http\Route\Path;
@@ -15,7 +15,7 @@ use Xtompie\Result\Error;
 #[Path(path: '/media/image/{path}', requirements: ['path' => '.+'])]
 class ImageVariantController implements Controller
 {
-    public function __invoke(string $path, CreateImageVariant $createImageVariant): Response
+    public function __invoke(string $path, CreateImageVariantById $createImageVariantById): Response
     {
         $id = MediaType::image()->value() . '/' . $path;
         $variant = ImageVariant::tryFrom($id);
@@ -28,7 +28,7 @@ class ImageVariantController implements Controller
             return Response::notFound();
         }
 
-        $result = $createImageVariant->__invoke(id: $variant->id());
+        $result = $createImageVariantById->__invoke(id: $variant->id());
         if ($result instanceof Error) {
             return Response::internalServerError();
         }
