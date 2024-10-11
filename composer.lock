@@ -2573,16 +2573,16 @@
         },
         {
             "name": "xtompie/collection-trait",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xtompie/collection-trait.git",
-                "reference": "70f7e30966a97987d2b0bc39b37367859f5b927e"
+                "reference": "38c630bb9b94fcca3c1b868196598e029be64460"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xtompie/collection-trait/zipball/70f7e30966a97987d2b0bc39b37367859f5b927e",
-                "reference": "70f7e30966a97987d2b0bc39b37367859f5b927e",
+                "url": "https://api.github.com/repos/xtompie/collection-trait/zipball/38c630bb9b94fcca3c1b868196598e029be64460",
+                "reference": "38c630bb9b94fcca3c1b868196598e029be64460",
                 "shasum": ""
             },
             "require-dev": {
@@ -2612,9 +2612,9 @@
             ],
             "support": {
                 "issues": "https://github.com/xtompie/collection-trait/issues",
-                "source": "https://github.com/xtompie/collection-trait/tree/2.3.0"
+                "source": "https://github.com/xtompie/collection-trait/tree/2.4.0"
             },
-            "time": "2024-10-09T20:04:26+00:00"
+            "time": "2024-10-11T17:33:56+00:00"
         },
         {
             "name": "xtompie/container",

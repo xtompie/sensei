@@ -7,6 +7,7 @@ namespace App\Shared\Type;
 use Xtompie\CollectionTrait\All;
 use Xtompie\CollectionTrait\Any;
 use Xtompie\CollectionTrait\Construct;
+use Xtompie\CollectionTrait\Each;
 use Xtompie\CollectionTrait\Filter;
 use Xtompie\CollectionTrait\First;
 use Xtompie\CollectionTrait\None;
@@ -23,6 +24,8 @@ class TypedCollection
     use Any;
     /** @use Construct<T> */
     use Construct;
+    /** @use Each<T> */
+    use Each;
     /** @use Filter<T> */
     use Filter;
     /** @use First<T> */

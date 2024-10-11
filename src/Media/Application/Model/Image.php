@@ -6,6 +6,7 @@ namespace App\Media\Application\Model;
 
 use App\Shared\Container\Container;
 use App\Shared\Kernel\DataDir;
+use App\Shared\Slugger\Slugger;
 use InvalidArgumentException;
 use SplFileInfo;
 
@@ -85,10 +86,22 @@ final class Image
         );
     }
 
+    public function withName(string $name): static
+    {
+        $parts = explode('.', $this->id);
+        $parts[1] = Container::container()->get(Slugger::class)->__invoke($name);
+        return new static(implode('.', $parts));
+    }
+
     private function variant(ImagePreset $preset): ImageVariant
     {
         $parts = explode('.', $this->id);
         $variant = $parts[0] . '.' . $parts[1] . '.' . $preset->value() . '.' . $parts[2];
         return new ImageVariant($variant);
+    }
+
+    public function equals(Image $other): bool
+    {
+        return $this->id === $other->id;
     }
 }
