@@ -7,12 +7,12 @@ namespace App\Media\Application\Service\GenerateId;
 use App\Media\Application\Model\ImageSpace;
 use App\Media\Application\Model\MediaType;
 use App\Shared\Gen\Gen;
-use Symfony\Component\String\Slugger\AsciiSlugger;
+use App\Shared\Slugger\Slugger;
 
 final class GenerateId
 {
     public function __construct(
-        private AsciiSlugger $asciiSlugger,
+        private Slugger $slugger,
     ) {
     }
 
@@ -26,13 +26,8 @@ final class GenerateId
             . '/' . $uuid[0] . $uuid[1]
             . '/' . $uuid[2] . $uuid[3]
             . '/' . $uuid
-            . '.' . $this->slug($name)
+            . '.' . $this->slugger->__invoke($name)
             . '.' . $extension
         ;
-    }
-
-    private function slug(string $string): string
-    {
-        return $this->asciiSlugger->slug($string, '-', 'de')->__toString();
     }
 }
