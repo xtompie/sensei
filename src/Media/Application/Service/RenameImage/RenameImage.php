@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Media\Application\Service\RenameImage;
 
 use App\Media\Application\Model\Image;
+use App\Media\Application\Model\ImageVariant;
 
 class RenameImage
 {
@@ -18,8 +19,9 @@ class RenameImage
         rename($source->path(), $destination->path());
 
         $source->variants()->each(
-            fn (Image $variant) =>
-            $variant->file()->isFile() ? unlink($variant->path()) : null
+            function (ImageVariant $variant): void {
+                $variant->file()->isFile() ? unlink($variant->path()) : null;
+            }
         );
 
         return $destination;
