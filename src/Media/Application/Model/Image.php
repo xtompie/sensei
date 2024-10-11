@@ -93,6 +93,12 @@ final class Image
         return new static(implode('.', $parts));
     }
 
+    public function name(): string
+    {
+        $parts = explode('.', $this->id);
+        return $parts[1];
+    }
+
     private function variant(ImagePreset $preset): ImageVariant
     {
         $parts = explode('.', $this->id);

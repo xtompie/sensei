@@ -16,8 +16,9 @@ use Xtompie\CollectionTrait\ToArray;
 
 /**
  * @template T
+ *
  */
-class TypedCollection
+abstract class TypedCollection
 {
     /** @use All<T> */
     use All;
