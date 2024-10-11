@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Image\Application\Service\Replication;
+namespace App\Image\Application\Service\EnsureImage;
 
 use App\Image\Application\Model\Image;
 use App\Image\Application\Model\ImageBlueprint;

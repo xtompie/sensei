@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "40504edae32a113cc8cb81e01ba6e81d",
+    "content-hash": "395d9c33c0c4849b32f7e6451c4df3f4",
     "packages": [
         {
             "name": "brick/math",
@@ -2570,51 +2570,6 @@
                 "source": "https://github.com/xtompie/collection/tree/1.0"
             },
             "time": "2024-05-24T19:43:32+00:00"
-        },
-        {
-            "name": "xtompie/collection-trait",
-            "version": "2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/xtompie/collection-trait.git",
-                "reference": "38c630bb9b94fcca3c1b868196598e029be64460"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/xtompie/collection-trait/zipball/38c630bb9b94fcca3c1b868196598e029be64460",
-                "reference": "38c630bb9b94fcca3c1b868196598e029be64460",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Xtompie\\CollectionTrait\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Tomasz Pielczyk",
-                    "email": "tomasz.pielczyk@gmail.com"
-                }
-            ],
-            "description": "Traits to build collections of specific objects",
-            "keywords": [
-                "array",
-                "collection",
-                "trait"
-            ],
-            "support": {
-                "issues": "https://github.com/xtompie/collection-trait/issues",
-                "source": "https://github.com/xtompie/collection-trait/tree/2.4.0"
-            },
-            "time": "2024-10-11T17:33:56+00:00"
         },
         {
             "name": "xtompie/container",

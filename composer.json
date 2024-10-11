@@ -36,7 +36,6 @@
         "xtompie/typed": "^4.0",
         "xtompie/validation": "^4.2",
         "xtompie/collection": "^1.0",
-        "xtompie/collection-trait": "^2.1",
         "symfony/string": "^7.1",
         "symfony/translation-contracts": "^3.5",
         "intervention/image": "^3.8"
