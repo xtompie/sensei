@@ -2659,16 +2659,16 @@
         },
         {
             "name": "xtompie/dao",
-            "version": "1.6",
+            "version": "1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xtompie/dao.git",
-                "reference": "866698694726960d7802b4c54b5019a2781c38a7"
+                "reference": "26bb6fb109253a3904e0532e08267c7f9ace4fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xtompie/dao/zipball/866698694726960d7802b4c54b5019a2781c38a7",
-                "reference": "866698694726960d7802b4c54b5019a2781c38a7",
+                "url": "https://api.github.com/repos/xtompie/dao/zipball/26bb6fb109253a3904e0532e08267c7f9ace4fd9",
+                "reference": "26bb6fb109253a3904e0532e08267c7f9ace4fd9",
                 "shasum": ""
             },
             "require": {
@@ -2702,9 +2702,9 @@
             ],
             "support": {
                 "issues": "https://github.com/xtompie/dao/issues",
-                "source": "https://github.com/xtompie/dao/tree/1.6"
+                "source": "https://github.com/xtompie/dao/tree/1.9"
             },
-            "time": "2024-08-21T21:24:17+00:00"
+            "time": "2024-09-29T11:11:49+00:00"
         },
         {
             "name": "xtompie/monitor",
