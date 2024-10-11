@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace App\Shared\Optimize;
 
-use App\Shared\Http\Routes;
-use App\Shared\Kernel\Dir;
+use App\Shared\Kernel\Discover;
 
 class Optimize
 {
     public function __construct(
-        private Routes $routes,
-        private OptimizeDir $optimizeDir,
+        private Discover $discover,
     ) {
     }
 
     public function __invoke(): void
     {
-        Dir::ensure($this->optimizeDir->__invoke());
-        $this->routes->optimize();
+        foreach ($this->discover->instances(instanceof: Optimizer::class, suffix: 'Optimizer') as $optimize) {
+            $optimize->optimize();
+        }
     }
 }

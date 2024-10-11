@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Shared\Http;
 
 use App\Registry\Http;
+use App\Shared\Kernel\Discover;
 use App\Shared\Http\Route\Method;
 use App\Shared\Http\Route\Path;
 use App\Shared\Http\Route\Route;
-use App\Shared\Kernel\AppDir;
-use App\Shared\Kernel\Discover;
+use App\Shared\Optimize\OptimizeDir;
 use Exception;
 use Generator;
 use ReflectionAttribute;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 final class Routes
 {
     public function __construct(
-        private AppDir $appDir,
+        private OptimizeDir $optimizeDir,
         private Discover $discover,
         private ?SymfonyRouteCollection $source = null,
         private ?SymfonyRouteCollection $routes = null,
@@ -78,7 +78,7 @@ final class Routes
 
     private function cache(): string
     {
-        return $this->appDir->__invoke() . '/optimize/http_router.php';
+        return $this->optimizeDir->__invoke() . '/' . preg_replace('/[^_A-Za-z0-9]/', '_', static::class) . '.php';
     }
 
     private function source(): SymfonyRouteCollection
@@ -112,7 +112,7 @@ final class Routes
     private function classes(): Generator
     {
         yield from Http::controllers();
-        yield from $this->discover->classes(implements: Controller::class, suffix: 'Controller');
+        yield from $this->discover->classes(instanceof: Controller::class, suffix: 'Controller');
     }
 
     /**

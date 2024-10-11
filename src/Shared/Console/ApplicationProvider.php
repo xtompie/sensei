@@ -11,9 +11,9 @@ use App\Shared\Console\Signature\Name as SignatureName;
 use App\Shared\Console\Signature\Option as SignatureOption;
 use App\Shared\Console\Signature\Signature;
 use App\Shared\Db\Schema\Provider as SchemaProvider;
+use App\Shared\Kernel\Discover;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
-use App\Shared\Kernel\Discover;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
@@ -147,7 +147,7 @@ final class ApplicationProvider
     private function classes(): Generator
     {
         yield from Console::commands();
-        yield from $this->discover->classes(implements: Command::class, suffix: 'Command');
+        yield from $this->discover->classes(instanceof: Command::class, suffix: 'Command');
     }
 
     /**
