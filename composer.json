@@ -38,9 +38,11 @@
         "xtompie/collection": "^1.0",
         "symfony/string": "^7.1",
         "symfony/translation-contracts": "^3.5",
-        "intervention/image": "^3.8"
+        "intervention/image": "^3.8",
+        "nesbot/carbon": "^3.8"
     },
     "scripts": {
+        "build": "(cd assets/backend && npm ci && npm run build)",
         "check-psr4": "composer dump-autoload --strict-psr --optimize",
         "db:diff": "php console app:db:diff",
         "db:migrate": "php console app:db:migrate",
@@ -73,7 +75,8 @@
             "composer phpstan-install",
             "composer php-cs-fixer-install",
             "composer tpl-cs-fixer-install",
-            "composer db:migrate-no-i"
+            "composer db:migrate-no-i",
+            "composer build"
         ]
     },
     "require-dev": {

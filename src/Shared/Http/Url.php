@@ -11,7 +11,8 @@ final class Url
 {
     public function __construct(
         private Routes $routes,
-        private ?UrlGenerator $urlGenerator = null
+        private UrlParameterContext $urlParameterContext,
+        private ?UrlGenerator $urlGenerator = null,
     ) {
     }
 
@@ -20,9 +21,27 @@ final class Url
      * @param array<string, mixed> $parameters
      * @return string
      */
-    public function __invoke(string $controller, array $parameters = []): string
-    {
-        return $this->generator()->generate($controller, $parameters, UrlGenerator::ABSOLUTE_PATH);
+    public function __invoke(
+        string $controller,
+        array $parameters = [],
+        ?UrlReference $reference = null,
+        bool $useParamContext = true,
+    ): string {
+        $referenceType = match ($reference) {
+            UrlReference::absoluteUrl() => UrlGenerator::ABSOLUTE_URL,
+            UrlReference::absolutePath() => UrlGenerator::ABSOLUTE_PATH,
+            UrlReference::relativePath() => UrlGenerator::RELATIVE_PATH,
+            UrlReference::newtworkPath() => UrlGenerator::NETWORK_PATH,
+            default => UrlGenerator::ABSOLUTE_PATH,
+        };
+
+        $parameters = $useParamContext ? array_merge($this->urlParameterContext->context(), $parameters) : $parameters;
+
+        return $this->generator()->generate(
+            name: $controller,
+            parameters: $parameters,
+            referenceType: $referenceType,
+        );
     }
 
     private function generator(): UrlGenerator

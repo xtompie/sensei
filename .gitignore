@@ -1,3 +1,5 @@
+/public/assets/backend
 /vendor/
 /var/
 .env
+/optimize/
