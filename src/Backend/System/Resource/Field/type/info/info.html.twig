@@ -1,0 +1,13 @@
+{% set value = value[name] ?? null %}
+
+{% if action == 'list' %}
+    {{ value }}
+{% elseif action == 'detail' %}
+    {% include '@backend/system/resource/field/detail/begin.html.twig' %}
+    {{ value }}
+    {% include '@backend/system/resource/field/detail/end.html.twig' %}
+{% else %}
+    {% include '@backend/system/resource/field/form/begin.html.twig' %}
+    {{ value }}
+    {% include '@backend/system/resource/field/form/end.html.twig' %}
+{% endif %}

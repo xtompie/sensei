@@ -1,0 +1,17 @@
+{% set value = value is defined ? value : (where[name] ?? null) %}
+
+<select
+    name="{{ name }}"
+>
+    <option value=""></option>
+    {% for option_value, option_title in options %}
+        <option
+            value="{{ option_value }}"
+            {% if value == option_value %}
+                selected="selected"
+            {% endif %}
+        >
+            {{ option_title }}
+        </option>
+    {% endfor %}
+</select>

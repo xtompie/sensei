@@ -1,0 +1,45 @@
+            <div class="col-span-full">
+                <button
+                    type="submit"
+                    name="_submit[commit]"
+                    class="
+                        btn
+                        {% if action == 'delete' %}
+                            btn-danger
+                        {% else %}
+                            btn-primary
+                        {% endif %}
+                    "
+                >
+                    {% if action == 'create' %}
+                        Speichern
+                    {% elseif action == 'update' %}
+                        Speichern
+                    {% elseif action == 'delete' %}
+                        Löschen
+                    {% else %}
+                        Speichern
+                    {% endif %}
+                </button>
+            </div>
+
+            {% set err = err is defined ? err : errors.rest() %}
+            <div resterrors-list>
+                {% if err.any %}
+                    {% for e in err %}
+                        <div class="invalid-feedback">{{ e.message|t }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <script>
+                document.querySelector('[resterrors-target]').appendChild(document.querySelector('[resterrors-list]'));
+            </script>
+        </div>
+    </div>
+</form>
+
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+  </div>

@@ -1,0 +1,9 @@
+
+{% set err = err is defined ? err : errors.space(name) %}
+<div>
+{% if err.any %}
+    {% for e in err %}
+        <div class="invalid-feedback">{{ e.message|t }}</div>
+    {% endfor %}
+{% endif %}
+</div>
