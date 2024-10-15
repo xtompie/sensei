@@ -1,0 +1,34 @@
+{% set value = value[name] ?? null %}
+
+{% if action == 'list' %}
+    {% if options[value] is defined %}
+        {{ options[value] }}
+    {% else %}
+        {{ value }}
+    {% endif %}
+{% elseif action == 'detail' %}
+    {% include '@backend/system/resource/field/detail/begin.html.twig' %}
+        {% if options[value] is defined %}
+            {{ options[value] }}
+        {% else %}
+            {{ value }}
+        {% endif %}
+    {% include '@backend/system/resource/field/detail/end.html.twig' %}
+{% else %}
+    {% include '@backend/system/resource/field/form/begin.html.twig' %}
+        <select
+            name="{{ name }}"
+        >
+            {% for option_value, option_title in options %}
+                <option
+                    value="{{ option_value }}"
+                    {% if value == option_value %}
+                        selected="selected"
+                    {% endif %}
+                >
+                    {{ option_title }}
+                </option>
+            {% endfor %}
+        </select>
+    {% include '@backend/system/resource/field/form/end.html.twig' %}
+{% endif %}

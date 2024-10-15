@@ -1,0 +1,73 @@
+{% set value = value[name] ?? null %}
+
+{% if action == 'list' %}
+    {% if value is iterable %}
+        {{ value|length }}
+    {% endif %}
+{% elseif action == 'detail' %}
+    {% include '@backend/system/resource/field/detail/begin.html.twig' %}
+    {% set value = value|default({})%}
+    {% for value in value %}
+        {% set relone_entity = value[id] is defined ? backend().repository().__call(reltype).findById(value[id]) : null %}
+        {% if relone_entity|any %}
+            {% set relone_link = backend().pilot().__call(reltype).link('detail', relone_entity) %}
+            {% set relone_sentry = sentry(relone_link.sentry) %}
+            {% if relone_sentry %}
+                <a href="{{ relone_link.url }}">
+            {% endif %}
+            {{ relone_link.title }}
+            {% if relone_sentry %}
+                </a>
+            {% endif %}
+        {% elseif value is defined and value is not null %}
+            <strike>{{ value }}</strike>
+        {% endif %}
+    {% endfor %}
+    {% include '@backend/system/resource/field/detail/end.html.twig' %}
+{% else %}
+    {{ include_once('@backend/system/js/selection.html.twig') }}
+    {{ include_once('@backend/system/js/formsubmit.html.twig') }}
+    {{ include_once('@backend/system/js/removeitem.html.twig') }}
+    {{ include_once('@backend/system/js/sortable.html.twig') }}
+    {% set label = label|default(null)|any ? label : backend().pilot().__call(reltype).title('index') %}
+    {% include '@backend/system/resource/field/form/begin.html.twig' %}
+    <div backend-sortable-space>
+        <div backend-sortable-sortable>
+            {% for value in value %}
+                {% if value['id'] is defined %}
+                    <div backend-removeitem>
+                        <span class="sortable-handle">=</span>
+                        <input type="hidden" name="{{ name }}[{{ loop.index0 }}][id]" value="{{ value['id'] }}" />
+                        {% set relone_entity = backend().repository().__call(reltype).findById(value['id']) %}
+                        {% if relone_entity|any %}
+                            {% set relone_link = backend().pilot().__call(reltype).link('detail', relone_entity) %}
+                            <a href="{{ relone_link.url }}" target="_blank">{{ relone_link.title }}</a>
+                        {% else %}
+                            <strike>{{ value['id'] }}</strike>
+                        {% endif %}
+                        <button type="button" onclick='backend.removeitem.form(this);'>X</button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <script>
+            backend.sortable(document.currentScript);
+        </script
+    </div>
+    <button
+        type="button"
+        onclick='
+            var ctx = this;
+            backend.selection.select(
+                "{{ reltype }}",
+                false,
+                function (result) {
+                    backend.formsubmit.add(ctx, "{{ name }}", result.data);
+                }
+            );
+        '
+    >
+        ...
+    </button>
+    {% include '@backend/system/resource/field/form/end.html.twig' %}
+{% endif %}

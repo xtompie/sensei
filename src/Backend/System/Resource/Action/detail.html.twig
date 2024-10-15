@@ -1,0 +1,13 @@
+{% extends "@backend/system/layout/layout.html.twig" %}
+
+{% block content %}
+
+    {% include "@backend/system/resource/title/title.html.twig" %}
+
+    {% include "@backend/system/resource/detail/begin.html.twig" %}
+
+    {% include fields %}
+
+    {% include "@backend/system/resource/detail/end.html.twig" %}
+
+{% endblock %}

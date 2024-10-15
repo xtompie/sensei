@@ -1,0 +1,30 @@
+{% if action in ['list', 'detail'] %}
+    {% include field with {
+        'name': 'id',
+        'more': true,
+        'sort': true,
+    } %}
+{% endif %}
+
+{% if action in ['list', 'detail', 'create', 'update'] %}
+    {% include field with {
+        'type': 'text',
+        'name': 'title',
+    } %}
+{% endif %}
+
+{% if action in ['list', 'detail', 'create', 'update'] %}
+    {% include field with {
+        'type': 'relone',
+        'name': 'category_id',
+        'reltype': 'category',
+    } %}
+{% endif %}
+
+{% if action in ['detail', 'create', 'update'] %}
+    {% include field with {
+        'type': 'relmany',
+        'name': 'children',
+        'reltype': 'category',
+    } %}
+{% endif %}
