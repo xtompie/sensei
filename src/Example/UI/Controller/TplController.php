@@ -13,6 +13,6 @@ class TplController implements Controller
 {
     public function __invoke(): Response
     {
-        return Response::tpl('src/Example/UI/Tpl/content.tpl.php', ['title' => 'Foo']);
+        return Response::tpl('/src/Example/UI/Tpl/content.tpl.php', ['title' => 'Foo']);
     }
 }

@@ -82,4 +82,12 @@ class Session
             unset($_SESSION[$key]);
         }
     }
+
+    public function push(string $key, mixed $value): void
+    {
+        $data = $this->get($key);
+        $data = is_array($data) ? $data : [];
+        $data[] = $value;
+        $this->set($key, $data);
+    }
 }

@@ -1,7 +1,7 @@
 <?php /** @var App\Shared\Tpl\Tpl $this */ ?>
-<?php $this->push('src/Example/UI/Tpl/layout.tpl.php', ['title' => $title]); ?>
+<?php $this->push('/src/Example/UI/Tpl/layout.tpl.php', ['title' => $title]); ?>
 <h1><?= $this->e($title) ?></h1>
-<?= $this->render('src/Example/UI/Tpl/navbar.tpl.php') ?>
+<?= $this->render('/src/Example/UI/Tpl/navbar.tpl.php') ?>
 
 <?php  dump(get_defined_vars()) ?>
 

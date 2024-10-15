@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.9"
+  },
+  "scripts": {
+    "dev": "tailwindcss -i ./src/main.css -o ../../public/assets/backend/backend.css --watch",
+    "build": "tailwindcss -i ./src/main.css -o ../../public/assets/backend/backend.css --minify"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.7"
+  }
+}

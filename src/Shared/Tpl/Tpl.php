@@ -11,17 +11,21 @@ use Xtompie\Tpl\Tpl as BaseTpl;
 
 final class Tpl extends BaseTpl
 {
+    /**
+     * @param array<string, bool> $import
+     */
     public function __construct(
         private AppDir $appDir,
         private Debug $debug,
         private ?string $templatePath = null,
+        private array $import = [],
     ) {
     }
 
     protected function templatePathPrefix(): string
     {
         if (!$this->templatePath) {
-            $this->templatePath = $this->appDir->__invoke() . '/';
+            $this->templatePath = $this->appDir->__invoke();
         }
         return $this->templatePath;
     }
@@ -51,5 +55,15 @@ final class Tpl extends BaseTpl
     protected function service(string $service): object
     {
         return Container::container()->get($service);
+    }
+
+    protected function import(string $template): string
+    {
+        if (isset($this->import[$template])) {
+            return '';
+        }
+        $this->import[$template] = true;
+
+        return $this->render($template);
     }
 }

@@ -123,4 +123,23 @@ final class Request extends ServerRequest implements Provider
 
         return null;
     }
+
+    /**
+     * @param array<string, mixed> $query
+     */
+    public function alterUri(array $query): string
+    {
+        $uri = $this->getUri();
+        $qs = $uri->getQuery();
+        $qa = [];
+
+        if ($qs !== '') {
+            parse_str($qs, $qa);
+        }
+
+        $qa = array_merge($qa, $query);
+        $qs = http_build_query($qa);
+
+        return (string) $uri->withQuery($qs);
+    }
 }
