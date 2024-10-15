@@ -94,6 +94,9 @@ class Provider implements SchemaProvider
         if ($column->unsigned()) {
             $options['unsigned'] = true;
         }
+        if ($column->type() instanceof StringType && $column->length() === null) {
+            $options['length'] = 255;
+        }
         return $options;
     }
 
@@ -104,10 +107,11 @@ class Provider implements SchemaProvider
             if ($index->lengths()) {
                 $options['lengths'] = $index->lengths();
             }
+            $name = $index->name() ?? 'idx_' . implode('_', $index->columns());
             if ($index->unique()) {
-                $doctrineTable->addUniqueIndex($index->columns(), $index->name(), $options);
+                $doctrineTable->addUniqueIndex($index->columns(), $name, $options);
             } else {
-                $doctrineTable->addIndex($index->columns(), $index->name(), [], $options);
+                $doctrineTable->addIndex($index->columns(), $name, [], $options);
             }
         }
     }
