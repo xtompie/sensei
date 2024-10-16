@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Backend\System\Resource;
 
-use App\Shared\Kernel\DiscoverOptimizer;
+use App\Shared\Kernel\Discoverer;
 
 /**
- * @extends DiscoverOptimizer<Repository>
+ * @extends Discoverer<Repository>
  */
-class RepositoryDiscoveryOptimizer extends DiscoverOptimizer
+class RepositoryDiscoverer extends Discoverer
 {
     protected function instanceof(): string
     {

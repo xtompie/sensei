@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Shared\Console;
 
-use App\Shared\Kernel\DiscoverOptimizer;
+use App\Shared\Kernel\Discoverer;
 
 /**
- * @extends DiscoverOptimizer<Command>
+ * @extends Discoverer<Command>
  */
-class CommandDiscoverOptimizer extends DiscoverOptimizer
+class CommandDiscoverer extends Discoverer
 {
     protected function instanceof(): string
     {

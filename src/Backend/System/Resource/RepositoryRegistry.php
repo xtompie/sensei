@@ -10,7 +10,7 @@ final class RepositoryRegistry
      * @param array<string, Repository>|null $map
      */
     public function __construct(
-        private RepositoryDiscoveryOptimizer $repositoryDiscoveryOptimizer,
+        private RepositoryDiscoverer $repositoryDiscoverer,
         private ?array $map = null,
     ) {
     }
@@ -19,7 +19,7 @@ final class RepositoryRegistry
     {
         if ($this->map === null) {
             $this->map = [];
-            foreach ($this->repositoryDiscoveryOptimizer->instances() as $repository) {
+            foreach ($this->repositoryDiscoverer->instances() as $repository) {
                 $this->map[$repository::resource()] = $repository;
             }
         }

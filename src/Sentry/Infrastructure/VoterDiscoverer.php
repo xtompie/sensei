@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Sentry\Infrastructure;
 
 use App\Sentry\Application\Model\Voter;
-use App\Shared\Kernel\DiscoverOptimizer;
+use App\Shared\Kernel\Discoverer;
 
 /**
- * @extends DiscoverOptimizer<Voter>
+ * @extends Discoverer<Voter>
  */
-class VoterDiscoverOptimizer extends DiscoverOptimizer
+class VoterDiscoverer extends Discoverer
 {
     protected function instanceof(): string
     {

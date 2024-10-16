@@ -10,7 +10,7 @@ final class PilotRegistry
      * @param array<string, Pilot>|null $map
      */
     public function __construct(
-        private PilotDiscoveryOptimizer $pilotDiscoveryOptimizer,
+        private PilotDiscoverer $pilotDiscoverer,
         private ?array $map = null,
     ) {
     }
@@ -19,7 +19,7 @@ final class PilotRegistry
     {
         if ($this->map === null) {
             $this->map = [];
-            foreach ($this->pilotDiscoveryOptimizer->instances() as $pilot) {
+            foreach ($this->pilotDiscoverer->instances() as $pilot) {
                 $this->map[$pilot::resource()] = $pilot;
             }
         }

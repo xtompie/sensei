@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Db\Schema;
 
-use App\Registry\Db;
-use App\Shared\Kernel\Discover;
+use App\Shared\Kernel\Source;
 use Doctrine\DBAL\Schema\Schema as DoctrineSchema;
 use Doctrine\DBAL\Schema\Table as DoctrineTable;
 use Doctrine\Migrations\Provider\SchemaProvider;
@@ -14,7 +13,7 @@ use Generator;
 class Provider implements SchemaProvider
 {
     public function __construct(
-        private Discover $discover,
+        private Source $source,
     ) {
     }
 
@@ -30,7 +29,7 @@ class Provider implements SchemaProvider
      */
     private function schema(): Generator
     {
-        foreach ($this->discover->instances(instanceof: Schema::class, suffix: 'Schema') as $schema) {
+        foreach ($this->source->instances(instanceof: Schema::class, suffix: 'Schema') as $schema) {
             yield from $schema->tables();
         }
     }

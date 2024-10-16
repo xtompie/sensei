@@ -11,7 +11,7 @@ use RecursiveIteratorIterator;
 use ReflectionClass;
 use SplFileInfo;
 
-class Discover
+class Source
 {
     /**
      * @param array<class-string>|null $source

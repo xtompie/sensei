@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Shared\Http;
 
 use App\Registry\Http;
-use App\Shared\Kernel\Discover;
+use App\Shared\Kernel\Source;
 use App\Shared\Optimize\OptimizeDir;
 use Generator;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper as SymfonyCompiledUrlMatcherDumper;
@@ -15,10 +15,10 @@ use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 final class Routes
 {
     public function __construct(
-        private Discover $discover,
+        private Source $source,
         private OptimizeDir $optimizeDir,
         private ResolveControllerMeta $resolveControllerMeta,
-        private ?SymfonyRouteCollection $source = null,
+        private ?SymfonyRouteCollection $discovered = null,
         private ?SymfonyRouteCollection $routes = null,
     ) {
     }
@@ -68,7 +68,7 @@ final class Routes
 
     private function dumper(): SymfonyCompiledUrlMatcherDumper
     {
-        return new SymfonyCompiledUrlMatcherDumper($this->source());
+        return new SymfonyCompiledUrlMatcherDumper($this->discovered());
     }
 
     private function cache(): string
@@ -76,15 +76,15 @@ final class Routes
         return $this->optimizeDir->__invoke() . '/' . preg_replace('/[^_A-Za-z0-9]/', '_', static::class) . '.php';
     }
 
-    private function source(): SymfonyRouteCollection
+    private function discovered(): SymfonyRouteCollection
     {
-        if ($this->source === null) {
-            $this->source = new SymfonyRouteCollection();
+        if ($this->discovered === null) {
+            $this->discovered = new SymfonyRouteCollection();
             foreach ($this->controllers() as $controller) {
                 if (!$controller->controller()) {
                     continue;
                 }
-                $this->source->add(
+                $this->discovered->add(
                     $controller->controller(),
                     new SymfonyRoute(
                         path: $controller->path(),
@@ -98,7 +98,7 @@ final class Routes
                 );
             }
         }
-        return $this->source;
+        return $this->discovered;
     }
 
     /**
@@ -107,7 +107,7 @@ final class Routes
     private function classes(): Generator
     {
         yield from Http::controllers();
-        yield from $this->discover->classes(instanceof: Controller::class, suffix: 'Controller');
+        yield from $this->source->classes(instanceof: Controller::class, suffix: 'Controller');
     }
 
     /**

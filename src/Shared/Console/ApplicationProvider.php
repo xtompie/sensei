@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Shared\Console;
 
-use App\Registry\Console;
 use App\Shared\Db\Schema\Provider as SchemaProvider;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
@@ -23,7 +22,7 @@ use Xtompie\Container\Container;
 final class ApplicationProvider
 {
     public function __construct(
-        private CommandDiscoverOptimizer $commandDiscoverOptimizer,
+        private CommandDiscoverer $commandDiscoverer,
         private ResolveCommandMeta $resolveCommandMeta,
         private SchemaProvider $schemaProvider,
     ) {
@@ -138,7 +137,7 @@ final class ApplicationProvider
      */
     private function classes(): Generator
     {
-        yield from $this->commandDiscoverOptimizer->classes();
+        yield from $this->commandDiscoverer->classes();
     }
 
     /**

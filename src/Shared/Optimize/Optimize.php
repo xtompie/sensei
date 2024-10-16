@@ -4,19 +4,29 @@ declare(strict_types=1);
 
 namespace App\Shared\Optimize;
 
-use App\Shared\Kernel\Discover;
+use App\Shared\Kernel\Source;
+use Generator;
 
 class Optimize
 {
     public function __construct(
-        private Discover $discover,
+        private Source $source,
     ) {
     }
 
     public function __invoke(): void
     {
-        foreach ($this->discover->instances(instanceof: Optimizer::class, suffix: 'Optimizer') as $optimize) {
-            $optimize->optimize();
+        foreach ($this->optimizers() as $optimizer) {
+            $optimizer->optimize();
         }
+    }
+
+    /**
+     * @return Generator<int, Optimizer>
+     */
+    private function optimizers(): Generator
+    {
+        yield from $this->source->instances(instanceof: Optimizer::class, suffix: 'Optimizer');
+        yield from $this->source->instances(instanceof: Optimizer::class, suffix: 'Discoverer');
     }
 }

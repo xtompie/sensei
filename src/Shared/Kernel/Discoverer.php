@@ -12,17 +12,17 @@ use Generator;
 /**
  * @template T
  */
-abstract class DiscoverOptimizer implements Optimizer
+abstract class Discoverer implements Optimizer
 {
     /**
-     * @param array<class-string<T>>|null $source
+     * @param array<class-string<T>>|null $discovered
      * @param array<class-string<T>>|null $classes
      * @param array<T>|null $instances
      */
     public function __construct(
-        private Discover $discover,
+        private Source $source,
         private OptimizeDir $optimizeDir,
-        private ?array $source = null,
+        private ?array $discovered = null,
         private ?array $classes = null,
         private ?array $instances = null,
     ) {
@@ -43,23 +43,23 @@ abstract class DiscoverOptimizer implements Optimizer
     /**
      * @return Generator<int, class-string<T>>
      */
-    protected function source(): Generator
+    protected function discovered(): Generator
     {
-        if ($this->source === null) {
-            $this->source = iterator_to_array($this->discover->classes(
+        if ($this->discovered === null) {
+            $this->discovered = iterator_to_array($this->source->classes(
                 instanceof: $this->instanceof(),
                 suffix: $this->suffix(),
             ));
         }
 
-        yield from $this->source;
+        yield from $this->discovered;
     }
 
     public function optimize(): void
     {
         file_put_contents(
             filename: $this->cache(),
-            data: '<?php return ' . var_export(iterator_to_array($this->source()), true) . ';'
+            data: '<?php return ' . var_export(iterator_to_array($this->discovered()), true) . ';'
         );
     }
 
@@ -69,11 +69,9 @@ abstract class DiscoverOptimizer implements Optimizer
     public function classes(): Generator
     {
         if ($this->classes === null) {
-            if (file_exists($this->cache())) {
-                $this->classes = iterator_to_array(require $this->cache());
-            } else {
-                $this->classes = iterator_to_array($this->source());
-            }
+            $this->classes = iterator_to_array(
+                file_exists($this->cache()) ? require $this->cache() : $this->discovered()
+            );
         }
 
         yield from $this->classes;

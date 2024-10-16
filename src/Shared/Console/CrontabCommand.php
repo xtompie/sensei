@@ -15,7 +15,7 @@ class CrontabCommand implements Command
 {
     public function __construct(
         private AppDir $appDir,
-        private CommandDiscoverOptimizer $commands,
+        private CommandDiscoverer $commandDiscoverer,
         private Output $output,
         private ResolveCommandMeta $resolveCommandMeta,
     ) {
@@ -44,7 +44,7 @@ class CrontabCommand implements Command
     private function list(): array
     {
         $list = [];
-        foreach ($this->commands->classes() as $class) {
+        foreach ($this->commandDiscoverer->classes() as $class) {
             $crontab = null;
             foreach ((new ReflectionClass($class))->getAttributes(Crontab::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
                 $crontab = $attribute->newInstance();
