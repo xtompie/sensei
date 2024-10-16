@@ -5,13 +5,7 @@ declare(strict_types=1);
 namespace App\Shared\Console;
 
 use App\Registry\Console;
-use App\Shared\Console\Signature\Argument as SignatureArgument;
-use App\Shared\Console\Signature\Description as SignatureDescription;
-use App\Shared\Console\Signature\Name as SignatureName;
-use App\Shared\Console\Signature\Option as SignatureOption;
-use App\Shared\Console\Signature\Signature;
 use App\Shared\Db\Schema\Provider as SchemaProvider;
-use App\Shared\Kernel\Discover;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
 use Doctrine\DBAL\DriverManager;
@@ -20,10 +14,7 @@ use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
 use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Provider\SchemaProvider as DoctrineSchemaProvider;
 use Doctrine\Migrations\Tools\Console\Command as DoctrineCommand;
-use Exception;
 use Generator;
-use ReflectionAttribute;
-use ReflectionClass;
 use Symfony\Component\Console\Command\Command as SymfonyCommnd;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -32,7 +23,8 @@ use Xtompie\Container\Container;
 final class ApplicationProvider
 {
     public function __construct(
-        private Discover $discover,
+        private CommandDiscoverOptimizer $commandDiscoverOptimizer,
+        private ResolveCommandMeta $resolveCommandMeta,
         private SchemaProvider $schemaProvider,
     ) {
     }
@@ -147,7 +139,7 @@ final class ApplicationProvider
     private function classes(): Generator
     {
         yield from Console::commands();
-        yield from $this->discover->classes(instanceof: Command::class, suffix: 'Command');
+        yield from $this->commandDiscoverOptimizer->classes();
     }
 
     /**
@@ -164,77 +156,10 @@ final class ApplicationProvider
             if (!class_exists($class)) {
                 return throw new \InvalidArgumentException('Command must be a valid class-string.');
             }
-            $command = $this->commandUsingStatic($class);
-            if (!$command) {
-                $command = $this->commandUsingAttributes($class);
-            }
-            if (!$command) {
-                throw new Exception("Command $class cannot be resolved using meta or attributes.");
-            }
+
+            $command = $this->resolveCommandMeta->__invoke($class);
+
             yield $command;
         }
-    }
-
-    private function commandUsingStatic(string $class): ?CommandMeta
-    {
-        if (!class_exists($class)) {
-            return null;
-        }
-
-        $reflectionClass = new ReflectionClass($class);
-        if (!$reflectionClass->implementsInterface(CommandWithMeta::class)) {
-            return null;
-        }
-
-        $command = $class::commandMeta();
-        if (!$command instanceof CommandMeta) {
-            return null;
-        }
-
-        $command->setCommand($class);
-
-        return $command;
-    }
-
-    private function commandUsingAttributes(string $class): ?CommandMeta
-    {
-        if (!class_exists($class)) {
-            return null;
-        }
-
-        $reflectionClass = new ReflectionClass($class);
-
-        $name = null;
-        $description = null;
-        $arguments = [];
-        $options = [];
-
-        foreach ($reflectionClass->getAttributes(Signature::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
-            $attr = $attribute->newInstance();
-            if ($attr instanceof SignatureName) {
-                $name = (string) $attr;
-            }
-            if ($attr instanceof SignatureDescription) {
-                $description = (string) $attr;
-            }
-            if ($attr instanceof SignatureArgument) {
-                $arguments[] = $attr->toArgument();
-            }
-            if ($attr instanceof SignatureOption) {
-                $options[] = $attr->toOption();
-            }
-        }
-
-        if ($name === null) {
-            return null;
-        }
-
-        return new CommandMeta(
-            name: $name,
-            command: $class,
-            description: $description,
-            arguments: $arguments,
-            options: $options,
-        );
     }
 }
