@@ -6,14 +6,8 @@ namespace App\Shared\Http;
 
 use App\Registry\Http;
 use App\Shared\Kernel\Discover;
-use App\Shared\Http\Route\Method;
-use App\Shared\Http\Route\Path;
-use App\Shared\Http\Route\Route;
 use App\Shared\Optimize\OptimizeDir;
-use Exception;
 use Generator;
-use ReflectionAttribute;
-use ReflectionClass;
 use Symfony\Component\Routing\Matcher\Dumper\CompiledUrlMatcherDumper as SymfonyCompiledUrlMatcherDumper;
 use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
@@ -21,8 +15,9 @@ use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 final class Routes
 {
     public function __construct(
-        private OptimizeDir $optimizeDir,
         private Discover $discover,
+        private OptimizeDir $optimizeDir,
+        private ResolveControllerMeta $resolveControllerMeta,
         private ?SymfonyRouteCollection $source = null,
         private ?SymfonyRouteCollection $routes = null,
     ) {
@@ -129,72 +124,10 @@ final class Routes
             if (!class_exists($class)) {
                 return throw new \InvalidArgumentException('Controller must be a valid class-string.');
             }
-            $controller = $this->controllerUsingStatic($class);
-            if (!$controller) {
-                $controller = $this->controllerUsingAttributes($class);
-            }
-            if (!$controller) {
-                throw new Exception("Controller $class cannot be resolved using meta or attributes.");
-            }
+
+            $controller = $this->resolveControllerMeta->__invoke($class);
+
             yield $controller;
         }
-    }
-
-    private static function controllerUsingStatic(string $class): ?ControllerMeta
-    {
-        if (!class_exists($class)) {
-            return null;
-        }
-
-        $reflectionClass = new ReflectionClass($class);
-        if (!$reflectionClass->implementsInterface(ControllerWithMeta::class)) {
-            return null;
-        }
-
-        $controller = $class::controllerMeta();
-        if (!$controller instanceof ControllerMeta) {
-            return null;
-        }
-
-        $controller->setController($class);
-
-        return $controller;
-    }
-
-    private function controllerUsingAttributes(string $class): ?ControllerMeta
-    {
-        if (!class_exists($class)) {
-            return null;
-        }
-
-        $reflectionClass = new ReflectionClass($class);
-
-        $path = null;
-        $requirements = [];
-        $methods = [];
-        $defaults = [];
-
-        foreach ($reflectionClass->getAttributes(Route::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
-            $attr = $attribute->newInstance();
-            if ($attr instanceof Path) {
-                $path = $attr->path;
-                $requirements = $attr->requirements;
-            }
-            if ($attr instanceof Method) {
-                $methods[] = (string) $attr;
-            }
-        }
-
-        if ($path === null) {
-            return null;
-        }
-
-        return new ControllerMeta(
-            path: $path,
-            controller: $class,
-            requirements: $requirements,
-            methods: $methods ?: ['GET'],
-            defaults: $defaults
-        );
     }
 }

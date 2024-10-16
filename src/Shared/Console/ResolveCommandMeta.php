@@ -4,26 +4,21 @@ declare(strict_types=1);
 
 namespace App\Shared\Console;
 
-use App\Shared\Console\Signature\Argument as SignatureArgument;
-use App\Shared\Console\Signature\Description as SignatureDescription;
-use App\Shared\Console\Signature\Name as SignatureName;
-use App\Shared\Console\Signature\Option as SignatureOption;
+use App\Shared\Console\Signature\Argument;
+use App\Shared\Console\Signature\Description;
+use App\Shared\Console\Signature\Name;
+use App\Shared\Console\Signature\Option;
 use App\Shared\Console\Signature\Signature;
 use Exception;
 use ReflectionAttribute;
 use ReflectionClass;
 
-class ResolveCommandMeta
+final class ResolveCommandMeta
 {
-    public function __construct(
-        private CommandDiscoverOptimizer $commands,
-    ) {
-    }
-
     /**
-     * @param class-string<Command> $class
+     * @param class-string $class
      */
-    public function __invoke($class): CommandMeta
+    public function __invoke(string $class): CommandMeta
     {
         $command = $this->usingStatic($class);
         if (!$command) {
@@ -72,16 +67,16 @@ class ResolveCommandMeta
 
         foreach ($reflectionClass->getAttributes(Signature::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
             $attr = $attribute->newInstance();
-            if ($attr instanceof SignatureName) {
+            if ($attr instanceof Name) {
                 $name = (string) $attr;
             }
-            if ($attr instanceof SignatureDescription) {
+            if ($attr instanceof Description) {
                 $description = (string) $attr;
             }
-            if ($attr instanceof SignatureArgument) {
+            if ($attr instanceof Argument) {
                 $arguments[] = $attr->toArgument();
             }
-            if ($attr instanceof SignatureOption) {
+            if ($attr instanceof Option) {
                 $options[] = $attr->toOption();
             }
         }

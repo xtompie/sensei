@@ -21,17 +21,16 @@ class CrontabCommand implements Command
     ) {
     }
 
-    public function __invoke(AppDir $appDir, Output $output): void
+    public function __invoke(): void
     {
         foreach ($this->list() as $line) {
-
-            $dir = escapeshellarg($appDir->__invoke());
+            $dir = escapeshellarg($this->appDir->__invoke());
             $expression = $line['crontab']->expression();
             $command = $line['meta']->name();
             $stdout = preg_replace('/[^a-zA-Z0-9]/', '_', $command);
             $stderr = $stdout . '_error';
 
-            $output->writeln(
+            $this->output->writeln(
                 "$expression cd $dir && php console $command"
                 . " >> var/log/{$stdout}-\$(date +\%Y-\%m-\%d).log"
                 . " 2>> var/log/{$stderr}-\$(date +\%Y-\%m-\%d).log"
