@@ -138,7 +138,6 @@ final class ApplicationProvider
      */
     private function classes(): Generator
     {
-        yield from Console::commands();
         yield from $this->commandDiscoverOptimizer->classes();
     }
 

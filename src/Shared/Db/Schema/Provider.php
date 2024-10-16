@@ -30,7 +30,6 @@ class Provider implements SchemaProvider
      */
     private function schema(): Generator
     {
-        yield from Db::tables();
         foreach ($this->discover->instances(instanceof: Schema::class, suffix: 'Schema') as $schema) {
             yield from $schema->tables();
         }
