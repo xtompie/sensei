@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Console;
 
-use App\Shared\Db\Schema\Provider as SchemaProvider;
+use App\Shared\Schema\Provider as SchemaProvider;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Env\Env;
 use Doctrine\DBAL\DriverManager;
@@ -100,7 +100,7 @@ final class ApplicationProvider
                     'execution_time_column_name' => 'execution_time',
                 ],
                 'migrations_paths' => [
-                    'Migrations' => $appDir->__invoke() . '/src/Shared/Db/Migrations',
+                    'Migrations' => $appDir->__invoke() . '/tools/migrations',
                 ],
                 'all_or_nothing' => true,
                 'transactional' => true,

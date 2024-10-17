@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Schema;
+namespace App\Shared\Schema;
 
 use App\Shared\Kernel\Source;
 use Doctrine\DBAL\Schema\Schema as DoctrineSchema;

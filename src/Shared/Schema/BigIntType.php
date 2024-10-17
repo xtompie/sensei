@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Schema;
+namespace App\Shared\Schema;
 
 class BigIntType extends Type
 {

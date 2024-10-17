@@ -12,7 +12,7 @@ final class Container extends BaseContainer
     public function __construct()
     {
         $this->providers = [
-            PDO::class => \App\Shared\Db\Pdo\PdoProvider::class,
+            PDO::class => \App\Shared\Pdo\PdoProvider::class,
         ];
 
         $this->bindings = [

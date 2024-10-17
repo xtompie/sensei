@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Image\Infrastructure;
 
-use App\Shared\Db\Schema\Schema;
-use App\Shared\Db\Schema\Column;
-use App\Shared\Db\Schema\IntegerType;
-use App\Shared\Db\Schema\StringType;
-use App\Shared\Db\Schema\Table;
+use App\Shared\Schema\Schema;
+use App\Shared\Schema\Column;
+use App\Shared\Schema\IntegerType;
+use App\Shared\Schema\StringType;
+use App\Shared\Schema\Table;
 use Generator;
 
 class ImageSchema implements Schema

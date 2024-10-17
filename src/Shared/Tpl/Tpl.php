@@ -70,6 +70,6 @@ final class Tpl extends BaseTpl
     protected function sentry(string $sid): bool
     {
         return true; // @TEST
-        return $this->service(\App\Sentry\Application\Service\Sentry\Sentry::class)->__invoke($sid);
+        // return $this->service(\App\Sentry\Application\Service\Sentry\Sentry::class)->__invoke($sid);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Db\Pdo;
+namespace App\Shared\Pdo;
 
 use App\Shared\Env\Env;
 use PDO;

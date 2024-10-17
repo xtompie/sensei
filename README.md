@@ -331,16 +331,16 @@ Controllers and Command
 
 ### DB
 
-Schema is resolved through `App\Registry\Db::tables()` and the Discovery mechanism, which searches for classes with the suffix `Schema` that implement `App\Shared\Db\Schema`. E.g.
+Schema is resolved through Discovery mechanism, which searches for classes with the suffix `Schema` that implement `App\Shared\Schema\Schema`. E.g.
 
 ```php
 namespace App\Article\Infrastructure\Schema;
 
-use App\Shared\Db\Schema\Column;
-use App\Shared\Db\Schema;
-use App\Shared\Db\Schema\Table;
-use App\Shared\Db\Schema\StringType;
-use App\Shared\Db\Schema\TextType;
+use App\Shared\Schema\Column;
+use App\Shared\Schema\Schema;
+use App\Shared\Schema\Table;
+use App\Shared\Schema\StringType;
+use App\Shared\Schema\TextType;
 use Generator;
 
 class TenantSchema implements Schema
