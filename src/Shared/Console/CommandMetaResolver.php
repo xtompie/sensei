@@ -13,7 +13,7 @@ use Exception;
 use ReflectionAttribute;
 use ReflectionClass;
 
-final class ResolveCommandMeta
+final class CommandMetaResolver
 {
     /**
      * @param class-string $class

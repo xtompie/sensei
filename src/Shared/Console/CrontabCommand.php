@@ -16,8 +16,8 @@ class CrontabCommand implements Command
     public function __construct(
         private AppDir $appDir,
         private CommandDiscoverer $commandDiscoverer,
+        private CommandMetaResolver $commandMetaResolver,
         private Output $output,
-        private ResolveCommandMeta $resolveCommandMeta,
     ) {
     }
 
@@ -53,7 +53,7 @@ class CrontabCommand implements Command
                 continue;
             }
             $list[] = [
-                'meta' => $this->resolveCommandMeta->__invoke($class),
+                'meta' => $this->commandMetaResolver->__invoke($class),
                 'crontab' => $crontab,
             ];
         }

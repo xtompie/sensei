@@ -18,50 +18,60 @@ final class Routes
     public function __construct(
         private Source $source,
         private OptimizeDir $optimizeDir,
-        private ResolveControllerMeta $resolveControllerMeta,
-        private ?SymfonyRouteCollection $discovered = null,
+        private ControllerMetaResolver $controllerMetaResolver,
         private ?SymfonyRouteCollection $routes = null,
     ) {
     }
 
     public function optimize(): void
     {
-        File::write(filename: $this->cache(), data: $this->dumper()->dump());
+        File::write(filename: $this->matcherCachePath(), data: $this->dumper()->dump());
+        $this->saveRouteCache();
     }
 
-    public function routes(): SymfonyRouteCollection
+    private function saveRouteCache(): void
     {
-        if ($this->routes === null) {
-            $this->routes = new SymfonyRouteCollection();
-            foreach ($this->compiled() as $name => $routeData) {
-                if (
-                    !isset($routeData['path']) || !is_string($routeData['path'])
-                    || !isset($routeData['defaults']) || !is_array($routeData['defaults'])
-                ) {
-                    continue;
-                }
-                $this->routes->add($name, new SymfonyRoute(
-                    path: $routeData['path'],
-                    defaults: $routeData['defaults'],
-                    requirements: $routeData['requirements'] ?? [],
-                    options:$routeData['options'] ?? [],
-                    host: $routeData['host'] ?? '',
-                    schemes: $routeData['schemes'] ?? [],
-                    methods: $routeData['methods'] ?? [],
-                    condition: $routeData['condition'] ?? ''
-                ));
-            }
+        $cache = [];
+        foreach ($this->routes() as $name => $route) {
+            $cache[$name] = [
+                'path' => $route->getPath(),
+                'defaults' => $route->getDefaults(),
+                'requirements' => $route->getRequirements(),
+                'options' => $route->getOptions(),
+                'host' => $route->getHost(),
+                'schemes' => $route->getSchemes(),
+                'methods' => $route->getMethods(),
+                'condition' => $route->getCondition(),
+            ];
         }
-        return $this->routes;
+        File::write(filename: $this->routesCachePath(), data: '<?php return ' . var_export($cache, true) . ';');
+    }
+
+    private function loadRouteCache(): SymfonyRouteCollection
+    {
+        $routes = new SymfonyRouteCollection();
+        foreach (require $this->routesCachePath() as $name => $routeData) {
+            $routes->add($name, new SymfonyRoute(
+                path: $routeData['path'],
+                defaults: $routeData['defaults'],
+                requirements: $routeData['requirements'],
+                options: $routeData['options'],
+                host: $routeData['host'],
+                schemes: $routeData['schemes'],
+                methods: $routeData['methods'],
+                condition: $routeData['condition'],
+            ));
+        }
+        return $routes;
     }
 
     /**
-     * @return array<string, array<mixed>>
+     * @return array<int, mixed>
      */
     public function compiled(): array
     {
-        if (file_exists($this->cache())) {
-            return require $this->cache();
+        if (file_exists($this->matcherCachePath())) {
+            return require $this->matcherCachePath();
         }
 
         return $this->dumper()->getCompiledRoutes();
@@ -69,37 +79,29 @@ final class Routes
 
     private function dumper(): SymfonyCompiledUrlMatcherDumper
     {
-        return new SymfonyCompiledUrlMatcherDumper($this->discovered());
+        return new SymfonyCompiledUrlMatcherDumper($this->routes());
     }
 
-    private function cache(): string
+    private function matcherCachePath(): string
     {
-        return $this->optimizeDir->__invoke() . '/' . preg_replace('/[^_A-Za-z0-9]/', '_', static::class) . '.php';
+        return $this->optimizeDir->__invoke() . '/' . preg_replace('/[^_A-Za-z0-9]/', '_', static::class) . '_Matcher.php';
     }
 
-    private function discovered(): SymfonyRouteCollection
+    private function routesCachePath(): string
     {
-        if ($this->discovered === null) {
-            $this->discovered = new SymfonyRouteCollection();
-            foreach ($this->controllers() as $controller) {
-                if (!$controller->controller()) {
-                    continue;
-                }
-                $this->discovered->add(
-                    $controller->controller(),
-                    new SymfonyRoute(
-                        path: $controller->path(),
-                        requirements: $controller->requirements(),
-                        defaults: [
-                            ...$controller->defaults(),
-                            '_controller' => $controller->controller(),
-                        ],
-                        methods: $controller->methods(),
-                    ),
-                );
+        return $this->optimizeDir->__invoke() . '/' . preg_replace('/[^_A-Za-z0-9]/', '_', static::class) . '_Routes.php';
+    }
+
+    public function routes(): SymfonyRouteCollection
+    {
+        if ($this->routes === null) {
+            if (file_exists($this->routesCachePath())) {
+                $this->routes = $this->loadRouteCache();
+            } else {
+                $this->routes = $this->sourceRoutes();
             }
         }
-        return $this->discovered;
+        return $this->routes;
     }
 
     /**
@@ -114,7 +116,7 @@ final class Routes
     /**
      * @return Generator<int, ControllerMeta>
      */
-    private function controllers(): Generator
+    private function controllerMetas(): Generator
     {
         $unique = [];
         foreach ($this->classes() as $class) {
@@ -126,9 +128,33 @@ final class Routes
                 return throw new \InvalidArgumentException('Controller must be a valid class-string.');
             }
 
-            $controller = $this->resolveControllerMeta->__invoke($class);
+            $controller = $this->controllerMetaResolver->__invoke($class);
 
             yield $controller;
         }
+    }
+
+    private function sourceRoutes(): SymfonyRouteCollection
+    {
+        $routes = new SymfonyRouteCollection();
+        foreach ($this->controllerMetas() as $controller) {
+            if (!$controller->controller()) {
+                continue;
+            }
+            $routes->add(
+                $controller->controller(),
+                new SymfonyRoute(
+                    path: $controller->path(),
+                    requirements: $controller->requirements(),
+                    defaults: [
+                        ...$controller->defaults(),
+                        '_controller' => $controller->controller(),
+                    ],
+                    methods: $controller->methods(),
+                ),
+            );
+        }
+
+        return $routes;
     }
 }

@@ -11,22 +11,34 @@ use Exception;
 use ReflectionAttribute;
 use ReflectionClass;
 
-final class ResolveControllerMeta
+final class ControllerMetaResolver
 {
+    /**
+     * @param array<string, ControllerMeta> $cache
+     */
+    public function __construct(
+        private array $cache = [],
+    ) {
+    }
+
     /**
      * @param class-string $class
      */
     public function __invoke(string $class): ControllerMeta
     {
-        $controller = $this->usingStatic($class);
-        if (!$controller) {
-            $controller = $this->usingAttributes($class);
-        }
-        if (!$controller) {
-            throw new Exception("Controller $class cannot be resolved using meta or attributes.");
+        if (!isset($this->cache[$class])) {
+            $controller = $this->usingStatic($class);
+            if (!$controller) {
+                $controller = $this->usingAttributes($class);
+            }
+            if (!$controller) {
+                throw new Exception("Controller $class cannot be resolved using meta or attributes.");
+            }
+
+            $this->cache[$class] = $controller;
         }
 
-        return $controller;
+        return $this->cache[$class];
     }
 
     private static function usingStatic(string $class): ?ControllerMeta

@@ -69,9 +69,11 @@ abstract class Discoverer implements Optimizer
     public function classes(): Generator
     {
         if ($this->classes === null) {
-            $this->classes = iterator_to_array(
-                file_exists($this->cache()) ? require $this->cache() : $this->discovered()
-            );
+            if (file_exists($this->cache())) {
+                $this->classes = require $this->cache();
+            } else {
+                $this->classes = iterator_to_array($this->discovered());
+            }
         }
 
         yield from $this->classes;

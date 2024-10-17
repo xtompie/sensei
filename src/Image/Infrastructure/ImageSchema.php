@@ -19,7 +19,7 @@ class ImageSchema implements Schema
     public function tables(): Generator
     {
         yield new Table(
-            name: __FUNCTION__,
+            name: 'image',
             columns: [
                 new Column(name: 'ai', type: new IntegerType(), primary: true, autoincrement: true),
                 new Column(name: 'id', type: new StringType(), unique: true),

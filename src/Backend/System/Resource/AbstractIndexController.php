@@ -16,7 +16,7 @@ abstract class AbstractIndexController implements Controller, ControllerWithMeta
 {
     public static function resource(): string
     {
-        return array_slice(explode('\\', static::class), -2, 1)[0];
+        return strtolower(array_slice(explode('\\', static::class), -2, 1)[0]);
     }
 
     public static function action(): string

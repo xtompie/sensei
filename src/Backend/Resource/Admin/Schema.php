@@ -16,7 +16,7 @@ class Schema implements DbSchema
     public function tables(): Generator
     {
         yield new Table(
-            name: __FUNCTION__,
+            name: 'admin',
             columns: [
                 new Column(name: 'id', type: new StringType(), primary: true),
                 new Column(name: 'created_at', type: new DateTimeType(), index: true),

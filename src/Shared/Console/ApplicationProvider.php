@@ -23,7 +23,7 @@ final class ApplicationProvider
 {
     public function __construct(
         private CommandDiscoverer $commandDiscoverer,
-        private ResolveCommandMeta $resolveCommandMeta,
+        private CommandMetaResolver $commandMetaResolver,
         private SchemaProvider $schemaProvider,
     ) {
     }
@@ -155,7 +155,7 @@ final class ApplicationProvider
                 return throw new \InvalidArgumentException('Command must be a valid class-string.');
             }
 
-            $command = $this->resolveCommandMeta->__invoke($class);
+            $command = $this->commandMetaResolver->__invoke($class);
 
             yield $command;
         }

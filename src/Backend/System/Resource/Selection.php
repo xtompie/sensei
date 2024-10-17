@@ -22,10 +22,10 @@ class Selection
     public function init(): void
     {
         $query = $this->request->query();
-        if ($query['_selection']) {
+        if (isset($query['_selection']) && $query['_selection']) {
             $this->urlParamContext->set('_selection', '1');
         }
-        if ($query['_selection_single']) {
+        if (isset($query['_selection_single']) && $query['_selection_single']) {
             $this->urlParamContext->set('_selection_single', '1');
         }
     }
