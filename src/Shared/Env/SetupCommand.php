@@ -11,30 +11,23 @@ use App\Shared\Console\Signature\Name;
 use App\Shared\Kernel\AppDir;
 
 #[Name('app:env:setup')]
-#[Description('Setup environment variables')]
+#[Description('Create .env file with default values')]
 class SetupCommand implements Command
 {
-    public function __construct(
-        private Output $output,
-        private AppDir $appDir,
-        private Env $env,
-    ) {
-    }
-
-    public function __invoke(): int
+    public function __invoke(Output $output, AppDir $appDir, Env $env): int
     {
-        $file = $this->appDir->__invoke() . '/.env';
+        $file = $appDir->__invoke() . '/.env';
 
         if (is_file($file)) {
-            $this->output->errorln('File already exists: ' . $file);
+            $output->errorln('File already exists: ' . $file);
             return 1;
         }
 
-        foreach ($this->env->entries() as $entry) {
+        foreach ($env->entries() as $entry) {
             file_put_contents($file, "{$entry->key()}={$entry->default()}\n", FILE_APPEND);
         }
 
-        $this->output->infoln('File created: ' . $file);
+        $output->infoln('File created: ' . $file);
 
         return 0;
     }

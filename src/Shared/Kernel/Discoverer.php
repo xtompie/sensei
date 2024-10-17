@@ -57,7 +57,7 @@ abstract class Discoverer implements Optimizer
 
     public function optimize(): void
     {
-        file_put_contents(
+        File::write(
             filename: $this->cache(),
             data: '<?php return ' . var_export(iterator_to_array($this->discovered()), true) . ';'
         );

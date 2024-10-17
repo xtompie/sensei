@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Shared\Http;
 
 use App\Registry\Http;
+use App\Shared\Kernel\File;
 use App\Shared\Kernel\Source;
 use App\Shared\Optimize\OptimizeDir;
 use Generator;
@@ -25,7 +26,7 @@ final class Routes
 
     public function optimize(): void
     {
-        file_put_contents($this->cache(), $this->dumper()->dump());
+        File::write(filename: $this->cache(), data: $this->dumper()->dump());
     }
 
     public function routes(): SymfonyRouteCollection

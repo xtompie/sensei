@@ -10,17 +10,11 @@ use App\Shared\Console\Signature\Description;
 use App\Shared\Console\Signature\Name;
 
 #[Name('app:env:check')]
-#[Description('Check environment variables')]
+#[Description('Check the environment configuration')]
 class CheckCommand implements Command
 {
-    public function __construct(
-        private Output $output,
-        private Validator $validator,
-    ) {
-    }
-
-    public function __invoke(): int
+    public function __invoke(Output $output, Validator $validator): int
     {
-        return $this->output->result($this->validator->__invoke());
+        return $output->result($validator->__invoke());
     }
 }

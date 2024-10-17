@@ -27,7 +27,7 @@ final class Env
     }
 
     /**
-     * @return Generator<Entry>
+     * @return Generator<int, Entry>
      */
     public function entries(): Generator
     {
@@ -65,11 +65,6 @@ final class Env
     }
 
     public function APP_KERNEL_WHOOPS_EDITOR(): string
-    {
-        return $this(__FUNCTION__);
-    }
-
-    public function APP_SECRET(): string
     {
         return $this(__FUNCTION__);
     }

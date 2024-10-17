@@ -9,16 +9,11 @@ use App\Shared\Console\Signature\Description;
 use App\Shared\Console\Signature\Name;
 
 #[Name('app:optimize')]
-#[Description('Optimize application')]
+#[Description('Optimize the application')]
 class OptimizeCommand implements Command
 {
-    public function __construct(
-        private Optimize $optimize
-    ) {
-    }
-
-    public function __invoke(): void
+    public function __invoke(Optimize $optimize): void
     {
-        $this->optimize->__invoke();
+        $optimize->__invoke();
     }
 }
