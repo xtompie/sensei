@@ -1,7 +1,0 @@
-{% if filters is defined %}
-    <form>
-        {% include filters %}
-        <button type="submit">Filter</button>
-        <input type="hidden" name="order" value="{{ order ?? '' }}" />
-    </form>
-{% endif %}
