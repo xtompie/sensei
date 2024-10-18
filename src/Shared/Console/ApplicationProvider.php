@@ -133,20 +133,12 @@ final class ApplicationProvider
     }
 
     /**
-     * @return Generator<class-string>
-     */
-    private function classes(): Generator
-    {
-        yield from $this->commandDiscoverer->classes();
-    }
-
-    /**
      * @return Generator<CommandMeta>
      */
     private function commands(): Generator
     {
         $unique = [];
-        foreach ($this->classes() as $class) {
+        foreach ($this->commandDiscoverer->classes() as $class) {
             if (isset($unique[$class])) {
                 continue;
             }

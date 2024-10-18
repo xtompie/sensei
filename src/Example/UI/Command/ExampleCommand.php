@@ -17,6 +17,5 @@ class ExampleCommand implements Command
     {
         sleep(10);
         $output->write('Hello, World!');
-
     }
 }

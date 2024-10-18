@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Shared\Http;
 
-use App\Registry\Http;
 use App\Shared\Kernel\File;
 use App\Shared\Kernel\Source;
 use App\Shared\Optimize\OptimizeDir;
@@ -105,33 +104,24 @@ final class Routes
     }
 
     /**
-     * @return Generator<class-string>
-     */
-    private function classes(): Generator
-    {
-        yield from Http::controllers();
-        yield from $this->source->classes(instanceof: Controller::class, suffix: 'Controller');
-    }
-
-    /**
      * @return Generator<int, ControllerMeta>
      */
     private function controllerMetas(): Generator
     {
-        $unique = [];
-        foreach ($this->classes() as $class) {
-            if (isset($unique[$class])) {
-                continue;
-            }
-            $unique[$class] = true;
+        /** @var ControllerMeta[] $metas */
+        $metas = [];
+        foreach ($this->source->classes(instanceof: Controller::class, suffix: 'Controller') as $class) {
             if (!class_exists($class)) {
                 return throw new \InvalidArgumentException('Controller must be a valid class-string.');
             }
-
-            $controller = $this->controllerMetaResolver->__invoke($class);
-
-            yield $controller;
+            $metas[] = $this->controllerMetaResolver->__invoke($class);
         }
+
+        usort($metas, function (ControllerMeta $a, ControllerMeta $b) {
+            return $b->priority() <=> $a->priority();
+        });
+
+        yield from $metas;
     }
 
     private function sourceRoutes(): SymfonyRouteCollection

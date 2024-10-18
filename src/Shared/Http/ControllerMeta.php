@@ -7,8 +7,6 @@ namespace App\Shared\Http;
 class ControllerMeta
 {
     /**
-     * @param string $path
-     * @param string $controller
      * @param array<string, string> $requirements
      * @param array<string> $methods
      * @param array<string, mixed> $defaults
@@ -19,6 +17,7 @@ class ControllerMeta
         protected array $requirements = [],
         protected array $methods = [],
         protected array $defaults = [],
+        protected int $priority = 0,
     ) {
     }
 
@@ -59,5 +58,10 @@ class ControllerMeta
     public function defaults(): array
     {
         return $this->defaults;
+    }
+
+    public function priority(): int
+    {
+        return $this->priority;
     }
 }

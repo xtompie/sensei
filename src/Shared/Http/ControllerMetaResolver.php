@@ -6,6 +6,7 @@ namespace App\Shared\Http;
 
 use App\Shared\Http\Route\Method;
 use App\Shared\Http\Route\Path;
+use App\Shared\Http\Route\Priority;
 use App\Shared\Http\Route\Route;
 use Exception;
 use ReflectionAttribute;
@@ -74,6 +75,7 @@ final class ControllerMetaResolver
         $requirements = [];
         $methods = [];
         $defaults = [];
+        $priority = 0;
 
         foreach ($reflectionClass->getAttributes(Route::class, ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
             $attr = $attribute->newInstance();
@@ -83,6 +85,9 @@ final class ControllerMetaResolver
             }
             if ($attr instanceof Method) {
                 $methods[] = (string) $attr;
+            }
+            if ($attr instanceof Priority) {
+                $priority = $attr->priority;
             }
         }
 
@@ -95,7 +100,8 @@ final class ControllerMetaResolver
             controller: $class,
             requirements: $requirements,
             methods: $methods ?: ['GET'],
-            defaults: $defaults
+            defaults: $defaults,
+            priority: $priority,
         );
     }
 }

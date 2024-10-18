@@ -10,7 +10,6 @@ use App\Shared\Console\Output;
 use Attribute;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\FlockStore;
-use Xtompie\Result\Error;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Lock implements Advice
