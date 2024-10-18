@@ -105,7 +105,7 @@ class ArticleController implements Controller
 }
 ```
 
-Controllers are resolved through `App\Registry\Http::controllers()` and the Discovery mechanism, which searches for classes with the suffix `Controller` that implement `App\Shared\Http\Controller`.
+Controllers are resolved through Discovery mechanism, which searches for classes with the suffix `Controller` that implement `App\Shared\Http\Controller`.
 
 Controllers are Single Action Controllers.
 
@@ -229,7 +229,7 @@ class UpdatePetCommand implements Command
 }
 ```
 
-Commands are resolved through `App\Registry\Console::commands()` and the Discovery mechanism, which searches for classes with the suffix `Command` that implement `App\Shared\Console\Command`.
+Commands are resolved through Discovery mechanism, which searches for classes with the suffix `Command` that implement `App\Shared\Console\Command`.
 
 Application console is handled using the [symfony/console](https://symfony.com/doc/current/console.html).
 
