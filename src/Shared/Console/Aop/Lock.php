@@ -17,6 +17,7 @@ class Lock implements Advice
 {
     public function __construct(
         private bool $error = true,
+        private ?string $resource = null,
     ) {
     }
 
@@ -24,7 +25,7 @@ class Lock implements Advice
     {
         $store = new FlockStore();
         $factory = new LockFactory($store);
-        $lock = $factory->createLock($invocation->method());
+        $lock = $factory->createLock($this->resource ?? $invocation->method());
         if (!$lock->acquire()) {
             if ($this->error) {
                 $output->errorln('The script is already running in another process.');
