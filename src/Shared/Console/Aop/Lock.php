@@ -7,9 +7,8 @@ namespace App\Shared\Console\Aop;
 use App\Shared\Aop\Advice;
 use App\Shared\Aop\Invocation;
 use App\Shared\Console\Output;
+use App\Shared\Lock\CreateLock;
 use Attribute;
-use Symfony\Component\Lock\LockFactory;
-use Symfony\Component\Lock\Store\FlockStore;
 
 #[Attribute(Attribute::TARGET_METHOD)]
 class Lock implements Advice
@@ -20,12 +19,10 @@ class Lock implements Advice
     ) {
     }
 
-    public function __invoke(Invocation $invocation, Output $output): mixed
+    public function __invoke(Invocation $invocation, Output $output, CreateLock $createLock): mixed
     {
-        $store = new FlockStore();
-        $factory = new LockFactory($store);
-        $lock = $factory->createLock($this->resource ?? $invocation->method());
-        if (!$lock->acquire()) {
+        $lock = $createLock->__invoke($this->resource ?? $invocation->method());
+        if (!$lock) {
             if ($this->error) {
                 $output->errorln('The script is already running in another process.');
                 return false;
