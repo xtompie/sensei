@@ -16,6 +16,7 @@ final class Container extends BaseContainer
         ];
 
         $this->bindings = [
+            \App\Shared\Job\Transport::class => \App\Shared\Job\FileTransport::class,
             \Xtompie\Aql\Platform::class => \Xtompie\Aql\MySQLPlatform::class,
             \Xtompie\Dao\Adapter::class => \Xtompie\Dao\PdoAdapter::class,
             \Xtompie\Dao\PdoAdapter::class => \App\Shared\Profiler\PdoAdapter::class,
