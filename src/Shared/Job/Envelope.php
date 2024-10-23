@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Shared\Job;
 
+use App\Shared\Job\Stamp\Stamp;
+
 final class Envelope
 {
     public static function fromSerialization(string $serialization): ?static
@@ -24,7 +26,7 @@ final class Envelope
                 foreach ($primitive['stamps'] as $stampClass => $stampPrimitives) {
                     if (class_exists($stampClass) && is_array($stampPrimitives)) {
                         foreach ($stampPrimitives as $stampPrimitive) {
-                            $stamps[$stampClass][] = $stampClass::fromPrimitive($stampPrimitive);
+                            $stamps[] = $stampClass::fromPrimitive($stampPrimitive);
                         }
                     } else {
                         return null;
@@ -38,13 +40,18 @@ final class Envelope
         }
     }
 
+    private object $job;
+    private array $stamps = [];
+
     /**
-     * @param array<class-string<Stamp>, list<Stamp>> $stamps
+     * @param list<Stamp> $stamps
      */
-    public function __construct(
-        private object $job,
-        private array $stamps = [],
-    ) {
+    public function __construct(object $job, array $stamps = [])
+    {
+        $this->job = $job;
+        foreach ($stamps as $stamp) {
+            $this->stamps[$stamp::class][] = $stamp;
+        }
     }
 
     public function job(): object
@@ -52,23 +59,28 @@ final class Envelope
         return $this->job;
     }
 
-    public function add(Stamp $stamp): void
+    public function add(Stamp $stamp): Envelope
     {
-        $this->stamps[$stamp::class][] = $stamp;
-    }
-
-    /**
-     * @return array<class-string<Stamp>, list<Stamp>>
-     */
-    public function stamps(): array
-    {
-        return $this->stamps;
+        $new = clone $this;
+        $new->stamps[$stamp::class][] = $stamp;
+        return $new;
     }
 
     /**
      * @param class-string<Stamp> $stamp
+     * @return list<Stamp>
      */
-    public function last(string $stamp): ?Stamp
+    public function all(string $stamp): array
+    {
+        return $this->stamps[$stamp] ?? [];
+    }
+
+    /**
+     * @template T of Stamp
+     * @param class-string<T> $stamp
+     * @return T|null
+     */
+    public function get(string $stamp): ?Stamp
     {
         return isset($this->stamps[$stamp]) ? end($this->stamps[$stamp]) : null;
     }
@@ -79,6 +91,14 @@ final class Envelope
     public function has(string $stamp): bool
     {
         return isset($this->stamps[$stamp]);
+    }
+
+    /**
+     * @param class-string<Stamp> $stamp
+     */
+    public function count(string $stamp): int
+    {
+        return count($this->stamps[$stamp] ?? []);
     }
 
     public function toSerialization(): string

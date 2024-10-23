@@ -2,14 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Job;
+namespace App\Shared\Job\Stamp;
+
+use App\Shared\Job\Queue;
+use stdClass;
 
 class QueueStamp implements Stamp
 {
-    public static function fromPrimitive(array $primitive): static
+    public static function fromPrimitive(stdClass $primitive): static
     {
         return new static(
-            queue: new Queue($primitive['queue']),
+            queue: new Queue($primitive->queue),
         );
     }
 
@@ -23,9 +26,9 @@ class QueueStamp implements Stamp
         return $this->queue;
     }
 
-    public function toPrimitive(): array
+    public function toPrimitive(): stdClass
     {
-        return [
+        return (object)[
             'queue' => $this->queue->value(),
         ];
     }
