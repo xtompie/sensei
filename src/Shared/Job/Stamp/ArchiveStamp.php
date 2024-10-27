@@ -6,11 +6,11 @@ namespace App\Shared\Job\Stamp;
 
 use stdClass;
 
-abstract class FlagStamp implements Stamp
+final class ArchiveStamp implements Stamp
 {
     public static function fromPrimitive(stdClass $primitive): static
     {
-        return new self();
+        return new static();
     }
 
     public function toPrimitive(): stdClass

@@ -4,32 +4,32 @@ declare(strict_types=1);
 
 namespace App\Shared\Job\Stamp;
 
-use App\Shared\Job\Queue;
+use App\Shared\Job\Priority;
 use stdClass;
 
-class QueueStamp implements Stamp
+final class PriorityStamp implements Stamp
 {
     public static function fromPrimitive(stdClass $primitive): static
     {
         return new static(
-            queue: new Queue($primitive->queue),
+            priority: new Priority($primitive->priority),
         );
     }
 
     public function __construct(
-        private Queue $queue,
+        private Priority $priority,
     ) {
     }
 
-    public function queue(): Queue
+    public function priority(): Priority
     {
-        return $this->queue;
+        return $this->priority;
     }
 
     public function toPrimitive(): stdClass
     {
-        return (object)[
-            'queue' => $this->queue->value(),
+        return (object) [
+            'priority' => $this->priority->value(),
         ];
     }
 }

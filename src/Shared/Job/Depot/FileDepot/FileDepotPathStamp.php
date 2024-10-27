@@ -2,33 +2,32 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Job\Stamp;
+namespace App\Shared\Job\Depot\FileDepot;
 
+use App\Shared\Job\Stamp\Stamp;
 use stdClass;
 
-final class DelayStamp implements Stamp
+class FileDepotPathStamp implements Stamp
 {
     public static function fromPrimitive(stdClass $primitive): static
     {
-        return new static(
-            delay: $primitive->delay,
-        );
+        return new static($primitive->path);
     }
 
     public function __construct(
-        private int $delay,
+        private string $path,
     ) {
     }
 
-    public function delay(): int
+    public function path(): string
     {
-        return $this->delay;
+        return $this->path;
     }
 
     public function toPrimitive(): stdClass
     {
         return (object) [
-            'delay' => $this->delay,
+            'path' => $this->path,
         ];
     }
 }

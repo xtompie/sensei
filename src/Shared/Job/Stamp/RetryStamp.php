@@ -6,29 +6,27 @@ namespace App\Shared\Job\Stamp;
 
 use stdClass;
 
-class RetryPolicyStamp implements Stamp
+final class RetryStamp implements Stamp
 {
-
     public static function fromPrimitive(stdClass $primitive): static
     {
-        return new self($primitive->delayes);
+        return new static($primitive->delay);
     }
 
     public function __construct(
-        private array $delayes,
+        private int $delay,
     ) {
     }
 
-    public function delayForRetry(int $offset): ?int
+    public function delay(): int
     {
-        return $this->delayes[$offset] ?? null;
+        return $this->delay;
     }
 
     public function toPrimitive(): stdClass
     {
         return (object) [
-            'delayes' => $this->delayes,
+            'delay' => $this->delay,
         ];
     }
-
 }

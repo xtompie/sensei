@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Shared\Job;
 
-class Worker
+use App\Shared\Job\Depot\Depot;
+
+final class Worker
 {
     public function __construct(
-
+        // private Instructor $instructor,
+        // private Depot $depot,
     ) {
     }
 

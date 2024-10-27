@@ -4,31 +4,52 @@ declare(strict_types=1);
 
 namespace App\Shared\Job\Stamp;
 
+use DateTime;
+use DateTimeZone;
+use InvalidArgumentException;
 use stdClass;
 
-class AvailableAtStamp implements Stamp
+final class AvailableAtStamp implements Stamp
 {
-    public static function fromPrimitive(stdClass $primitive): static
+    public static function ofDelay(int $delay): static
     {
         return new static(
-            availableAt: $primitive->availableAt,
+            availableAt: (new DateTime('now', new DateTimeZone('UTC')))->modify("+{$delay} seconds"),
+        );
+    }
+
+    public static function now(): static
+    {
+        return new static(
+            availableAt: new DateTime('now', new DateTimeZone('UTC')),
+        );
+    }
+
+    public static function fromPrimitive(stdClass $primitive): static
+    {
+        $availableAt = DateTime::createFromFormat(DateTime::ATOM, $primitive->availableAt, new DateTimeZone('UTC'));
+        if ($availableAt === false) {
+            throw new InvalidArgumentException('Invalid availableAt format');
+        }
+        return new static(
+            availableAt: $availableAt,
         );
     }
 
     public function __construct(
-        private int $availableAt,
+        private DateTime $availableAt,
     ) {
     }
 
-    public function availableAt(): int
+    public function availableAt(): DateTime
     {
         return $this->availableAt;
     }
 
     public function toPrimitive(): stdClass
     {
-        return (object)[
-            'availableAt' => $this->availableAt,
+        return (object) [
+            'availableAt' => $this->availableAt->format(DateTime::ATOM),
         ];
     }
 }

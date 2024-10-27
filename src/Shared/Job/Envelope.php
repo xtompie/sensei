@@ -12,15 +12,16 @@ final class Envelope
     {
         try {
             $primitive = json_decode($serialization, true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($primitive)) {
+                return null;
+            }
             if (!isset($primitive['job'])) {
                 return null;
             }
-
             $job = unserialize($primitive['job']);
-            if ($job === false) {
+            if (!is_object($job)) {
                 return null;
             }
-
             $stamps = [];
             if (isset($primitive['stamps']) && is_array($primitive['stamps'])) {
                 foreach ($primitive['stamps'] as $stampClass => $stampPrimitives) {
@@ -33,7 +34,6 @@ final class Envelope
                     }
                 }
             }
-
             return new static($job, $stamps);
         } catch (\Throwable $e) {
             return null;
@@ -41,10 +41,11 @@ final class Envelope
     }
 
     private object $job;
+    /** @var array<class-string<Stamp>, array<Stamp>> */
     private array $stamps = [];
 
     /**
-     * @param list<Stamp> $stamps
+     * @param array<Stamp> $stamps
      */
     public function __construct(object $job, array $stamps = [])
     {
@@ -67,22 +68,43 @@ final class Envelope
     }
 
     /**
-     * @param class-string<Stamp> $stamp
-     * @return list<Stamp>
+     * @template T of Stamp
+     * @param class-string<T> $stamp
+     * @return array<T>
      */
     public function all(string $stamp): array
     {
-        return $this->stamps[$stamp] ?? [];
+        if (!isset($this->stamps[$stamp])) {
+            return [];
+        }
+
+        /** @var T[] $stamps */
+        $stamps = $this->stamps[$stamp];
+
+        return $stamps;
     }
 
     /**
      * @template T of Stamp
-     * @param class-string<T> $stamp
+     * @param class-string<T> $stampClass
      * @return T|null
      */
-    public function get(string $stamp): ?Stamp
+    public function get(string $stampClass): ?Stamp
     {
-        return isset($this->stamps[$stamp]) ? end($this->stamps[$stamp]) : null;
+        if (!isset($this->stamps[$stampClass])) {
+            return null;
+        }
+
+        /** @var T[] $stamps */
+        $stamps = $this->stamps[$stampClass];
+
+        $result = end($stamps);
+
+        if ($result === false) {
+            return null;
+        }
+
+        return $result;
     }
 
     /**
