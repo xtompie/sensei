@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Shared\Job\Depot;
 
 use App\Shared\Job\Envelope;
-use App\Shared\Job\Priority;
+use Generator;
 
 interface Depot
 {
     public function put(Envelope $envelope): Envelope;
 
-    public function get(Priority $priority): ?Envelope;
+    /**
+     * @return Generator<Envelope>
+     */
+    public function get(): Generator;
 
     public function done(Envelope $envelope): Envelope;
 

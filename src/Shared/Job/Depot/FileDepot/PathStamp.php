@@ -7,7 +7,7 @@ namespace App\Shared\Job\Depot\FileDepot;
 use App\Shared\Job\Stamp\Stamp;
 use stdClass;
 
-class FileDepotPathStamp implements Stamp
+class PathStamp implements Stamp
 {
     public static function fromPrimitive(stdClass $primitive): static
     {

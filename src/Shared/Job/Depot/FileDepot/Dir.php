@@ -6,7 +6,7 @@ namespace App\Shared\Job\Depot\FileDepot;
 
 use App\Shared\Kernel\DataDir;
 
-class FileDepotDir
+class Dir
 {
     public function __construct(
         private DataDir $dataDir

@@ -4,74 +4,49 @@ declare(strict_types=1);
 
 namespace App\Shared\Job\Depot\FileDepot;
 
+use App\Shared\Gen\Gen;
 use App\Shared\Job\Depot\Depot;
 use App\Shared\Job\Envelope;
 use App\Shared\Job\Priority;
-use App\Shared\Job\Stamp\AvailableAtStamp;
-use App\Shared\Job\Stamp\IdStamp;
-use DateTime;
-use RuntimeException;
+use Generator;
 
 class FileDepot implements Depot
 {
     public function __construct(
-        private FileDepotDir $dir
+        private Fetch $fetch,
+        private Store $store,
     ) {
     }
 
     public function put(Envelope $envelope): Envelope
     {
-        $currentPath = $envelope->get(FileDepotPathStamp::class)?->path();
-        $availableAtStamp = $envelope->get(AvailableAtStamp::class);
-        if (!$availableAtStamp) {
-            throw new RuntimeException('AvailableAtStamp is required');
-        }
-        $idStamp = $envelope->get(IdStamp::class);
-        if (!$idStamp) {
-            throw new RuntimeException('IdStamp is required');
-        }
-        $futurePath = $this->dir->__invoke() . '/todo/' . $this->path(
-            time: $availableAtStamp->availableAt(),
-            id: $idStamp->id()
-        );
-
-        if ($currentPath !== $futurePath) {
-            $envelope = $envelope->add(new FileDepotPathStamp($futurePath));
-        }
-
-        file_put_contents($futurePath, json_encode($envelope->toSerialization()));
-
-        if ($currentPath && $currentPath !== $futurePath) {
-            unlink($currentPath);
-        }
-
-        return $envelope;
+        return $this->store->__invoke('todo', $envelope);
     }
 
-    public function get(Priority $priority): ?Envelope
+    /**
+     * @return Generator<Envelope>
+     */
+    public function get(): Generator
     {
-        // przeniesienie do work
-        return null;
+        foreach ($this->fetch->__invoke() as $envelope) {
+            $envelope = $this->store->__invoke('work', $envelope);
+            yield $envelope;
+
+        }
     }
 
     public function done(Envelope $envelope): Envelope
     {
-        // z work usuniecie
+        return $this->store->__invoke('done', $envelope);
     }
 
     public function fail(Envelope $envelope): Envelope
     {
-        // z work do fail
+        return $this->store->__invoke('fail', $envelope);
     }
 
     public function archive(Envelope $envelope): Envelope
     {
-
+        return $this->store->__invoke('archive', $envelope);
     }
-
-    public function path(DateTime $time, string $id): void
-    {
-        return $time->format('Y/m/d/H/i') . '/' . $time->format('Y_m_d_H_i_s') . '_' . $id . '.json';
-    }
-
 }
