@@ -15,7 +15,7 @@ abstract class AbstractPaoRepository implements Repository
 {
     public static function resource(): string
     {
-        return strtolower(strtolower(array_slice(explode('\\', static::class), -2, 1)[0]));
+        return strtolower(array_slice(explode('\\', static::class), -2, 1)[0]);
     }
 
     public function __construct(

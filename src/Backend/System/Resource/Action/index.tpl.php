@@ -15,12 +15,13 @@
     'values' => $values,
 ]) ?>
 
+<?php $selection = $this->service(\App\Backend\System\Resource\Selection::class) ?>
 <?= $this->render('/src/Backend/System/Resource/Field/List/list.tpl.php', [
-    'list_link' => !$this->backend()->selection()->enabled(),
-    'list_more' => !$this->backend()->selection()->enabled(),
-    'list_selection' => $this->backend()->selection()->enabled(),
-    'list_selection_single' => $this->backend()->selection()->single(),
-    'list_sort' => !$this->backend()->selection()->enabled(),
+    'list_link' => !$selection->enabled(),
+    'list_more' => !$selection->enabled(),
+    'list_selection' => $selection->enabled(),
+    'list_selection_single' => $selection->single(),
+    'list_sort' => !$selection->enabled(),
     'values' => $values,
 ]) ?>
 

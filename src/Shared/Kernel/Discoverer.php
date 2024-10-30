@@ -46,13 +46,22 @@ abstract class Discoverer implements Optimizer
     protected function discovered(): Generator
     {
         if ($this->discovered === null) {
-            $this->discovered = iterator_to_array($this->source->classes(
+            $this->discovered = $this->sort(iterator_to_array($this->source->classes(
                 instanceof: $this->instanceof(),
                 suffix: $this->suffix(),
-            ));
+            )));
         }
 
         yield from $this->discovered;
+    }
+
+    /**
+     * @param array<class-string<T>> $discovered
+     * @return array<class-string<T>>
+     */
+    protected function sort(array $discovered): array
+    {
+        return $discovered;
     }
 
     public function optimize(): void

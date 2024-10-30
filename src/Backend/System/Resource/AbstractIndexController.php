@@ -81,7 +81,7 @@ abstract class AbstractIndexController implements Controller, ControllerWithMeta
             'field' => '/src/Backend/System/Resource/Field/field.html.twig',
             'fields' => '/src/Backend/Resource/' . static::resource() . '/fields.html.twig',
             'filter' => '/src/Backend/System/Resource/Filter/Filter.html.twig',
-            'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/filters.html.twig' : null,
+            'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/filters.tpl.php' : null,
             'limit' => $limit,
             'more' => $this->pilot()->more(action: static::action()),
             'offset' => $offset,

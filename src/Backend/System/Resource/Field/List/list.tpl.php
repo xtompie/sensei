@@ -1,6 +1,8 @@
-{% if list_selection|any %}
-    {{ include_once('@backend/system/js/checkone.html.twig') }}
-{% endif %}
+<?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
+
+<?php if ($list_selection) : ?>
+    <?= $this->render('src/Backend/System/Js/checkone.tpl.php') ?>
+<?php endif ?>
 
 <div class="mt-8 flow-root">
     <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -8,10 +10,10 @@
 
         <table
             class="min-w-full divide-y divide-gray-300"
-            {% if list_selection|any %}
+            <?php if ($list_selection) : ?>
                 backend-checkone-space
                 backend-selection-space
-            {% endif %}
+            <?php endif ?>
         >
             <thead>
 

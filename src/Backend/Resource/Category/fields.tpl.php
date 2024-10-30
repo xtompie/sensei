@@ -12,14 +12,22 @@
 <?php if (in_array($action, ['list', 'detail', 'create', 'update'])) : ?>
     <?= $this->render('/src/Backend/System/Resource/Field/field.tpl.php', [
         'type' => 'text',
-        'name' => 'email',
+        'name' => 'title',
     ]) ?>
 <?php endif ?>
 
-<?php if (in_array($action, ['create', 'update', 'detail'])) : ?>
+<?php if (in_array($action, ['list', 'detail', 'create', 'update'])) : ?>
     <?= $this->render('/src/Backend/System/Resource/Field/field.tpl.php', [
-        'type' => 'select',
-        'name' => 'role',
-        'options' => $pilot->roles(),
+        'type' => 'relone',
+        'name' => 'category_id',
+        'reltype' => 'category',
+    ]) ?>
+<?php endif ?>
+
+<?php if (in_array($action, ['detail', 'create', 'update'])) : ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/field.tpl.php', [
+        'type' => 'relmany',
+        'name' => 'children',
+        'reltype' => 'category',
     ]) ?>
 <?php endif ?>
