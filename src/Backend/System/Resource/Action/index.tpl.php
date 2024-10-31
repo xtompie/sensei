@@ -1,4 +1,5 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
+<?php $selection = $this->service(\App\Backend\System\Resource\Selection::class) ?>
 
 <?= $this->render('/src/Backend/System/Resource/Title/title.tpl.php', [
     'action' => $action,
@@ -15,14 +16,18 @@
     'values' => $values,
 ]) ?>
 
-<?php $selection = $this->service(\App\Backend\System\Resource\Selection::class) ?>
+
 <?= $this->render('/src/Backend/System/Resource/Field/List/list.tpl.php', [
+    'fields' => $fields,
     'list_link' => !$selection->enabled(),
     'list_more' => !$selection->enabled(),
     'list_selection' => $selection->enabled(),
     'list_selection_single' => $selection->single(),
     'list_sort' => !$selection->enabled(),
+    'resource' => $resource,
     'values' => $values,
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Resource/Seleciton/submits.tpl.php') ?>
+<?= $this->render('/src/Backend/System/Resource/Selection/submits.tpl.php', [
+    'resource' => $resource,
+]) ?>

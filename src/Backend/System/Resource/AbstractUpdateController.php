@@ -192,7 +192,7 @@ abstract class AbstractUpdateController implements Controller, ControllerWithMet
             'entity' => $entity,
             'errors' => UberErrorCollection::of($errors),
             'field' => '/src/Backend/System/Resource/Field/field.html.twig',
-            'fields' => '/src/Backend/Resource/' . static::resource() . '/fields.html.twig',
+            'fields' => '/src/Backend/Resource/' . static::resource() . '/fields.tpl.php',
             'resource' => static::resource(),
             'title' => $this->pilot()->title(action: static::action()),
             'value' => $this->augument(entity: $entity, value: $value),
