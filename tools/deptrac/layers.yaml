@@ -2,11 +2,11 @@ deptrac:
   paths:
     - ../../src
   layers:
-    - { name: Application, collectors: [ { type: directory, value: src/.*/Application/.* } ] }
-    - { name: Domain, collectors: [ { type: directory, value: src/.*/Domain/.* } ] }
-    - { name: Infrastructure, collectors: [ { type: directory, value: src/.*/Infrastructure/.* } ] }
-    - { name: UI, collectors: [ { type: directory, value: src/.*/UI/.* } ] }
+    - { name: Application, collectors: [ { type: directory, value: "src/[^/]*/Application/.*" } ] }
+    - { name: Domain, collectors: [ { type: directory, value: "src/[^/]*/Domain/.*" } ] }
+    - { name: Infrastructure, collectors: [ { type: directory, value: "src/[^/]*/Infrastructure/.*" } ] }
+    - { name: UI, collectors: [ { type: directory, value: "src/[^/]*/UI/.*" } ] }
   ruleset:
     Application: [ Domain, Infrastructure ]
-    Infrastructure: [ Application ]
+    Infrastructure: [ Application, Domain ]
     UI: [ Application, Infrastructure ]
