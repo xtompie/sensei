@@ -15,7 +15,8 @@ use ReflectionClass;
 class SubscriberDiscoverer implements Optimizer
 {
     /**
-     * @param array<class-string, array<Subscriber>>|null $index
+     * @param array<class-string, array<class-string<Subscriber>>>|null $classes
+     * @param array<class-string, array<Subscriber>> $instances
      */
     public function __construct(
         private Source $source,
@@ -47,6 +48,9 @@ class SubscriberDiscoverer implements Optimizer
         }
     }
 
+    /**
+     * @return array<class-string, array<class-string<Subscriber>>>
+     */
     private function discover(): array
     {
         $index = [];
@@ -63,6 +67,7 @@ class SubscriberDiscoverer implements Optimizer
                 continue;
             }
 
+            /** @var class-string $messageClass */
             $index[$messageClass][] = $subscriber;
         }
 
@@ -93,6 +98,10 @@ class SubscriberDiscoverer implements Optimizer
         }
     }
 
+    /**
+     * @param class-string $message
+     * @return Generator<int, Subscriber>
+     */
     public function instances(string $message): Generator
     {
         if (!array_key_exists($message, $this->instances)) {

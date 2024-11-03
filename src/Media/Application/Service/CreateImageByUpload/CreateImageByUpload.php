@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Media\Application\Service\CreateImageByUpload;
 
+use App\Media\Application\Event\ImageCreated;
 use App\Media\Application\Model\Image;
 use App\Media\Application\Model\ImageMimeType;
 use App\Media\Application\Model\ImageSpace;
 use App\Media\Application\Model\MediaType;
 use App\Media\Application\Service\GenerateId\GenerateId;
 use App\Shared\Kernel\Dir;
+use App\Shared\Messenger\Messenger;
 use Laminas\Diactoros\UploadedFile;
 use Xtompie\Result\Error;
 
@@ -17,6 +19,7 @@ class CreateImageByUpload
 {
     public function __construct(
         private GenerateId $generateId,
+        private Messenger $messenger,
     ) {
     }
 
@@ -48,6 +51,8 @@ class CreateImageByUpload
         $image = new Image(id: $id);
         Dir::ensureForFile($image->path());
         $uploadedImage->moveTo($image->path());
+        $this->messenger->__invoke(new ImageCreated(id: $image->id()));
+
         return $image;
     }
 }

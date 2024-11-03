@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Media\Application\Service\CreateImageByPathOrUrl;
 
+use App\Media\Application\Event\ImageCreated;
 use App\Media\Application\Model\Image;
 use App\Media\Application\Model\ImageMimeType;
 use App\Media\Application\Model\ImageSpace;
@@ -11,12 +12,14 @@ use App\Media\Application\Model\MediaType;
 use App\Media\Application\Service\GenerateId\GenerateId;
 use App\Shared\Gen\Gen;
 use App\Shared\Kernel\Dir;
+use App\Shared\Messenger\Messenger;
 use Xtompie\Result\Error;
 
 final class CreateImageByPathOrUrl
 {
     public function __construct(
         private GenerateId $generateId,
+        private Messenger $messenger,
     ) {
     }
 
@@ -55,6 +58,8 @@ final class CreateImageByPathOrUrl
             return Error::of($error['message'] ?? null, 'create');
         }
         unlink($tmp);
+
+        $this->messenger->__invoke(new ImageCreated(id: $image->id()));
 
         return $image;
     }
