@@ -16,7 +16,6 @@
     'values' => $values,
 ]) ?>
 
-
 <?= $this->render('/src/Backend/System/Resource/Field/List/list.tpl.php', [
     'fields' => $fields,
     'list_link' => !$selection->enabled(),

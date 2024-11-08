@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Shared\Tpl;
 
 use App\Shared\Container\Container;
+use App\Shared\Http\Csrf;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Kernel\Debug;
+use Pest\Support\Str;
 use Xtompie\Tpl\Tpl as BaseTpl;
 
 final class Tpl extends BaseTpl
@@ -16,6 +18,7 @@ final class Tpl extends BaseTpl
      */
     public function __construct(
         private AppDir $appDir,
+        private Csrf $csrf,
         private Debug $debug,
         private ?string $templatePath = null,
         private array $import = [],
@@ -24,10 +27,7 @@ final class Tpl extends BaseTpl
 
     protected function templatePathPrefix(): string
     {
-        if (!$this->templatePath) {
-            $this->templatePath = $this->appDir->__invoke();
-        }
-        return $this->templatePath;
+        return $this->templatePath ??= $this->appDir->__invoke();
     }
 
     /**
@@ -71,5 +71,10 @@ final class Tpl extends BaseTpl
     {
         return true; // @TEST
         // return $this->service(\App\Sentry\Application\Service\Sentry\Sentry::class)->__invoke($sid);
+    }
+
+    protected function csrf(): string
+    {
+        return $this->csrf->get();
     }
 }
