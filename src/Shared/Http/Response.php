@@ -89,7 +89,7 @@ final class Response extends DiactorosResponse
      * @return Response the HTML response
      *
      * @example
-     * Response::tpl('template.html.twig', ['name' => 'John'], 200, ['X-Custom-Header' => 'value']);
+     * Response::tpl('template.tpl.php', ['name' => 'John'], 200, ['X-Custom-Header' => 'value']);
      */
     public static function tpl(string $template, array $data = [], int $status = 200, array $headers = []): Response
     {

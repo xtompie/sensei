@@ -1,6 +1,6 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
-<?php $btn = $action != 'list'; ?>
-<?php $more = array_filter($more ?? [], fn (array $i) => $this->sentry($i['sentry'])); ?>
+<?php $btn = $action != 'list' ?>
+<?php $more = array_filter($more ?? [], fn (array $i) => $this->sentry($i['sentry'])) ?>
 
 <?php if ($more) : ?>
     <?= $this->import('/src/Backend/System/Js/dropdown.tpl.php') ?>

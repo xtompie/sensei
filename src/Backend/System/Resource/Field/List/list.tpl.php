@@ -1,5 +1,5 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
-<?php $pilot = $this->service(\App\Backend\System\Resource\PilotRegistry::class)->__call($resource) ?>
+<?php $pilot = $this->service(\App\Backend\System\Resource\Pilot\ResourcePilotRegistry::class)->__call($resource) ?>
 
 <?php if ($list_selection) : ?>
     <?= $this->import('src/Backend/System/Js/checkone.tpl.php') ?>
@@ -21,8 +21,9 @@
                     <?php if ($list_selection) : ?>
                         <th class="[&:first-child]:pl-0 [&:last-child]:pr-0"></th>
                     <?php endif ?>
-                    <?= $this->render($fields, [
+                    <?= $this->render('/src/Backend/System/Resource/Field/field.tpl.php', [
                         'action' => 'index',
+                        'mode' => 'index',
                         'list_header' => true,
                     ]) ?>
                     <?php if ($list_more) : ?>
@@ -35,7 +36,6 @@
             </thead>
             <tbody class="divide-y divide-gray-200">
 
-                {% for value in values %}
                 <?php foreach ($values as $value) : ?>
                     <?php $entity = $value ?>
                     <tr

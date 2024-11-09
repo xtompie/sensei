@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Backend\System\Ctrl;
 
 use App\Backend\System\Flash\Flash;
-use App\Backend\System\Resource\Selection;
+use App\Backend\System\Resource\Selection\Selection;
 use App\Backend\System\Validation\Validation;
 use App\Sentry\Application\Service\Sentry\Sentry;
 use App\Shared\Http\Csrf;

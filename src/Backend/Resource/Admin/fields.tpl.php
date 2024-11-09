@@ -6,6 +6,7 @@
         'name' => 'id',
         'more' => true,
         'sort' => true,
+        ...get_defined_vars(),
     ]) ?>
 <?php endif ?>
 
@@ -13,6 +14,7 @@
     <?= $this->render('/src/Backend/System/Resource/Field/field.tpl.php', [
         'type' => 'text',
         'name' => 'email',
+        ...get_defined_vars(),
     ]) ?>
 <?php endif ?>
 
@@ -21,5 +23,6 @@
         'type' => 'select',
         'name' => 'role',
         'options' => $pilot->roles(),
+        ...get_defined_vars(),
     ]) ?>
 <?php endif ?>

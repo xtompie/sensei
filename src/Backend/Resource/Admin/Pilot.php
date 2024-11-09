@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Backend\Resource\Admin;
 
-use App\Backend\System\Resource\AbstractPilot;
+use App\Backend\System\Resource\Pilot\ResourcePilot;
 use App\Backend\System\Validation\Validation;
 
-class Pilot extends AbstractPilot
+class Pilot extends ResourcePilot
 {
     /**
      * @param array<string, mixed> $entity

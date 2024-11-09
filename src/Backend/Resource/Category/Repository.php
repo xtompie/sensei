@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Backend\Resource\Category;
 
-use App\Backend\System\Resource\AbstractPaoRepository;
+use App\Backend\System\Resource\Repository\PaoRepository;
 
-class Repository extends AbstractPaoRepository
+class Repository extends PaoRepository
 {
     // protected function future(string $id, array $value): array
     // {

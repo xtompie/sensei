@@ -6,9 +6,9 @@ namespace App\Shared\Tpl;
 
 use App\Shared\Container\Container;
 use App\Shared\Http\Csrf;
+use App\Shared\Http\Request;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Kernel\Debug;
-use Pest\Support\Str;
 use Xtompie\Tpl\Tpl as BaseTpl;
 
 final class Tpl extends BaseTpl
@@ -20,6 +20,7 @@ final class Tpl extends BaseTpl
         private AppDir $appDir,
         private Csrf $csrf,
         private Debug $debug,
+        private Request $request,
         private ?string $templatePath = null,
         private array $import = [],
     ) {
@@ -76,5 +77,18 @@ final class Tpl extends BaseTpl
     protected function csrf(): string
     {
         return $this->csrf->get();
+    }
+
+    /**
+     * @param array<string, mixed> $query
+     */
+    protected function alterUri(array $query): string
+    {
+        return $this->request->alterUri($query);
+    }
+
+    protected function t($module, $text): string
+    {
+        return $text;
     }
 }

@@ -14,7 +14,7 @@
 }
 </style>
 <script src="/assets/shared/sortable.js"></script>
-{{ include_once("@backend/system/js/util.html.twig") }}
+{{ include_once("@backend/system/js/util.tpl.php") }}
 <script>
 var backend = backend || {};
 backend.sortable = function (ctx) {

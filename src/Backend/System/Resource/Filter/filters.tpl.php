@@ -1,4 +1,5 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
+
 <?php if (isset($filters)): ?>
     <form>
         <?= $this->render($filters) ?>
@@ -6,6 +7,6 @@
         <input
             type="hidden"
             name="order"
-            value="<?php echo isset($order) ? $this->e($order) : '' ?>" />
+            value="<?= $this->e(isset($order) ? $this->e($order) : '') ?>" />
     </form>
 <?php endif ?>
