@@ -25,7 +25,7 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
 {
     public static function resource(): string
     {
-        return strtolower(array_slice(explode('\\', static::class), -2, 1)[0]);
+        return array_slice(explode('\\', static::class), -2, 1)[0];
     }
 
     public static function action(): string
@@ -35,7 +35,7 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
 
     public static function controllerMeta(): ControllerMeta
     {
-        return new ControllerMeta(path: '/backend/resource/' . static::resource() . '/' . static::action());
+        return new ControllerMeta(path: '/backend/resource/' . strtolower(static::resource()) . '/' . static::action());
     }
 
     protected function ctrl(): Ctrl
@@ -188,7 +188,6 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
             'action' => static::action(),
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action(), entity: null),
             'errors' => UberErrorCollection::of($errors),
-            'fields' => '/src/Backend/Resource/' . static::resource() . '/fields.tpl.php',
             'more' => $this->pilot()->more(action: static::action(), entity: null),
             'resource' => static::resource(),
             'title' => $this->pilot()->title(action: static::action()),

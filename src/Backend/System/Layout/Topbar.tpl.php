@@ -1,10 +1,12 @@
-{{ include_once('@backend/system/js/visible.tpl.php') }}
-{{ include_once('@backend/system/js/dropdown.tpl.php') }}
+<?= $this->import('/src/Backend/System/Js/Visible.tpl.php') ?>
+<?= $this->import('/src/Backend/System/Js/Dropdown.tpl.php') ?>
 
 <div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white shadow-sm px-8">
 
 	<div class="flex flex-1 self-stretch justify-between gap-x-6">
-		{{ include('@backend/system/layout/breadcrumb.tpl.php') }}
+		<?= $this->render('/src/Backend/System/Layout/Breadcrumb.tpl.php', [
+		    'breadcrumb' => $breadcrumb,
+		]) ?>
 		<div
 			class="flex items-center gap-x-6">
 			<!-- Profile dropdown -->

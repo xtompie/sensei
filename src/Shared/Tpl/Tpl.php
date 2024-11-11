@@ -87,7 +87,7 @@ final class Tpl extends BaseTpl
         return $this->request->alterUri($query);
     }
 
-    protected function t($module, $text): string
+    protected function t(string $module, string $text): string
     {
         return $text;
     }

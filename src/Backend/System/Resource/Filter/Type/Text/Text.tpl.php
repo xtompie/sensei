@@ -1,9 +1,9 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 
-<?php $value = $value ?: ($where[$name] ?? null) ?>
+<?php $value = $value ?? ($where[$name] ?? '') ?>
 
 <input
     type="text"
-    name="{{ name }}"
-    value="{{ value }}"
+    name="<?= $this->e($name) ?>"
+    value="<?= $this->e($value) ?>"
 />

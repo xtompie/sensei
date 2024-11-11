@@ -7,7 +7,7 @@ namespace App\Backend\System\Resource\Pilot;
 use App\Shared\Kernel\Discoverer;
 
 /**
- * @extends Discoverer<Pilot>
+ * @extends Discoverer<ResourcePilot>
  */
 class ResourcePilotDiscoverer extends Discoverer
 {

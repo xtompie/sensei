@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Backend\System\Resource\Controller;
 
 use App\Backend\System\Ctrl\Ctrl;
+use App\Backend\System\Resource\Pilot\ResourcePilot;
+use App\Backend\System\Resource\Pilot\ResourcePilotRegistry;
+use App\Backend\System\Resource\Repository\ResourceRepository;
+use App\Backend\System\Resource\Repository\ResourceRepositoryRegistry;
 use App\Shared\Container\Container;
 use App\Shared\Http\Controller;
 use App\Shared\Http\ControllerMeta;
@@ -16,7 +20,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
 {
     public static function resource(): string
     {
-        return strtolower(array_slice(explode('\\', static::class), -2, 1)[0]);
+        return array_slice(explode('\\', static::class), -2, 1)[0];
     }
 
     public static function action(): string
@@ -26,7 +30,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
 
     public static function controllerMeta(): ControllerMeta
     {
-        return new ControllerMeta(path: '/backend/resource/' . static::resource());
+        return new ControllerMeta(path: '/backend/resource/' . strtolower(static::resource()));
     }
 
     protected function ctrl(): Ctrl
@@ -34,14 +38,14 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
         return Container::container()->get(Ctrl::class);
     }
 
-    protected function repository(): Repository
+    protected function repository(): ResourceRepository
     {
-        return Container::container()->get(RepositoryRegistry::class)->__call(static::resource());
+        return Container::container()->get(ResourceRepositoryRegistry::class)->__call(static::resource());
     }
 
-    protected function pilot(): Pilot
+    protected function pilot(): ResourcePilot
     {
-        return Container::container()->get(PilotRegistry::class)->__call(static::resource());
+        return Container::container()->get(ResourcePilotRegistry::class)->__call(static::resource());
     }
 
     protected function init(): ?Response
@@ -53,21 +57,21 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
 
     protected function sentryInit(): string
     {
-        return 'backend.resource.' . static::resource() . '.action.' . static::action();
+        return 'backend.resource.' . strtolower(static::resource()) . '.action.' . strtolower(static::action());
     }
 
     protected function sentryProp(string $prop): string
     {
-        return 'backend.resource.' . static::resource() . '.action.' . static::action() . ".prop.$prop";
+        return 'backend.resource.' . strtolower(static::resource()) . '.action.' . strtolower(static::action()) . ".prop.$prop";
     }
 
     /**
-     * @param array<int, array<string, mixed>> $values
+     * @param array<int, array<string, mixed>> $entities
      * @param array<string, mixed> $where
      * @return array<string, mixed>
      */
     protected function vm(
-        array $values,
+        array $entities,
         array $where,
         ?string $order,
         int $limit,
@@ -79,29 +83,29 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
             'all' => $all,
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action()),
             'fields' => '/src/Backend/Resource/' . static::resource() . '/fields.tpl.php',
-            'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/filters.tpl.php' : null,
+            'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/Filters.tpl.php' : null,
             'limit' => $limit,
             'more' => $this->pilot()->more(action: static::action()),
             'offset' => $offset,
             'order' => $order,
             'resource' => static::resource(),
             'title' => $this->pilot()->title(action: static::action()),
-            'values' => $values,
+            'entities' => $entities,
             'where' => $where,
         ];
     }
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Action/' . static::action() . '.tpl.php';
+        return '/src/Backend/System/Resource/Controller/' . ucfirst(static::action()) . '.tpl.php';
     }
 
     /**
-     * @param array<int, array<string, mixed>> $values
+     * @param array<int, array<string, mixed>> $entities
      * @param array<string, mixed> $where
      */
     protected function view(
-        array $values,
+        array $entities,
         array $where,
         ?string $order,
         int $limit,
@@ -109,7 +113,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
         int $all,
     ): Response {
         return Response::tpl($this->tpl(), $this->vm(
-            values: $values,
+            entities: $entities,
             where: $where,
             order: $order,
             limit: $limit,
@@ -259,7 +263,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
         $limit = $this->limit();
         $offset = $this->offset();
         $all = $this->repository()->count(where: $where ?: null);
-        $values = $this->repository()->findAll(
+        $entities = $this->repository()->findAll(
             where: $where ?: null,
             order: $order,
             limit: $limit,
@@ -267,7 +271,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
         );
 
         return $this->view(
-            values: $values,
+            entities: $entities,
             where: $where,
             order: $order,
             limit: $limit,

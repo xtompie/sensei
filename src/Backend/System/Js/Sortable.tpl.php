@@ -1,3 +1,4 @@
+<?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 <style>
 .sortable-handle {
     cursor: move;
@@ -14,7 +15,7 @@
 }
 </style>
 <script src="/assets/shared/sortable.js"></script>
-{{ include_once("@backend/system/js/util.tpl.php") }}
+<?= $this->import('/src/Backend/System/Js/Util.tpl.php') ?>
 <script>
 var backend = backend || {};
 backend.sortable = function (ctx) {

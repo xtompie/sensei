@@ -15,7 +15,7 @@ abstract class PaoRepository implements ResourceRepository
 {
     public static function resource(): string
     {
-        return strtolower(array_slice(explode('\\', static::class), -2, 1)[0]);
+        return array_slice(explode('\\', static::class), -2, 1)[0];
     }
 
     public function __construct(
@@ -36,7 +36,7 @@ abstract class PaoRepository implements ResourceRepository
     {
         return [
             ...$value,
-            ':table' => static::resource(),
+            ':table' => strtolower(static::resource()),
             'id' => $id,
         ];
     }
@@ -48,8 +48,8 @@ abstract class PaoRepository implements ResourceRepository
     protected function pql(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
     {
         $query = [
-            'select' => static::resource() . '.*',
-            'from' => static::resource(),
+            'select' => strtolower(static::resource()) . '.*',
+            'from' => strtolower(static::resource()),
         ];
 
         $query['where'] = (isset($query['where']) || isset($where)) ? array_merge($query['where'] ?? [], (array) $where) : null; /** @phpstan-ignore-line */

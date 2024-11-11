@@ -8,7 +8,7 @@
         {{ backend().pilot().__call(reltype).title('detail', relone_entity) }}
     {% endif %}
 {% elseif action == 'detail' %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/begin.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php') ?>
     {% set relone_entity = value is defined ? backend().repository().__call(reltype).findById(value) : null %}
     {% if relone_entity|any %}
         {% set relone_link = backend().pilot().__call(reltype).link('detail', relone_entity) %}
@@ -23,12 +23,12 @@
     {% elseif value is defined and value is not null %}
         <strike>{{ value }}</strike>
     {% endif %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/end.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php') ?>
 {% else %}
     {{ include_once('@backend/system/js/selection.tpl.php') }}
     {{ include_once('@backend/system/js/formsubmit.tpl.php') }}
     {% set label = label|default(null)|any ? label : backend().pilot().__call(reltype).title('list') %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Form/begin.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php') ?>
     <input type="hidden" name="{{ name }}" value="{{ value }}" />
     {% set relone_entity = value|any ? backend().repository().__call(reltype).findById(value) : null %}
     {% if relone_entity|any %}
@@ -62,5 +62,5 @@
     >
         ...
     </button>
-    <?= $this->render('/src/Backend/System/Resource/Field/Form/end.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php') ?>
 {% endif %}

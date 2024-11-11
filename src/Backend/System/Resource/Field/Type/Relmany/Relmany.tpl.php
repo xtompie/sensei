@@ -7,7 +7,7 @@
         {{ value|length }}
     {% endif %}
 {% elseif action == 'detail' %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/begin.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php') ?>
     {% set value = value|default({})%}
     {% for value in value %}
         {% set relone_entity = value[id] is defined ? backend().repository().__call(reltype).findById(value[id]) : null %}
@@ -25,14 +25,14 @@
             <strike>{{ value }}</strike>
         {% endif %}
     {% endfor %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/end.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php') ?>
 {% else %}
     {{ include_once('@backend/system/js/selection.tpl.php') }}
     {{ include_once('@backend/system/js/formsubmit.tpl.php') }}
     {{ include_once('@backend/system/js/removeitem.tpl.php') }}
     {{ include_once('@backend/system/js/sortable.tpl.php') }}
     {% set label = label|default(null)|any ? label : backend().pilot().__call(reltype).title('index') %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Form/begin.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php') ?>
     <div backend-sortable-space>
         <div backend-sortable-sortable>
             {% for value in value %}
@@ -71,5 +71,5 @@
     >
         ...
     </button>
-    <?= $this->render('/src/Backend/System/Resource/Field/Form/end.tpl.php') ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php') ?>
 {% endif %}

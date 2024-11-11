@@ -2,12 +2,14 @@
 <?php $pilot = $this->service(\App\Backend\Resource\Admin\Pilot::class) ?>
 
 <?= $this->render('/src/Backend/System/Resource/Filter/filter.tpl.php', [
-    'type' => 'text',
+    'type' => 'Text',
     'name' => 'email:match',
+    ...get_defined_vars(),
 ]) ?>
 
 <?= $this->render('/src/Backend/System/Resource/Filter/filter.tpl.php', [
-    'type' => 'select',
+    'type' => 'Select',
     'name' => 'role',
     'options' => $pilot->roles(),
+    ...get_defined_vars(),
 ]) ?>

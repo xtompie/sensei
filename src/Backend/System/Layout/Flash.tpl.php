@@ -1,25 +1,26 @@
-{% set flashes = backend_flash() %}
-{% if flashes|any %}
-    {% for flash in flashes %}
-        {% set type = flash.type %}
+<?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
+<?php $flashes = $this->service(\App\Backend\System\Flash\Flash::class)->pull(); ?>
+
+<?php if (!empty($flashes)): ?>
+    <?php foreach ($flashes as $flash): ?>
+        <?php $type = $flash['type'] ?>
         <div
             class="
                 alert alert-dismissible fade show
-                {% if type == 'error' %}
+                <?php if ($type == 'error'): ?>
                     alert-danger
-                {% elseif type == 'ok' %}
+                <?php elseif ($type == 'ok'): ?>
                     alert-success
-                {% elseif type == 'warning' %}
+                <?php elseif ($type == 'warning'): ?>
                     alert-warning
-                {% else %}
+                <?php else: ?>
                     alert-danger
-                {% endif %}
-
+                <?php endif; ?>
             "
             role="alert"
         >
-            {{ flash.msg|t }}
+            <?= $this->e($flash['msg']) ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    {% endfor %}
-{% endif %}
+    <?php endforeach ?>
+<?php endif ?>

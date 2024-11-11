@@ -1,32 +1,26 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
-<?php $selection = $this->service(\App\Backend\System\Resource\Selection::class) ?>
+<?php $fields = $fields ?? "/src/Backend/Resource/$resource/Fields.tpl.php" ?>
 
-<?= $this->render('/src/Backend/System/Resource/Title/title.tpl.php', [
-    'action' => $action,
-    'more' => $more,
-    'title' => $title,
+<?php $this->push('/src/Backend/System/Layout/Layout.tpl.php', [
+    ...get_defined_vars(),
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Resource/Filter/filters.tpl.php', [
-    'filters' => $filters,
-    'where' => $where,
+<?= $this->render('/src/Backend/System/Resource/Title/Title.tpl.php', [
+    ...get_defined_vars(),
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Resource/Nodata/nodata.tpl.php', [
-    'values' => $values,
+<?= $this->render('/src/Backend/System/Resource/Filter/Filters.tpl.php', [
+    ...get_defined_vars(),
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Resource/Field/List/list.tpl.php', [
+<?= $this->render('/src/Backend/System/Resource/Nodata/Nodata.tpl.php', [
+    'entities' => $entities,
+]) ?>
+
+<?= $this->render('/src/Backend/System/Resource/Field/List/List.tpl.php', [
     'fields' => $fields,
-    'list_link' => !$selection->enabled(),
-    'list_more' => !$selection->enabled(),
-    'list_selection' => $selection->enabled(),
-    'list_selection_single' => $selection->single(),
-    'list_sort' => !$selection->enabled(),
     'resource' => $resource,
-    'values' => $values,
+    'entities' => $entities,
+    'order' => $order,
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Resource/Selection/submits.tpl.php', [
-    'resource' => $resource,
-]) ?>

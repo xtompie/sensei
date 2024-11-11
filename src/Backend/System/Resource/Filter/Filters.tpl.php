@@ -2,7 +2,7 @@
 
 <?php if (isset($filters)): ?>
     <form>
-        <?= $this->render($filters) ?>
+        <?= $this->render($filters, get_defined_vars()) ?>
         <button type="submit">Filter</button>
         <input
             type="hidden"

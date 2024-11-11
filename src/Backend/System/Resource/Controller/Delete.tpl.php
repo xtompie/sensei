@@ -1,13 +1,24 @@
-{% extends "@backend/system/layout/layout.tpl.php" %}
+<?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
+<?php $fields = $fields ?? "/src/Backend/Resource/$resource/Fields.tpl.php" ?>
 
-{% block content %}
+<?php $this->push('/src/Backend/System/Layout/Layout.tpl.php', [
+    ...get_defined_vars(),
+]) ?>
 
-    {% include "@backend/system/resource/title/title.tpl.php" %}
+<?= $this->render('/src/Backend/System/Resource/Title/Title.tpl.php', [
+    ...get_defined_vars(),
+]) ?>
 
-    {% include "@backend/system/resource/form/begin.tpl.php" %}
+<?= $this->render('/src/Backend/System/Resource/Form/Begin.tpl.php', [
+    ...get_defined_vars(),
+]) ?>
 
-    {% include fields %}
+<?= $this->render($fields, [
+    'mode' => 'form',
+    ...get_defined_vars(),
+]) ?>
 
-    {% include "@backend/system/resource/form/end.tpl.php" %}
+<?= $this->render('/src/Backend/System/Resource/Form/End.tpl.php', [
+    ...get_defined_vars(),
+]) ?>
 
-{% endblock %}

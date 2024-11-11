@@ -12,13 +12,13 @@ use App\Shared\Container\Container;
 
 abstract class ResourcePilot
 {
-   /**
+    /**
      * Name of the resource. This is used to identify the resource in the backend.
      * Same as folder name in src/Backend/Resource. E.g. 'article'.
      */
     public static function resource(): string
     {
-        return strtolower(array_slice(explode('\\', static::class), -2, 1)[0]);
+        return array_slice(explode('\\', static::class), -2, 1)[0];
     }
 
     protected function ctrl(): Ctrl

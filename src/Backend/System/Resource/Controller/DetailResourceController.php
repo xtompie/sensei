@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Backend\System\Resource\Controller;
 
 use App\Backend\System\Ctrl\Ctrl;
+use App\Backend\System\Resource\Pilot\ResourcePilot;
+use App\Backend\System\Resource\Pilot\ResourcePilotRegistry;
+use App\Backend\System\Resource\Repository\ResourceRepository;
+use App\Backend\System\Resource\Repository\ResourceRepositoryRegistry;
 use App\Shared\Container\Container;
 use App\Shared\Http\Controller;
 use App\Shared\Http\ControllerMeta;
@@ -15,7 +19,7 @@ abstract class DetailResourceController implements Controller, ControllerWithMet
 {
     public static function resource(): string
     {
-        return strtolower(array_slice(explode('\\', static::class), -2, 1)[0]);
+        return array_slice(explode('\\', static::class), -2, 1)[0];
     }
 
     public static function action(): string
@@ -33,14 +37,14 @@ abstract class DetailResourceController implements Controller, ControllerWithMet
         return Container::container()->get(Ctrl::class);
     }
 
-    protected function repository(): Repository
+    protected function repository(): ResourceRepository
     {
-        return Container::container()->get(RepositoryRegistry::class)->__call(static::resource());
+        return Container::container()->get(ResourceRepositoryRegistry::class)->__call(static::resource());
     }
 
-    protected function pilot(): Pilot
+    protected function pilot(): ResourcePilot
     {
-        return Container::container()->get(PilotRegistry::class)->__call(static::resource());
+        return Container::container()->get(ResourcePilotRegistry::class)->__call(static::resource());
     }
 
     protected function init(string $id): ?Response
@@ -82,7 +86,6 @@ abstract class DetailResourceController implements Controller, ControllerWithMet
             'action' => static::action(),
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action(), entity: $entity),
             'entity' => $entity,
-            'fields' => '/src/Backend/Resource/' . static::resource() . '/fields.tpl.php',
             'more' => $this->pilot()->more(action: static::action(), entity: $entity),
             'resource' => static::resource(),
             'title' => $this->pilot()->title(action: static::action(), entity: $entity),
@@ -92,7 +95,7 @@ abstract class DetailResourceController implements Controller, ControllerWithMet
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Action/' . static::action() . '.tpl.php';
+        return '/src/Backend/System/Resource/Controller/' . ucfirst(static::action()) . '.tpl.php';
     }
 
     /**

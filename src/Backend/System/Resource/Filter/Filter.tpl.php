@@ -1,9 +1,10 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
+<?php
+$type = isset($type) ? $type : 'info';
+$view = isset($view) ? $view : '/src/Backend/System/Resource/Filter/Type/' . $type . '/' . $type . '.tpl.php';
+$sentry = isset($sentry) ? $sentry : 'backend.resource.' . $resource . '.action.' . $action . '.prop.' . $name;
+?>
 
-{% set type = type is defined ? type : 'info' %}
-{% set view = view is defined ? view : '@backend/system/resource/filter/type/' ~ type ~ '/' ~ type ~ '.tpl.php' %}
-{% set sentry = sentry is defined ? sentry : 'backend.resource.' ~ resource ~ '.action.' ~ action ~ '.prop.' ~ name %}
-
-{% if sentry(sentry) %}
-    {% include view %}
-{% endif %}
+<?php if ($this->sentry($sentry)): ?>
+    <?= $this->render($view, get_defined_vars()) ?>
+<?php endif ?>
