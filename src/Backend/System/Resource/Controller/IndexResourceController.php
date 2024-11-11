@@ -82,7 +82,6 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
             'action' => static::action(),
             'all' => $all,
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action()),
-            'fields' => '/src/Backend/Resource/' . static::resource() . '/fields.tpl.php',
             'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/Filters.tpl.php' : null,
             'limit' => $limit,
             'more' => $this->pilot()->more(action: static::action()),

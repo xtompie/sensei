@@ -27,10 +27,10 @@
     {% endfor %}
     <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php') ?>
 {% else %}
-    {{ include_once('@backend/system/js/selection.tpl.php') }}
-    {{ include_once('@backend/system/js/formsubmit.tpl.php') }}
-    {{ include_once('@backend/system/js/removeitem.tpl.php') }}
-    {{ include_once('@backend/system/js/sortable.tpl.php') }}
+    {{ include_once('@backend/system/js/Slection.tpl.php') }}
+    {{ include_once('@backend/system/js/Formsubmit.tpl.php') }}
+    {{ include_once('@backend/system/js/Removeitem.tpl.php') }}
+    {{ include_once('@backend/system/js/Sortable.tpl.php') }}
     {% set label = label|default(null)|any ? label : backend().pilot().__call(reltype).title('index') %}
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php') ?>
     <div backend-sortable-space>

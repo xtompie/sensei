@@ -1,32 +1,33 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 
-{% set value = value[name] ?? null %}
+<?php $value = $value[$name] ?? '' ?>
 
-{% if action == 'list' %}
-    {% set relone_entity = value|default(null)|any ? backend().repository().__call(reltype).findById(value) : null %}
-    {% if relone_entity|any %}
-        {{ backend().pilot().__call(reltype).title('detail', relone_entity) }}
-    {% endif %}
-{% elseif action == 'detail' %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php') ?>
-    {% set relone_entity = value is defined ? backend().repository().__call(reltype).findById(value) : null %}
-    {% if relone_entity|any %}
-        {% set relone_link = backend().pilot().__call(reltype).link('detail', relone_entity) %}
-        {% set relone_sentry = sentry(relone_link.sentry) %}
-        {% if relone_sentry %}
-            <a href="{{ relone_link.url }}">
-        {% endif %}
-        {{ relone_link.title }}
-        {% if relone_sentry %}
+<?php if ($mode === 'list'): ?>
+    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\ResourceRepositoryRegistry::class)->__call($reltype)->findById($value) : null ?>
+    <?php if ($relone_entity): ?>
+        <?php $title = $this->service(\App\Backend\System\Resource\Pilot\ResourcePilot::class)->__call($reltype)->title('detail', $relone_entity) ?>
+        <?= $this->e($title) ?>
+    <?php endif ?>
+<?php if ($mode === 'detail'): ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php', get_defined_vars()) ?>
+    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\ResourceRepositoryRegistry::class)->__call($reltype)->findById($value) : null ?>
+    <?php if ($relone_entity): ?>
+        <?php $relone_link = $this->service(\App\Backend\System\Resource\Pilot\ResourcePilot::class)->__call($reltype)->link('detail', $relone_entity) ?>
+        <?php $relone_sentry = $this->sentry($relone_link['sentry']) ?>
+        <?php if ($relone_sentry): ?>
+            <a href="<?= $this->e($relone_link['url']) ?>">
+        <?php endif ?>
+        <?= $this->e($relone_link['title']) ?>
+        <?php if ($relone_sentry): ?>
             </a>
-        {% endif %}
-    {% elseif value is defined and value is not null %}
-        <strike>{{ value }}</strike>
-    {% endif %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php') ?>
-{% else %}
-    {{ include_once('@backend/system/js/selection.tpl.php') }}
-    {{ include_once('@backend/system/js/formsubmit.tpl.php') }}
+        <?php endif ?>
+    <?php elseif ($value): ?>
+        <strike><?= $this->e($value) ?></strike>
+    <?php endif ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php', get_defined_vars()) ?>
+<?php elseif ($mode === 'form'): ?>
+    <?= $this->import('/src/Backend/System/Js/Selection.tpl.php') ?>
+    <?= $this->import('/src/Backend/System/Js/Formsubmit.tpl.php') ?>
     {% set label = label|default(null)|any ? label : backend().pilot().__call(reltype).title('list') %}
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php') ?>
     <input type="hidden" name="{{ name }}" value="{{ value }}" />

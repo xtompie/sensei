@@ -3,7 +3,7 @@
 <?php $more = array_filter($more ?? [], fn (array $i) => $this->sentry($i['sentry'])) ?>
 
 <?php if ($more) : ?>
-    <?= $this->import('/src/Backend/System/Js/dropdown.tpl.php') ?>
+    <?= $this->import('/src/Backend/System/Js/Dropdown.tpl.php') ?>
     <div backend-dropdown-space>
         <?php $item = $more[0] ?>
         <a

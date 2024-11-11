@@ -45,6 +45,24 @@ class Kernel
         if ($debug) {
             if (!$cli) {
                 (new \Whoops\Run())
+                    ->addFrameFilter(function ($frame) {
+                        $function = $frame->getFunction();
+                        $file = $frame->getFile();
+                        $class = $frame->getClass();
+                        if ($function == 'include' && str_ends_with($file, '/vendor/xtompie/tpl/src/Tpl.php')) {
+                            return null;
+                        }
+                        if ($class == 'Xtompie\Tpl\Tpl' && $function == 'Xtompie\Tpl\{closure}') {
+                            return null;
+                        }
+                        if ($class == 'Xtompie\Tpl\Tpl' && $function == 'render') {
+                            return null;
+                        }
+                        if ($class == 'Whoops\Run' && $function == 'handleError') {
+                            return null;
+                        }
+                        return $frame;
+                    })
                     ->pushHandler(
                         (new \Whoops\Handler\PrettyPageHandler())
                         ->setEditor($this->env->APP_KERNEL_WHOOPS_EDITOR())

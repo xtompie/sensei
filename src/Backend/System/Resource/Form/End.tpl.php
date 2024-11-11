@@ -2,7 +2,7 @@
 <?php /** @var \App\Backend\System\Resource\UberErrorCollection $errors */ ?>
 
             <div class="col-span-full">
-                <?= $this->render('/src/Backend/System/Resource/Form/submit.tpl.php', [
+                <?= $this->render('/src/Backend/System/Resource/Form/Submit.tpl.php', [
                     'action' => $action,
                     'resource' => $resource,
                 ]) ?>
