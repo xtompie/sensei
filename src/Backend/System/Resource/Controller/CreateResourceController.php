@@ -215,7 +215,7 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Controller/' . static::action() . '.tpl.php';
+        return '/src/Backend/System/Resource/Controller/Form.tpl.php';
     }
 
     protected function generateId(): string

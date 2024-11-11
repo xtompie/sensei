@@ -1,5 +1,5 @@
 <?php /** @var App\Shared\Tpl\Tpl $this */ ?>
-<?= $this->import('/src/Backend/System/Js/util.tpl.php') ?>
+<?= $this->import('/src/Backend/System/Js/Util.tpl.php') ?>
 <script>
 var backend = backend || {};
 backend.visible = (function () {

@@ -1,7 +1,7 @@
 <?php /** @var App\Shared\Tpl\Tpl $this */ ?>
-<?= $this->import('/src/Backend/System/Js/httpbuildquery.tpl.php') ?>
-<?= $this->import('/src/Backend/System/Js/modal.tpl.php') ?>
-<?= $this->import('/src/Backend/System/Js/util.tpl.php') ?>
+<?= $this->import('/src/Backend/System/Js/Httpbuildquery.tpl.php') ?>
+<?= $this->import('/src/Backend/System/Js/Modal.tpl.php') ?>
+<?= $this->import('/src/Backend/System/Js/Util.tpl.php') ?>
 <script>
 var backend = backend || {};
 backend.selection = (function () {

@@ -223,7 +223,7 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Controller/' . ucfirst(static::action()) . '.tpl.php';
+        return '/src/Backend/System/Resource/Controller/Form.tpl.php';
     }
 
     /**

@@ -193,7 +193,6 @@ abstract class DeleteResourceController implements Controller, ControllerWithMet
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action(), entity: $entity),
             'entity' => $entity,
             'errors' => UberErrorCollection::of($errors),
-            'fields' => '/src/Backend/Resource/' . ucfirst(static::resource()) . '/fields.tpl.php',
             'more' => $this->pilot()->more(action: static::action(), entity: $entity),
             'resource' => static::resource(),
             'title' => $this->pilot()->title(action: static::action(), entity: $entity),
@@ -221,7 +220,7 @@ abstract class DeleteResourceController implements Controller, ControllerWithMet
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Action/' . static::action() . '.tpl.php';
+        return '/src/Backend/System/Resource/Controller/Form.tpl.php';
     }
 
     /**
