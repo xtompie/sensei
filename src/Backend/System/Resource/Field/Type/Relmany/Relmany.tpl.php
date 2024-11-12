@@ -1,15 +1,14 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 
-{% set value = value[name] ?? null %}
+<?php $value = $value[$name] ?? [] ?>
 
-{% if action == 'list' %}
-    {% if value is iterable %}
-        {{ value|length }}
-    {% endif %}
-{% elseif action == 'detail' %}
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php') ?>
-    {% set value = value|default({})%}
-    {% for value in value %}
+<?php if ($mode === 'list'): ?>
+    <?php if (is_iterable($value)): ?>
+        <?= count($value) ?>
+    <?php endif ?>
+<?php elseif ($mode === 'detail'): ?>
+    <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php', get_defined_vars()) ?>
+    <?php foreach ($value as $value_item): ?>
         {% set relone_entity = value[id] is defined ? backend().repository().__call(reltype).findById(value[id]) : null %}
         {% if relone_entity|any %}
             {% set relone_link = backend().pilot().__call(reltype).link('detail', relone_entity) %}
