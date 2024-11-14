@@ -70,12 +70,12 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
 
     protected function sentryInit(): string
     {
-        return 'backend.resource.' . static::resource() . '.action.' . static::action();
+        return $this->pilot()->sentry(action: static::action());
     }
 
     protected function sentryProp(string $prop): string
     {
-        return 'backend.resource.' . static::resource() . '.action.' . static::action() . ".prop.$prop";
+        return $this->pilot()->sentry(action: static::action(), prop: $prop);
     }
 
     protected function commit(): bool
@@ -188,6 +188,7 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
             'action' => static::action(),
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action(), entity: null),
             'errors' => UberErrorCollection::of($errors),
+            'mode' => 'form',
             'more' => $this->pilot()->more(action: static::action(), entity: null),
             'resource' => static::resource(),
             'title' => $this->pilot()->title(action: static::action()),
@@ -215,7 +216,7 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Controller/Form.tpl.php';
+        return '/src/Backend/System/Resource/Controller/Controller.tpl.php';
     }
 
     protected function generateId(): string

@@ -70,13 +70,31 @@ abstract class ResourcePilot
      */
     public function link(string $action, ?array $entity = null, ?string $title = null): array
     {
+        $id = null;
+        if ($entity) {
+            $id = $entity['id'] ?? null;
+            if (!is_string($id)) {
+                throw new \Exception('Entity has no id');
+            }
+        }
+
         return [
             'resource' => static::resource(),
             'action' => $action,
-            'sentry' => 'backend.resource.' . static::resource() . '.action.' . $action . ($entity ? '.id.' . $entity['id'] : ''),
+            'sentry' => $this->sentry(action: $action, id: $id),
             'title' => $title ?: $this->title(action: $action, entity: $entity),
             'url' => $this->url(action: $action, entity: $entity),
         ];
+    }
+
+    public function sentry(string $action, ?string $id = null, ?string $prop = null): string
+    {
+        return 'backend'
+            . '.resource.' . strtolower(static::resource())
+            . '.action.' . $action
+            . ($id ? '.id.' . $id : '')
+            . ($prop ? '.prop.' . $prop : '')
+        ;
     }
 
     /**

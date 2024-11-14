@@ -10,7 +10,7 @@
 
             <?php $rest = $errors->rest() ?>
             <div resterrors-list>
-                <?php foreach ($rest as $err) : ?>
+                <?php foreach ($rest as $err): ?>
                     <div class="invalid-feedback"><?= $this->e($err->message()) ?></div>
                 <?php endforeach ?>
             </div>

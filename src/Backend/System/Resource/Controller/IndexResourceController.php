@@ -57,12 +57,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
 
     protected function sentryInit(): string
     {
-        return 'backend.resource.' . strtolower(static::resource()) . '.action.' . strtolower(static::action());
-    }
-
-    protected function sentryProp(string $prop): string
-    {
-        return 'backend.resource.' . strtolower(static::resource()) . '.action.' . strtolower(static::action()) . ".prop.$prop";
+        return $this->pilot()->sentry(action: static::action());
     }
 
     /**
@@ -84,6 +79,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action()),
             'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/Filters.tpl.php' : null,
             'limit' => $limit,
+            'model' => 'index',
             'more' => $this->pilot()->more(action: static::action()),
             'offset' => $offset,
             'order' => $order,
@@ -96,7 +92,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Controller/' . ucfirst(static::action()) . '.tpl.php';
+        return '/src/Backend/System/Resource/Controller/Controller.tpl.php';
     }
 
     /**

@@ -12,11 +12,11 @@
         {% endif %}
     "
 >
-    <?php if ($action == 'create') : ?>
+    <?php if ($action == 'create'): ?>
         Save
-    <?php elseif ($action == 'update') : ?>
+    <?php elseif ($action == 'update'): ?>
         Save
-    <?php elseif ($action == 'delete') : ?>
+    <?php elseif ($action == 'delete'): ?>
         Delete
     <?php else : ?>
         Save

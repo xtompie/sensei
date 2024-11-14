@@ -51,10 +51,10 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
         return Container::container()->get(ResourcePilotRegistry::class)->__call(static::resource());
     }
 
-    protected function init(string $id): ?Response
+    protected function init(): ?Response
     {
         return $this->ctrl()->init(
-            sentry: $this->sentryInit($id),
+            sentry: $this->sentryInit(),
         );
     }
 
@@ -66,14 +66,19 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
         return $this->repository()->findById($id);
     }
 
-    protected function sentryInit(string $id): string
+    protected function sentryInit(): string
     {
-        return 'backend.resource.' . static::resource() . '.action.' . static::action() . ".id.$id";
+        return $this->pilot()->sentry(action: static::action());
+    }
+
+    protected function sentryEntity(string $id): string
+    {
+        return $this->pilot()->sentry(action: static::action(), id: $id);
     }
 
     protected function sentryProp(string $id, string $prop): string
     {
-        return 'backend.resource.' . static::resource() . '.action.' . static::action() . ".id.$id.prop.$prop";
+        return $this->pilot()->sentry(action: static::action(), id: $id, prop: $prop);
     }
 
     protected function commit(): bool
@@ -196,6 +201,7 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action(), entity: $entity),
             'entity' => $entity,
             'errors' => UberErrorCollection::of($errors),
+            'mode' => 'form',
             'more' => $this->pilot()->more(action: static::action(), entity: null),
             'resource' => static::resource(),
             'title' => $this->pilot()->title(action: static::action()),
@@ -223,7 +229,7 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
 
     protected function tpl(): string
     {
-        return '/src/Backend/System/Resource/Controller/Form.tpl.php';
+        return '/src/Backend/System/Resource/Controller/Controller.tpl.php';
     }
 
     /**
@@ -241,7 +247,7 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
 
     public function __invoke(string $id): Response
     {
-        $init = $this->init(id: $id);
+        $init = $this->init();
         if ($init) {
             return $init;
         }
@@ -249,6 +255,10 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
         $entity = $this->findEntity(id: $id);
         if (!$entity) {
             return $this->ctrl()->notFound();
+        }
+
+        if (!$this->ctrl()->sentry($this->sentryEntity(id: $id))) {
+            return $this->ctrl()->forbidden();
         }
 
         $value = $this->value(entity: $entity, value: $this->body() ?: $entity);

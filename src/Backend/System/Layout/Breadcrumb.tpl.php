@@ -1,7 +1,7 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 <?php $modal = $this->service(\App\Backend\System\Modal\Modal::class)->is() ?>
 
-<?php if (!$modal) : ?>
+<?php if (!$modal): ?>
     <?php if ($breadcrumb): ?>
         <nav class="flex" aria-label="Breadcrumb">
             <ol role="list" class="flex items-center space-x-4">
