@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Backend\System\Resource\Repository;
 
-final class ResourceRepositoryRegistry
+final class Repositories
 {
     /**
      * @param array<string, ResourceRepository>|null $map
      */
     public function __construct(
-        private ResourceRepositoryDiscoverer $repositoryDiscoverer,
+        private RepositoryDiscoverer $repositoryDiscoverer,
         private ?array $map = null,
     ) {
     }
@@ -27,16 +27,8 @@ final class ResourceRepositoryRegistry
         return $this->map[$name];
     }
 
-    /**
-     * @param array<string, mixed> $arguments
-     */
-    public function __call(string $name, array $arguments = []): ResourceRepository
+    public function get(string $resource): ResourceRepository
     {
-        return $this->map($name);
-    }
-
-    public function __get(string $name): ResourceRepository
-    {
-        return $this->map($name);
+        return $this->map($resource);
     }
 }

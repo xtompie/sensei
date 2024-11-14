@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Backend\System\Resource\Pilot;
 
 use App\Backend\System\Ctrl\Ctrl;
+use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
-use App\Backend\System\Resource\Repository\ResourceRepositoryRegistry;
 use App\Backend\System\Validation\Validation;
 use App\Shared\Container\Container;
 
@@ -28,7 +28,7 @@ abstract class ResourcePilot
 
     protected function repository(): ResourceRepository
     {
-        return Container::container()->get(ResourceRepositoryRegistry::class)->__call(static::resource());
+        return Container::container()->get(Repositories::class)->get(static::resource());
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class ResourcePilot
      * Link an array<string, string> with keys: resource, action, sentry, title, url.
      *
      * @param array<string, mixed>|null $entity
-     * @return array<string, mixed>
+     * @return array{resource:string,action:string,sentry:string,title:string,url:string}
      */
     public function link(string $action, ?array $entity = null, ?string $title = null): array
     {
@@ -82,7 +82,7 @@ abstract class ResourcePilot
             'resource' => static::resource(),
             'action' => $action,
             'sentry' => $this->sentry(action: $action, id: $id),
-            'title' => $title ?: $this->title(action: $action, entity: $entity),
+            'title' => $title ?: $this->title(action: $action, entity: $entity) ?? ucfirst($action),
             'url' => $this->url(action: $action, entity: $entity),
         ];
     }
@@ -130,6 +130,11 @@ abstract class ResourcePilot
     public function name(): string
     {
         return static::resource();
+    }
+
+    public function priority(): int
+    {
+        return 0;
     }
 
     /**

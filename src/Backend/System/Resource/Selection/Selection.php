@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Backend\System\Resource\Selection;
 
-use App\Backend\System\Resource\Pilot\ResourcePilotRegistry;
-use App\Backend\System\Resource\Repository\ResourceRepositoryRegistry;
+use App\Backend\System\Resource\Pilot\Pilots;
+use App\Backend\System\Resource\Repository\Repositories;
 use App\Shared\Http\Request;
 use App\Shared\Http\Response;
 use App\Shared\Http\UrlParameterContext;
@@ -14,8 +14,8 @@ use Xtompie\Collection\Collection;
 class Selection
 {
     public function __construct(
-        protected ResourcePilotRegistry $pilotRegistry,
-        protected ResourceRepositoryRegistry $repositoryRegistry,
+        protected Pilots $pilots,
+        protected Repositories $repositories,
         protected Request $request,
         protected UrlParameterContext $urlParamContext,
     ) {
@@ -68,7 +68,7 @@ class Selection
      */
     public function url(string $resource, array $ids): string
     {
-        return $this->pilotRegistry->__call($resource)->url(action: 'index', params: ['_selection' => '1', '_selection_result' => $ids]);
+        return $this->pilots->get($resource)->url(action: 'index', params: ['_selection' => '1', '_selection_result' => $ids]);
     }
 
     /**
@@ -76,8 +76,8 @@ class Selection
      */
     public function result(string $resource, array $ids): Response
     {
-        $entities = $this->repositoryRegistry->__call($resource)->findAll(['id' => $ids]);
-        $keys = $this->pilotRegistry->__call($resource)->selection();
+        $entities = $this->repositories->get($resource)->findAll(['id' => $ids]);
+        $keys = $this->pilots->get($resource)->selection();
         $entities = Collection::of($entities)
             ->map(fn (array $entity) => Collection::of($entity)->only($keys)->toArray())
             ->toArray()

@@ -3,16 +3,16 @@
 <?php $value = $value[$name] ?? '' ?>
 
 <?php if ($mode === 'list'): ?>
-    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\UberRepository::class)->findById($reltype, $value) : null ?>
+    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\Repositories::class)->get($reltype)->findById($value) : null ?>
     <?php if ($relone_entity): ?>
-        <?php $title = $this->service(\App\Backend\System\Resource\Pilot\UberPilot::class)->title($reltype, 'detail', $relone_entity) ?>
+        <?php $title = $this->service(\App\Backend\System\Resource\Pilot\Pilots::class)->get($reltype)->title(action: 'detail', entity: $relone_entity) ?>
         <?= $this->e($title) ?>
     <?php endif ?>
 <?php elseif ($mode === 'detail'): ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php', get_defined_vars()) ?>
-    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\UberRepository::class)->findById($reltype, $value) : null ?>
+    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\Repositories::class)->get($reltype)->findById($value) : null ?>
     <?php if ($relone_entity): ?>
-        <?php $relone_link = $this->service(\App\Backend\System\Resource\Pilot\UberPilot::class)->link($reltype, 'detail', $relone_entity) ?>
+        <?php $relone_link = $this->service(\App\Backend\System\Resource\Pilot\Pilots::class)->get($reltype)->link('detail', $relone_entity) ?>
         <?php $relone_sentry = $this->sentry($relone_link['sentry']) ?>
         <?php if ($relone_sentry): ?>
             <a href="<?= $this->e($relone_link['url']) ?>">
@@ -28,12 +28,12 @@
 <?php elseif ($mode === 'form'): ?>
     <?= $this->import('/src/Backend/System/Js/Selection.tpl.php') ?>
     <?= $this->import('/src/Backend/System/Js/Formsubmit.tpl.php') ?>
-    <?php $label = $label ?? $this->service(\App\Backend\System\Resource\Pilot\UberPilot::class)->title($reltype, 'list') ?>
+    <?php $label = $label ?? $this->service(\App\Backend\System\Resource\Pilot\Pilots::class)->get($reltype)->title('list') ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
     <input type="hidden" name="<?= $this->e($name) ?>" value="<?= $this->e($value) ?>" />
-    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\UberRepository::class)->findById($reltype, $value) : null ?>
+    <?php $relone_entity = $value ? $this->service(\App\Backend\System\Resource\Repository\Repositories::class)->get($reltype)->findById($value) : null ?>
     <?php if ($relone_entity): ?>
-        <?php $relone_link = $this->service(\App\Backend\System\Resource\Pilot\UberPilot::class)->link($reltype, 'detail', $relone_entity) ?>
+        <?php $relone_link = $this->service(\App\Backend\System\Resource\Pilot\Pilots::class)->get($reltype)->link(action: 'detail', entity: $relone_entity) ?>
         <a
             href="<?= $this->e($relone_link['url']) ?>"
             target="_blank"

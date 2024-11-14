@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Backend\System\Resource\Controller;
 
 use App\Backend\System\Ctrl\Ctrl;
+use App\Backend\System\Resource\Pilot\Pilots;
 use App\Backend\System\Resource\Pilot\ResourcePilot;
-use App\Backend\System\Resource\Pilot\ResourcePilotRegistry;
+use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
-use App\Backend\System\Resource\Repository\ResourceRepositoryRegistry;
 use App\Backend\System\Validation\UberErrorCollection;
 use App\Backend\System\Validation\Validation;
 use App\Shared\Container\Container;
@@ -43,12 +43,12 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
 
     protected function repository(): ResourceRepository
     {
-        return Container::container()->get(ResourceRepositoryRegistry::class)->__call(static::resource());
+        return Container::container()->get(Repositories::class)->get(static::resource());
     }
 
     protected function pilot(): ResourcePilot
     {
-        return Container::container()->get(ResourcePilotRegistry::class)->__call(static::resource());
+        return Container::container()->get(Pilots::class)->get(static::resource());
     }
 
     protected function init(): ?Response

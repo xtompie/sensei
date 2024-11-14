@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Backend\System\Resource\Controller;
 
 use App\Backend\System\Ctrl\Ctrl;
+use App\Backend\System\Resource\Pilot\Pilots;
 use App\Backend\System\Resource\Pilot\ResourcePilot;
-use App\Backend\System\Resource\Pilot\ResourcePilotRegistry;
+use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
-use App\Backend\System\Resource\Repository\ResourceRepositoryRegistry;
 use App\Shared\Container\Container;
 use App\Shared\Http\Controller;
 use App\Shared\Http\ControllerMeta;
@@ -40,12 +40,12 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
 
     protected function repository(): ResourceRepository
     {
-        return Container::container()->get(ResourceRepositoryRegistry::class)->__call(static::resource());
+        return Container::container()->get(Repositories::class)->get(static::resource());
     }
 
     protected function pilot(): ResourcePilot
     {
-        return Container::container()->get(ResourcePilotRegistry::class)->__call(static::resource());
+        return Container::container()->get(Pilots::class)->get(static::resource());
     }
 
     protected function init(): ?Response
@@ -79,7 +79,7 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action()),
             'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/Filters.tpl.php' : null,
             'limit' => $limit,
-            'model' => 'index',
+            'mode' => 'index',
             'more' => $this->pilot()->more(action: static::action()),
             'offset' => $offset,
             'order' => $order,

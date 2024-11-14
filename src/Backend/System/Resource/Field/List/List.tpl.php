@@ -3,7 +3,7 @@
 $selection = $this->service(\App\Backend\System\Resource\Selection\Selection::class);
 $fields = $fields ?? "/src/Backend/Resource/$resource/Fields.tpl.php";
 $mode = isset($mode) && in_array($mode, ['index', 'card', 'rel']) ? $mode : 'index';
-$list_selection = $mode === 'index' && $selection->enable();
+$list_selection = $mode === 'index' && $selection->enabled();
 $list_link = $list_selection ? false : true;
 $list_more = !$list_selection || $mode == 'rel' ? false : true;
 $list_link_blank = $list_selection || $mode == 'rel' ? true : false;
@@ -97,7 +97,7 @@ $list_removeitem = $mode == 'rel';
                                         'action' => 'list',
                                         'list_header' => false,
                                         'mode' => 'list',
-                                        'more' => $this->service(App\Backend\System\Resource\Pilot\UberPilot::class)->more($resource, 'list', $entity),
+                                        'more' => $this->service(App\Backend\System\Resource\Pilot\Pilots::class)->get($resource)->more(action: 'list', entity: $entity),
                                     ]) ?>
                                 </td>
                             <?php endif ?>

@@ -9,7 +9,7 @@ use App\Shared\Kernel\Discoverer;
 /**
  * @extends Discoverer<ResourcePilot>
  */
-class ResourcePilotDiscoverer extends Discoverer
+class PilotDiscoverer extends Discoverer
 {
     protected function instanceof(): string
     {

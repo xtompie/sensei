@@ -91,4 +91,9 @@ final class Tpl extends BaseTpl
     {
         return $text;
     }
+
+    protected function isUriAciive(string $url): bool
+    {
+        return str_starts_with($this->request->getUri()->getPath(), $url);
+    }
 }
