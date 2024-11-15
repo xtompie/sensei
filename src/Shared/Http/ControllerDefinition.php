@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Http;
 
-class ControllerMeta
+class ControllerDefinition
 {
     /**
      * @param array<string, string> $requirements

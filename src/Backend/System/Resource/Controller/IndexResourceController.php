@@ -11,12 +11,12 @@ use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
 use App\Shared\Container\Container;
 use App\Shared\Http\Controller;
-use App\Shared\Http\ControllerMeta;
-use App\Shared\Http\ControllerWithMeta;
+use App\Shared\Http\ControllerDefinition;
+use App\Shared\Http\HasControllerDefinition;
 use App\Shared\Http\Response;
 use Xtompie\Collection\Collection;
 
-abstract class IndexResourceController implements Controller, ControllerWithMeta
+abstract class IndexResourceController implements Controller, HasControllerDefinition
 {
     public static function resource(): string
     {
@@ -28,9 +28,9 @@ abstract class IndexResourceController implements Controller, ControllerWithMeta
         return 'index';
     }
 
-    public static function controllerMeta(): ControllerMeta
+    public static function controllerDefinition(): ControllerDefinition
     {
-        return new ControllerMeta(path: '/backend/resource/' . strtolower(static::resource()));
+        return new ControllerDefinition(path: '/backend/resource/' . strtolower(static::resource()));
     }
 
     protected function ctrl(): Ctrl

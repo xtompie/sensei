@@ -13,13 +13,13 @@ use App\Backend\System\Validation\UberErrorCollection;
 use App\Backend\System\Validation\Validation;
 use App\Shared\Container\Container;
 use App\Shared\Http\Controller;
-use App\Shared\Http\ControllerMeta;
-use App\Shared\Http\ControllerWithMeta;
+use App\Shared\Http\ControllerDefinition;
+use App\Shared\Http\HasControllerDefinition;
 use App\Shared\Http\Response;
 use Xtompie\Result\ErrorCollection;
 use Xtompie\Result\Result;
 
-abstract class UpdateResourceController implements Controller, ControllerWithMeta
+abstract class UpdateResourceController implements Controller, HasControllerDefinition
 {
     public static function resource(): string
     {
@@ -31,9 +31,9 @@ abstract class UpdateResourceController implements Controller, ControllerWithMet
         return 'update';
     }
 
-    public static function controllerMeta(): ControllerMeta
+    public static function controllerDefinition(): ControllerDefinition
     {
-        return new ControllerMeta(path: '/backend/resource/' . strtolower(static::resource()) . '/' . static::action() . '/{id}');
+        return new ControllerDefinition(path: '/backend/resource/' . strtolower(static::resource()) . '/' . static::action() . '/{id}');
     }
 
     protected function ctrl(): Ctrl

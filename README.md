@@ -111,7 +111,7 @@ Controllers are Single Action Controllers.
 
 Routing is handled using the [symfony/routing](https://symfony.com/doc/current/routing.html).
 
-Routes can be defined either via [ControllerMeta](https://github.com/xtompie/sensei/blob/master/src/Example/UI/Controller/MetaController.php) or with [Routing attributes](https://github.com/xtompie/sensei/blob/master/src/Shared/Http/Route) targeting class like in code above.
+Routes can be defined either via [ControllerDefinition](https://github.com/xtompie/sensei/blob/master/src/Example/UI/Controller/MetaController.php) or with [Routing attributes](https://github.com/xtompie/sensei/blob/master/src/Shared/Http/Route) targeting class like in code above.
 
 The `__invoke()` method of a controller can request any dependencies from the container. If multiple methods need dependencies, it's better to inject them through the constructor. If only the `__invoke` method needs them, pass them as arguments to that method.
 

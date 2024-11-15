@@ -12,10 +12,10 @@ use Exception;
 use ReflectionAttribute;
 use ReflectionClass;
 
-final class ControllerMetaResolver
+final class ControllerDefinitionResolver
 {
     /**
-     * @param array<string, ControllerMeta> $cache
+     * @param array<string, ControllerDefinition> $cache
      */
     public function __construct(
         private array $cache = [],
@@ -25,7 +25,7 @@ final class ControllerMetaResolver
     /**
      * @param class-string $class
      */
-    public function __invoke(string $class): ControllerMeta
+    public function __invoke(string $class): ControllerDefinition
     {
         if (!isset($this->cache[$class])) {
             $controller = $this->usingStatic($class);
@@ -42,19 +42,19 @@ final class ControllerMetaResolver
         return $this->cache[$class];
     }
 
-    private static function usingStatic(string $class): ?ControllerMeta
+    private static function usingStatic(string $class): ?ControllerDefinition
     {
         if (!class_exists($class)) {
             return null;
         }
 
         $reflectionClass = new ReflectionClass($class);
-        if (!$reflectionClass->implementsInterface(ControllerWithMeta::class)) {
+        if (!$reflectionClass->implementsInterface(HasControllerDefinition::class)) {
             return null;
         }
 
-        $controller = $class::controllerMeta();
-        if (!$controller instanceof ControllerMeta) {
+        $controller = $class::controllerDefinition();
+        if (!$controller instanceof ControllerDefinition) {
             return null;
         }
 
@@ -63,7 +63,7 @@ final class ControllerMetaResolver
         return $controller;
     }
 
-    private function usingAttributes(string $class): ?ControllerMeta
+    private function usingAttributes(string $class): ?ControllerDefinition
     {
         if (!class_exists($class)) {
             return null;
@@ -95,7 +95,7 @@ final class ControllerMetaResolver
             return null;
         }
 
-        return new ControllerMeta(
+        return new ControllerDefinition(
             path: $path,
             controller: $class,
             requirements: $requirements,

@@ -14,14 +14,14 @@ use App\Backend\System\Validation\Validation;
 use App\Shared\Container\Container;
 use App\Shared\Gen\Gen;
 use App\Shared\Http\Controller;
-use App\Shared\Http\ControllerMeta;
-use App\Shared\Http\ControllerWithMeta;
+use App\Shared\Http\ControllerDefinition;
+use App\Shared\Http\HasControllerDefinition;
 use App\Shared\Http\Response;
 use Exception;
 use Xtompie\Result\ErrorCollection;
 use Xtompie\Result\Result;
 
-abstract class CreateResourceController implements Controller, ControllerWithMeta
+abstract class CreateResourceController implements Controller, HasControllerDefinition
 {
     public static function resource(): string
     {
@@ -33,9 +33,9 @@ abstract class CreateResourceController implements Controller, ControllerWithMet
         return 'create';
     }
 
-    public static function controllerMeta(): ControllerMeta
+    public static function controllerDefinition(): ControllerDefinition
     {
-        return new ControllerMeta(path: '/backend/resource/' . strtolower(static::resource()) . '/' . static::action());
+        return new ControllerDefinition(path: '/backend/resource/' . strtolower(static::resource()) . '/' . static::action());
     }
 
     protected function ctrl(): Ctrl

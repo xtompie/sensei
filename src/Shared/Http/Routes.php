@@ -17,7 +17,7 @@ final class Routes
     public function __construct(
         private Source $source,
         private OptimizeDir $optimizeDir,
-        private ControllerMetaResolver $controllerMetaResolver,
+        private ControllerDefinitionResolver $controllerDefinitionResolver,
         private ?SymfonyRouteCollection $routes = null,
     ) {
     }
@@ -104,20 +104,20 @@ final class Routes
     }
 
     /**
-     * @return Generator<int, ControllerMeta>
+     * @return Generator<int, ControllerDefinition>
      */
-    private function controllerMetas(): Generator
+    private function controllerDefinitions(): Generator
     {
-        /** @var ControllerMeta[] $metas */
+        /** @var ControllerDefinition[] $metas */
         $metas = [];
         foreach ($this->source->classes(instanceof: Controller::class, suffix: 'Controller') as $class) {
             if (!class_exists($class)) {
                 return throw new \InvalidArgumentException('Controller must be a valid class-string.');
             }
-            $metas[] = $this->controllerMetaResolver->__invoke($class);
+            $metas[] = $this->controllerDefinitionResolver->__invoke($class);
         }
 
-        usort($metas, function (ControllerMeta $a, ControllerMeta $b) {
+        usort($metas, function (ControllerDefinition $a, ControllerDefinition $b) {
             return $b->priority() <=> $a->priority();
         });
 
@@ -127,7 +127,7 @@ final class Routes
     private function sourceRoutes(): SymfonyRouteCollection
     {
         $routes = new SymfonyRouteCollection();
-        foreach ($this->controllerMetas() as $controller) {
+        foreach ($this->controllerDefinitions() as $controller) {
             if (!$controller->controller()) {
                 continue;
             }
