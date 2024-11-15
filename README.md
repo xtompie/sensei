@@ -233,7 +233,7 @@ Commands are resolved through Discovery mechanism, which searches for classes wi
 
 Application console is handled using the [symfony/console](https://symfony.com/doc/current/console.html).
 
-Command singnature can be defined either via CommandMeta or with [Singnature attributes](https://github.com/xtompie/sensei/blob/master/src/Shared/Console/Signature) targeting class like in code above.
+Command singnature can be defined either via CommandDefinition or with [Singnature attributes](https://github.com/xtompie/sensei/blob/master/src/Shared/Console/Signature) targeting class like in code above.
 
 The `__invoke()` method of a command can request any dependencies from the container. If multiple methods need dependencies, it's better to inject them through the constructor. If only the `__invoke` method needs them, pass them as arguments to that method.
 

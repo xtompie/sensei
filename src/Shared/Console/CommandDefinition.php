@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Console;
 
-class CommandMeta
+class CommandDefinition
 {
     /**
      * @param string $name

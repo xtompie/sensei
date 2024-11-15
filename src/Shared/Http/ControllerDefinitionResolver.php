@@ -28,7 +28,7 @@ final class ControllerDefinitionResolver
     public function __invoke(string $class): ControllerDefinition
     {
         if (!isset($this->cache[$class])) {
-            $controller = $this->usingStatic($class);
+            $controller = $this->usingDefinition($class);
             if (!$controller) {
                 $controller = $this->usingAttributes($class);
             }
@@ -42,7 +42,7 @@ final class ControllerDefinitionResolver
         return $this->cache[$class];
     }
 
-    private static function usingStatic(string $class): ?ControllerDefinition
+    private static function usingDefinition(string $class): ?ControllerDefinition
     {
         if (!class_exists($class)) {
             return null;

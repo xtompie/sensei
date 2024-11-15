@@ -13,14 +13,14 @@ use Exception;
 use ReflectionAttribute;
 use ReflectionClass;
 
-final class CommandMetaResolver
+final class CommandDefinitionResolver
 {
     /**
      * @param class-string $class
      */
-    public function __invoke(string $class): CommandMeta
+    public function __invoke(string $class): CommandDefinition
     {
-        $command = $this->usingStatic($class);
+        $command = $this->usingDefinition($class);
         if (!$command) {
             $command = $this->usingAttributes($class);
         }
@@ -31,19 +31,19 @@ final class CommandMetaResolver
         return $command;
     }
 
-    private function usingStatic(string $class): ?CommandMeta
+    private function usingDefinition(string $class): ?CommandDefinition
     {
         if (!class_exists($class)) {
             return null;
         }
 
         $reflectionClass = new ReflectionClass($class);
-        if (!$reflectionClass->implementsInterface(CommandWithMeta::class)) {
+        if (!$reflectionClass->implementsInterface(HasCommandDefinition::class)) {
             return null;
         }
 
-        $command = $class::commandMeta();
-        if (!$command instanceof CommandMeta) {
+        $command = $class::commandDefinition();
+        if (!$command instanceof CommandDefinition) {
             return null;
         }
 
@@ -52,7 +52,7 @@ final class CommandMetaResolver
         return $command;
     }
 
-    private function usingAttributes(string $class): ?CommandMeta
+    private function usingAttributes(string $class): ?CommandDefinition
     {
         if (!class_exists($class)) {
             return null;
@@ -85,7 +85,7 @@ final class CommandMetaResolver
             return null;
         }
 
-        return new CommandMeta(
+        return new CommandDefinition(
             name: $name,
             command: $class,
             description: $description,

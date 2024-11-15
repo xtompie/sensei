@@ -23,7 +23,7 @@ final class ApplicationProvider
 {
     public function __construct(
         private CommandDiscoverer $commandDiscoverer,
-        private CommandMetaResolver $commandMetaResolver,
+        private CommandDefinitionResolver $commandDefinitionResolver,
         private SchemaProvider $schemaProvider,
     ) {
     }
@@ -39,7 +39,7 @@ final class ApplicationProvider
         return $application;
     }
 
-    private function symfony(CommandMeta $definition): SymfonyCommnd
+    private function symfony(CommandDefinition $definition): SymfonyCommnd
     {
         /** @var Bridge $bridge */
         $bridge = Container::container()->resolve(
@@ -133,7 +133,7 @@ final class ApplicationProvider
     }
 
     /**
-     * @return Generator<CommandMeta>
+     * @return Generator<CommandDefinition>
      */
     private function commands(): Generator
     {
@@ -147,7 +147,7 @@ final class ApplicationProvider
                 return throw new \InvalidArgumentException('Command must be a valid class-string.');
             }
 
-            $command = $this->commandMetaResolver->__invoke($class);
+            $command = $this->commandDefinitionResolver->__invoke($class);
 
             yield $command;
         }

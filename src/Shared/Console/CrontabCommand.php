@@ -16,7 +16,7 @@ class CrontabCommand implements Command
     public function __construct(
         private AppDir $appDir,
         private CommandDiscoverer $commandDiscoverer,
-        private CommandMetaResolver $commandMetaResolver,
+        private CommandDefinitionResolver $commandDefinitionResolver,
         private Output $output,
     ) {
     }
@@ -39,7 +39,7 @@ class CrontabCommand implements Command
     }
 
     /**
-     * @return array<array{meta: CommandMeta, crontab: Crontab}>
+     * @return array<array{meta: CommandDefinition, crontab: Crontab}>
      */
     private function list(): array
     {
@@ -53,7 +53,7 @@ class CrontabCommand implements Command
                 continue;
             }
             $list[] = [
-                'meta' => $this->commandMetaResolver->__invoke($class),
+                'meta' => $this->commandDefinitionResolver->__invoke($class),
                 'crontab' => $crontab,
             ];
         }
