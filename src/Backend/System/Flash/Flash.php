@@ -15,7 +15,7 @@ class Flash extends BaseFlash
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function __invoke(): array
     {
@@ -30,7 +30,7 @@ class Flash extends BaseFlash
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function pull(): array
     {

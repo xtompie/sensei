@@ -88,7 +88,7 @@ class Bridge extends SymfonyCommand
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     private function args(InputInterface $input): array
     {

@@ -14,7 +14,7 @@ use Xtompie\Tpl\Tpl as BaseTpl;
 final class Tpl extends BaseTpl
 {
     /**
-     * @param array<string, bool> $import
+     * @param array<string,bool> $import
      */
     public function __construct(
         private AppDir $appDir,
@@ -33,7 +33,7 @@ final class Tpl extends BaseTpl
 
     /**
      * @param string $template
-     * @param array<string, mixed> $data
+     * @param array<string,mixed> $data
      * @return string
      */
     protected function render(string $template, array $data = []): string
@@ -80,7 +80,7 @@ final class Tpl extends BaseTpl
     }
 
     /**
-     * @param array<string, mixed> $query
+     * @param array<string,mixed> $query
      */
     protected function alterUri(array $query): string
     {

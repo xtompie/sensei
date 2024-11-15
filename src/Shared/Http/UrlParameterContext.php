@@ -7,7 +7,7 @@ namespace App\Shared\Http;
 class UrlParameterContext
 {
     /**
-     * @param array<string, mixed> $context
+     * @param array<string,mixed> $context
      */
     public function __construct(
         protected array $context = [],
@@ -30,7 +30,7 @@ class UrlParameterContext
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function context(): array
     {

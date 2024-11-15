@@ -11,7 +11,7 @@ class Invocation
     /**
      * @param array<Advice> $advices
      * @param string $method
-     * @param array<mixed, mixed> $args
+     * @param array<mixed,mixed> $args
      * @param callable $main
      */
     public function __construct(
@@ -46,7 +46,7 @@ class Invocation
     }
 
     /**
-     * @return array<mixed, mixed> $args
+     * @return array<mixed,mixed> $args
      */
     public function args(): array
     {
@@ -54,7 +54,7 @@ class Invocation
     }
 
     /**
-     * @param array<string, mixed> $args
+     * @param array<string,mixed> $args
      * @return static
      */
     public function withArgs(array $args): static

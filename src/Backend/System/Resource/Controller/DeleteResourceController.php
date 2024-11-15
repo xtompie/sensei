@@ -59,7 +59,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     protected function findEntity(string $id): ?array
     {
@@ -87,7 +87,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     protected function body(): ?array
     {
@@ -95,9 +95,9 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $entity
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function valueSentry(array $entity, array $value): array
     {
@@ -112,7 +112,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function valuePositiveList(): array
     {
@@ -120,9 +120,9 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $entity
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function valuePositive(array $entity, array $value): array
     {
@@ -141,9 +141,9 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $entity
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function value(array $entity, array $value): array
     {
@@ -153,9 +153,9 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $entity
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function augument(array $entity, array $value): array
     {
@@ -163,8 +163,8 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @param array<string, mixed> $value
+     * @param array<string,mixed> $entity
+     * @param array<string,mixed> $value
      */
     protected function validate(array $entity, array $value): Result
     {
@@ -174,7 +174,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     protected function validation(array $entity, Validation $validation): Validation
     {
@@ -187,9 +187,9 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $entity
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function vm(array $entity, array $value, ?ErrorCollection $errors = null): array
     {
@@ -207,7 +207,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     protected function commited(array $entity): Response
     {
@@ -217,7 +217,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     protected function flash(array $entity): void
     {
@@ -230,8 +230,8 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @param array<string, mixed> $value
+     * @param array<string,mixed> $entity
+     * @param array<string,mixed> $value
      */
     protected function stagged(array $entity, array $value, ?ErrorCollection $errors = null): Response
     {

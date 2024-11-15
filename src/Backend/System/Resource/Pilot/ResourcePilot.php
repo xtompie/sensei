@@ -34,8 +34,8 @@ abstract class ResourcePilot
     /**
      * Returns array of links.
      *
-     * @param array<string, mixed>|null $entity
-     * @return array<int, mixed>
+     * @param array<string,mixed>|null $entity
+     * @return array<int,mixed>
      */
     public function breadcrumb(string $action, ?array $entity = null): array
     {
@@ -63,9 +63,7 @@ abstract class ResourcePilot
     }
 
     /**
-     * Link an array<string, string> with keys: resource, action, sentry, title, url.
-     *
-     * @param array<string, mixed>|null $entity
+     * @param array<string,mixed>|null $entity
      * @return array{resource:string,action:string,sentry:string,title:string,url:string}
      */
     public function link(string $action, ?array $entity = null, ?string $title = null): array
@@ -100,8 +98,8 @@ abstract class ResourcePilot
     /**
      * Returns array of links.
      *
-     * @param array<string, mixed>|null $entity
-     * @return array<int, mixed>
+     * @param array<string,mixed>|null $entity
+     * @return array<int,mixed>
      */
     public function more(string $action, ?array $entity = null): array
     {
@@ -150,7 +148,7 @@ abstract class ResourcePilot
 
     /**
      * Title of the entity.
-     * @param array<string, mixed>|null $entity
+     * @param array<string,mixed>|null $entity
      */
     public function title(string $action, ?array $entity = null): ?string
     {
@@ -166,7 +164,7 @@ abstract class ResourcePilot
     }
 
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     protected function titleDetail(array $entity): string
     {
@@ -195,8 +193,8 @@ abstract class ResourcePilot
     /**
      * Url
      *
-     * @param array<string, mixed>|null $entity
-     * @param array<string, mixed> $params
+     * @param array<string,mixed>|null $entity
+     * @param array<string,mixed> $params
      */
     public function url(string $action, ?array $entity = null, array $params = []): string
     {
@@ -216,7 +214,7 @@ abstract class ResourcePilot
      * White list of entity keys in write operations.
      * WHen using insert or update, only these keys from $_POST will be used.
      *
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function values(string $action): array
     {
@@ -226,7 +224,7 @@ abstract class ResourcePilot
     /**
      * Validation rules.
      *
-     * @param array<string, mixed>|null $entity
+     * @param array<string,mixed>|null $entity
      */
     public function validation(Validation $validation, string $action, ?array $entity): Validation
     {

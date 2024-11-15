@@ -55,7 +55,7 @@ abstract class DetailResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     protected function findEntity(string $id): ?array
     {
@@ -73,8 +73,8 @@ abstract class DetailResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function augument(array $value): array
     {
@@ -82,8 +82,8 @@ abstract class DetailResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
-     * @return array<string, mixed>
+     * @param array<string,mixed> $entity
+     * @return array<string,mixed>
      */
     protected function vm(array $entity): array
     {
@@ -105,7 +105,7 @@ abstract class DetailResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     protected function view(array $entity): Response
     {

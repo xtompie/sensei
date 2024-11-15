@@ -39,7 +39,7 @@ class CrontabCommand implements Command
     }
 
     /**
-     * @return array<array{meta: CommandDefinition, crontab: Crontab}>
+     * @return array<array{meta:CommandDefinition,crontab:Crontab}>
      */
     private function list(): array
     {

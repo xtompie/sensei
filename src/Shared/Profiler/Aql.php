@@ -19,7 +19,7 @@ class Aql extends BaseAql
     }
 
     /**
-     * @param array<string, mixed> $aql
+     * @param array<string,mixed> $aql
      */
     public function __invoke(array $aql): Result
     {

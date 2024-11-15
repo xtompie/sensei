@@ -33,7 +33,7 @@ class Session
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function all(): array
     {

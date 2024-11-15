@@ -74,7 +74,7 @@ class Provider implements SchemaProvider
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function options(Column $column): array
     {

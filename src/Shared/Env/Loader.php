@@ -15,7 +15,7 @@ final class Loader
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function __invoke(): array
     {

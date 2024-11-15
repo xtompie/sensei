@@ -8,14 +8,14 @@ use ReflectionMethod;
 final class Aop
 {
     /**
-     * @var array<string, array<Advice>>
+     * @var array<string,array<Advice>>
      */
     protected static array $advices = [];
 
     /**
      * @template T
      * @param string $method
-     * @param array<mixed, mixed> $args
+     * @param array<mixed,mixed> $args
      * @param callable():T $main
      * @param array<Advice> $prepend
      * @param array<Advice> $append

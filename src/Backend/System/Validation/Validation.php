@@ -17,7 +17,7 @@ class Validation extends BaseValidation
     }
 
     /**
-     * @param array<string, mixed>|null $entity
+     * @param array<string,mixed>|null $entity
      */
     public function unique(ResourceRepository $repository, string $field, ?array $entity, ?string $msg = null): static
     {

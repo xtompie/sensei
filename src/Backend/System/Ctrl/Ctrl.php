@@ -63,7 +63,7 @@ class Ctrl
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     public function body(): ?array
     {
@@ -105,7 +105,7 @@ class Ctrl
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function query(): array
     {

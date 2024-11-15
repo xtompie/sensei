@@ -9,7 +9,7 @@ class Data
     /**
      * @param array<array<string, mixed>> $data
      * @param int $limitPerType
-     * @param array<string, int> $counts
+     * @param array<string,int> $counts
      */
     public function __construct(
         protected array $data = [],

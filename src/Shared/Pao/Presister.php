@@ -14,7 +14,7 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed> $future
+     * @param array<string,mixed> $future
      * @param callable|null $presentProvider
      * @param array<callable> $hooks
      */
@@ -28,10 +28,10 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed>|null $present
-     * @param array<string, mixed> $future
+     * @param array<string,mixed>|null $present
+     * @param array<string,mixed> $future
      * @param array<callable> $hooks
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function hooks(?array $present, array $future, array $hooks): array
     {
@@ -53,8 +53,8 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed>|null $presentProjection
-     * @param array<string, mixed>|null $futureProjection
+     * @param array<string,mixed>|null $presentProjection
+     * @param array<string,mixed>|null $futureProjection
      */
     protected function presist(?array $presentProjection, ?array $futureProjection): void
     {
@@ -77,8 +77,8 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed>|null $projection
-     * @return array<string, array<string, mixed>>
+     * @param array<string,mixed>|null $projection
+     * @return array<string,array<string, mixed>>
      */
     protected function records(?array $projection): array
     {
@@ -100,8 +100,8 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed> $projection
-     * @return array<string, array<string, mixed>>
+     * @param array<string,mixed> $projection
+     * @return array<string,array<string, mixed>>
      */
     protected function record(array $projection): array
     {
@@ -125,9 +125,9 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed> $present
-     * @param array<string, mixed> $future
-     * @return array<string, array{table: string, data: array<string, mixed>}>
+     * @param array<string,mixed> $present
+     * @param array<string,mixed> $future
+     * @return array<string,array{table:string,data:array<string,mixed>}>
      */
     protected function inserts(array $present, array $future): array
     {
@@ -142,9 +142,9 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed> $present
-     * @param array<string, mixed> $future
-     * @return array<string, array{table: string, id: string, data: array<string, mixed>}>
+     * @param array<string,mixed> $present
+     * @param array<string,mixed> $future
+     * @return array<string,array{table:string,id:string,data:array<string,mixed>}>
      */
     protected function updates(array $present, array $future): array
     {
@@ -163,9 +163,9 @@ class Presister
     }
 
     /**
-     * @param array<string, mixed> $present
-     * @param array<string, mixed> $future
-     * @return array<string, array{table: string, id: string}>
+     * @param array<string,mixed> $present
+     * @param array<string,mixed> $future
+     * @return array<string,array{table:string,id:string}>
      */
     protected function deletes(array $present, array $future): array
     {

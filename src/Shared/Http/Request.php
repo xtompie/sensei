@@ -16,7 +16,7 @@ use Xtompie\Typed\Typed;
 final class Request extends ServerRequest implements Provider
 {
     /**
-     * @var array<string, mixed>|null
+     * @var array<string,mixed>|null
      */
     private ?array $resolvedBody = null;
 
@@ -32,7 +32,7 @@ final class Request extends ServerRequest implements Provider
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function query(): array
     {
@@ -54,7 +54,7 @@ final class Request extends ServerRequest implements Provider
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function body(): array
     {
@@ -125,7 +125,7 @@ final class Request extends ServerRequest implements Provider
     }
 
     /**
-     * @param array<string, mixed> $query
+     * @param array<string,mixed> $query
      */
     public function alterUri(array $query): string
     {

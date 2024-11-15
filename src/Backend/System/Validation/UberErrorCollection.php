@@ -15,7 +15,7 @@ final class UberErrorCollection
     }
 
     /**
-     * @param array<string, bool> $handled
+     * @param array<string,bool> $handled
      */
     public function __construct(
         protected ErrorCollection $errors,

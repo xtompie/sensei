@@ -14,7 +14,7 @@ class Checksum
     }
 
     /**
-     * @param array<string, mixed> $projection
+     * @param array<string,mixed> $projection
      */
     public function validate(array $projection, string $field = 'checksum'): bool
     {
@@ -25,8 +25,8 @@ class Checksum
     }
 
     /**
-     * @param array<string, mixed> $projection
-     * @return array<string, mixed>
+     * @param array<string,mixed> $projection
+     * @return array<string,mixed>
      */
     public function generate(array $projection, string $field = 'checksum'): array
     {

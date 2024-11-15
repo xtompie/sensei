@@ -43,7 +43,7 @@ class Selection
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function enable(): array
     {
@@ -51,7 +51,7 @@ class Selection
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function enableSingle(): array
     {

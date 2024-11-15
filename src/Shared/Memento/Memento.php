@@ -7,7 +7,7 @@ namespace App\Shared\Memento;
 class Memento
 {
     /**
-     * @param array<string, array<string, mixed>> $cache
+     * @param array<string,array<string, mixed>> $cache
      */
     public function __construct(
         private array $cache = [],

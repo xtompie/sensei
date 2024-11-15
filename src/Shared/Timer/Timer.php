@@ -47,7 +47,7 @@ class Timer implements Transient, JsonSerializable
     }
 
     /**
-     * @return array{type: class-string, start: float, time: float}
+     * @return array{type:class-string,start:float,time:float}
      */
     public function jsonSerialize(): array
     {

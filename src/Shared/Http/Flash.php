@@ -20,7 +20,7 @@ class Flash
     }
 
     /**
-     * @return array<array{msg: string, type: string, format: string}>
+     * @return array<array{msg:string,type:string,format:string}>
      */
     public function __invoke(): array
     {
@@ -38,7 +38,7 @@ class Flash
     }
 
     /**
-     * @return array<array{msg: string, type: string, format: string}>
+     * @return array<array{msg:string,type:string,format:string}>
      */
     public function pull(): array
     {

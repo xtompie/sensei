@@ -61,9 +61,9 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @param array<int, array<string, mixed>> $entities
-     * @param array<string, mixed> $where
-     * @return array<string, mixed>
+     * @param array<int,array<string, mixed>> $entities
+     * @param array<string,mixed> $where
+     * @return array<string,mixed>
      */
     protected function vm(
         array $entities,
@@ -96,8 +96,8 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @param array<int, array<string, mixed>> $entities
-     * @param array<string, mixed> $where
+     * @param array<int,array<string, mixed>> $entities
+     * @param array<string,mixed> $where
      */
     protected function view(
         array $entities,
@@ -118,7 +118,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function filters(): array
     {
@@ -126,7 +126,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function whereQuery(): array
     {
@@ -138,7 +138,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function whereStatic(): array
     {
@@ -146,7 +146,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function where(): array
     {

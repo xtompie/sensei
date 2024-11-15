@@ -21,7 +21,7 @@ final class Response extends DiactorosResponse
      *
      * @param string $body The response body content
      * @param int $status The HTTP status code
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -45,7 +45,7 @@ final class Response extends DiactorosResponse
      * Create an OK response (HTTP 200).
      *
      * @param string $body The response body content
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -61,7 +61,7 @@ final class Response extends DiactorosResponse
      *
      * @param string $body The HTML content to be sent
      * @param int $status The HTTP status code
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -83,9 +83,9 @@ final class Response extends DiactorosResponse
      * and returns an HTTP response with a default `Content-Type` of `text/html`.
      *
      * @param string $template the template to render
-     * @param array<string, mixed> $data optional data to pass to the template
+     * @param array<string,mixed> $data optional data to pass to the template
      * @param int $status the HTTP status code (default: 200)
-     * @param array<string, string|array<string>> $headers optional headers to include in the response
+     * @param array<string,string|array<string>> $headers optional headers to include in the response
      * @return Response the HTML response
      *
      * @example
@@ -102,7 +102,7 @@ final class Response extends DiactorosResponse
      *
      * @param array<mixed> $body The data to be encoded as JSON
      * @param int $status The HTTP status code
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -125,7 +125,7 @@ final class Response extends DiactorosResponse
      * Create a created response (HTTP 201).
      *
      * @param string|null $location The location header (optional)
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -144,7 +144,7 @@ final class Response extends DiactorosResponse
      * Create an accepted response (HTTP 202).
      *
      * @param string|null $location The location header (optional)
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -163,7 +163,7 @@ final class Response extends DiactorosResponse
      * Create a no content response (HTTP 204).
      *
      * @param int $status The HTTP status code (default: 204)
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -179,7 +179,7 @@ final class Response extends DiactorosResponse
      *
      * @param string $url The redirect URL
      * @param int $status The HTTP status code (default: 302)
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -198,9 +198,9 @@ final class Response extends DiactorosResponse
      * then returns a redirect response to that URL.
      *
      * @param class-string $controller the controller to redirect to
-     * @param array<string, mixed> $parameters optional parameters for the URL generation
+     * @param array<string,mixed> $parameters optional parameters for the URL generation
      * @param int $status the HTTP status code for the redirect (default: 302)
-     * @param array<string, string|array<string>> $headers optional headers to include in the response
+     * @param array<string,string|array<string>> $headers optional headers to include in the response
      * @return Response the redirect response
      *
      * @example
@@ -271,7 +271,7 @@ final class Response extends DiactorosResponse
      *
      * @param StreamInterface $stream The stream to be sent
      * @param int $status The HTTP status code
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -288,7 +288,7 @@ final class Response extends DiactorosResponse
      *
      * @param callable(): void $callback The callback function to generate content
      * @param int $status The HTTP status code
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -309,7 +309,7 @@ final class Response extends DiactorosResponse
      *
      * @param callable(resource): void $callback The callback that receives a handler (resource) and writes to it
      * @param int $status The HTTP status code
-     * @param array<string, string|array<string>> $headers The response headers
+     * @param array<string,string|array<string>> $headers The response headers
      * @return Response
      *
      * @example
@@ -339,7 +339,7 @@ final class Response extends DiactorosResponse
      *
      * @param string $path The absolute path to the file on the file system
      * @param string $filename The name of the file to be used in the Content-Disposition header
-     * @param array<string, string|array<string>> $headers Optional additional headers to include in the response
+     * @param array<string,string|array<string>> $headers Optional additional headers to include in the response
      * @return Response The response serving the file
      *
      * @example

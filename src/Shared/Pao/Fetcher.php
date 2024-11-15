@@ -14,7 +14,7 @@ class Fetcher
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      */
     public function count(array $pql, ?string $count = null): int
     {
@@ -29,9 +29,9 @@ class Fetcher
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      * @param array<callable> $hooks
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     public function find(array $pql, array $hooks = []): ?array
     {
@@ -39,7 +39,7 @@ class Fetcher
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      * @param array<callable> $hooks
      * @return array<array<string, mixed>>
      */
@@ -49,7 +49,7 @@ class Fetcher
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      * @param array<string> $parents
      * @param array<callable> $hooks
      * @return array<array<string, mixed>>
@@ -74,7 +74,7 @@ class Fetcher
             foreach ($pql as $key => $value) {
                 if (str_starts_with($key, 'pql:children:')) {
                     $field = substr($key, strlen('pql:children:'));
-                    /** @var array<string, mixed> $value */
+                    /** @var array<string,mixed> $value */
                     $projections = $this->children($projections, $field, $value, $ids, $hooks);
                 }
             }
@@ -85,7 +85,7 @@ class Fetcher
 
     /**
      * @param array<array<string, mixed>> $results
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      * @param array<string> $ids
      * @param array<callable> $hooks
      * @return array<array<string, mixed>>
@@ -108,9 +108,9 @@ class Fetcher
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      * @param array<string> $parents
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function query(array $pql, array $parents): array
     {

@@ -11,7 +11,7 @@ final class Path implements Route
 {
     /**
      * @param string $path
-     * @param array<string, string> $requirements
+     * @param array<string,string> $requirements
      */
     public function __construct(
         public string $path,

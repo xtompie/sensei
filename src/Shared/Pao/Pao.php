@@ -18,7 +18,7 @@ class Pao
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      */
     public function count(array $pql, ?string $count = null): int
     {
@@ -26,9 +26,9 @@ class Pao
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      * @param array<callable> $hooks
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     public function find(array $pql, array $hooks = []): ?array
     {
@@ -36,7 +36,7 @@ class Pao
     }
 
     /**
-     * @param array<string, mixed> $pql
+     * @param array<string,mixed> $pql
      * @param array<callable> $hooks
      * @return array<array<string, mixed>>
      */
@@ -46,7 +46,7 @@ class Pao
     }
 
     /**
-     * @param array<string, mixed> $future
+     * @param array<string,mixed> $future
      * @param callable|null $presentProvider
      * @param array<callable> $hooks
      */

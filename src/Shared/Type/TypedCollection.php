@@ -32,7 +32,7 @@ abstract class TypedCollection
     }
 
     /**
-     * @param (callable(T, int):void|callable(T):void) $fn
+     * @param (callable(T,int):void|callable(T):void) $fn
      * @return static
      */
     public function each(callable $fn): static
@@ -44,7 +44,7 @@ abstract class TypedCollection
     }
 
     /**
-     * @param (callable(T, int):bool|callable(T):bool)|null $fn
+     * @param (callable(T,int):bool|callable(T):bool)|null $fn
      * @return static
      */
     public function filter(?callable $fn = null): static
@@ -72,7 +72,7 @@ abstract class TypedCollection
     }
 
     /**
-     * @param callable(T, int):mixed|null $map
+     * @param callable(T,int):mixed|null $map
      * @return array<T>|array<mixed>
      */
     public function toArray(?callable $map = null): array

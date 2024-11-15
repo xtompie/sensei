@@ -7,7 +7,7 @@ namespace App\Backend\System\Resource\Repository;
 final class Repositories
 {
     /**
-     * @param array<string, ResourceRepository>|null $map
+     * @param array<string,ResourceRepository>|null $map
      */
     public function __construct(
         private RepositoryDiscoverer $repositoryDiscoverer,

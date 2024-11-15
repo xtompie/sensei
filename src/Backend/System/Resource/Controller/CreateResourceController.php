@@ -61,7 +61,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     protected function findEntity(string $id): ?array
     {
@@ -84,7 +84,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     protected function body(): ?array
     {
@@ -92,7 +92,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function dummy(): array
     {
@@ -100,8 +100,8 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function valueSentry(array $value): array
     {
@@ -114,7 +114,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     protected function valuePositiveList(): array
     {
@@ -122,8 +122,8 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function valuePositive(array $value): array
     {
@@ -136,8 +136,8 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function value(array $value): array
     {
@@ -147,8 +147,8 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function augument(array $value): array
     {
@@ -156,7 +156,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
+     * @param array<string,mixed> $value
      */
     protected function validate(array $value): Result
     {
@@ -171,7 +171,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
+     * @param array<string,mixed> $value
      */
     protected function save(string $id, array $value): Result
     {
@@ -179,8 +179,8 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function vm(array $value, ?ErrorCollection $errors = null): array
     {
@@ -197,7 +197,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     protected function commited(array $entity): Response
     {
@@ -207,7 +207,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     protected function flash(array $entity): void
     {
@@ -225,7 +225,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @param array<string, mixed> $value
+     * @param array<string,mixed> $value
      */
     protected function stagged(array $value, ?ErrorCollection $errors = null): Response
     {

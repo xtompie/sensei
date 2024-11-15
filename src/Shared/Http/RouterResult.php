@@ -8,7 +8,7 @@ final class RouterResult
 {
     /**
      * @param class-string<Object> $controller
-     * @param array<string, mixed> $parameters
+     * @param array<string,mixed> $parameters
      */
     public function __construct(
         public string $controller,

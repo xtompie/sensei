@@ -15,7 +15,7 @@ class CallCommand
 
     /**
      * @param string $command
-     * @param array<string, string> $params
+     * @param array<string,string> $params
      * @return integer
      */
     public function __invoke(string $command, array $params): int

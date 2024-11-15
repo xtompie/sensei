@@ -86,7 +86,7 @@ class Repository
     }
 
     /**
-     * @param array<string, mixed>|null $where
+     * @param array<string,mixed>|null $where
      */
     public function count(?array $where = null, ?string $count = null): int
     {
@@ -100,7 +100,7 @@ class Repository
     }
 
     /**
-     * @param array<string, mixed>|null $where
+     * @param array<string,mixed>|null $where
      */
     public function findAll(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
@@ -115,7 +115,7 @@ class Repository
     }
 
     /**
-     * @param array<string, mixed>|null $where
+     * @param array<string,mixed>|null $where
      */
     public function find(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
@@ -127,7 +127,7 @@ class Repository
     }
 
     /**
-     * @param array<string, mixed> $projection
+     * @param array<string,mixed> $projection
      */
     public function save(array $projection): void
     {
@@ -147,7 +147,7 @@ class Repository
     }
 
     /**
-     * @param array<string, mixed> $projection
+     * @param array<string,mixed> $projection
      */
     protected function item(array $projection): mixed
     {

@@ -10,7 +10,7 @@ use InvalidArgumentException;
 final class Pilots
 {
     /**
-     * @param array<string, ResourcePilot>|null $map
+     * @param array<string,ResourcePilot>|null $map
      */
     public function __construct(
         private PilotDiscoverer $pilotDiscoverer,

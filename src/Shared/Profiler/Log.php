@@ -12,7 +12,7 @@ class Log
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param array<string,mixed> $data
      */
     public function __invoke(array $data): void
     {

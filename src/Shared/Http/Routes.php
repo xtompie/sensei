@@ -65,7 +65,7 @@ final class Routes
     }
 
     /**
-     * @return array<int, mixed>
+     * @return array<int,mixed>
      */
     public function compiled(): array
     {

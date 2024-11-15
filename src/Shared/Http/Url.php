@@ -18,7 +18,7 @@ final class Url
 
     /**
      * @param class-string $controller
-     * @param array<string, mixed> $parameters
+     * @param array<string,mixed> $parameters
      * @return string
      */
     public function __invoke(

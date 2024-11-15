@@ -7,9 +7,9 @@ namespace App\Shared\Http;
 class ControllerDefinition
 {
     /**
-     * @param array<string, string> $requirements
+     * @param array<string,string> $requirements
      * @param array<string> $methods
-     * @param array<string, mixed> $defaults
+     * @param array<string,mixed> $defaults
      */
     public function __construct(
         protected string $path,
@@ -37,7 +37,7 @@ class ControllerDefinition
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function requirements(): array
     {
@@ -53,7 +53,7 @@ class ControllerDefinition
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<string,mixed>
      */
     public function defaults(): array
     {

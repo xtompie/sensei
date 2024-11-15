@@ -14,7 +14,7 @@ class ProfileAql
     }
 
     /**
-     * @param array<string, mixed> $aql
+     * @param array<string,mixed> $aql
      * @param Result $result
      * @return void
      */

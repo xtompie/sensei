@@ -68,7 +68,7 @@ final class Router
     }
 
     /**
-     * @param array<string, mixed> $match
+     * @param array<string,mixed> $match
      */
     private function matched(array $match): RouterResult
     {

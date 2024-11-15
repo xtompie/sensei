@@ -15,7 +15,7 @@ use ReflectionClass;
 final class ControllerDefinitionResolver
 {
     /**
-     * @param array<string, ControllerDefinition> $cache
+     * @param array<string,ControllerDefinition> $cache
      */
     public function __construct(
         private array $cache = [],

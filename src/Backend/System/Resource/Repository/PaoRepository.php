@@ -29,8 +29,8 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @return array<string, mixed>
+     * @param array<string,mixed> $value
+     * @return array<string,mixed>
      */
     protected function future(string $id, array $value): array
     {
@@ -42,8 +42,8 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param array<string, mixed>|null $where
-     * @return array<string, mixed>
+     * @param array<string,mixed>|null $where
+     * @return array<string,mixed>
      */
     protected function pql(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -61,7 +61,7 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param array<string, mixed>|null $where
+     * @param array<string,mixed>|null $where
      */
     public function count(?array $where): int
     {
@@ -69,7 +69,7 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param array<string, mixed>|null $where
+     * @param array<string,mixed>|null $where
      * @return array<array<string, mixed>>
      */
     public function findAll(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
@@ -82,7 +82,7 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @return array<string, mixed>|null
+     * @return array<string,mixed>|null
      */
     public function findById(string $id): ?array
     {
@@ -94,7 +94,7 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param array<string, mixed> $value
+     * @param array<string,mixed> $value
      */
     public function save(string $id, array $value): Result
     {
@@ -109,8 +109,8 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param array<string, mixed> $tuple
-     * @return array<string, mixed>
+     * @param array<string,mixed> $tuple
+     * @return array<string,mixed>
      */
     protected function load(array $tuple): array
     {

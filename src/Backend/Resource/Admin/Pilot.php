@@ -10,7 +10,7 @@ use App\Backend\System\Validation\Validation;
 class Pilot extends ResourcePilot
 {
     /**
-     * @param array<string, mixed> $entity
+     * @param array<string,mixed> $entity
      */
     public function titleDetail(array $entity): string
     {
@@ -31,7 +31,7 @@ class Pilot extends ResourcePilot
     }
 
     /**
-     * @param null|array<string, mixed> $entity
+     * @param null|array<string,mixed> $entity
      */
     public function validation(Validation $validation, string $action, ?array $entity): Validation
     {
@@ -43,7 +43,7 @@ class Pilot extends ResourcePilot
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string,string>
      */
     public function roles(): array
     {
