@@ -7,10 +7,16 @@ namespace App\Shared\Pao;
 use ReflectionClass;
 use Xtompie\Collection\Collection;
 
+/**
+ * @template TItem
+ * @template TCollection
+ */
 class Repository
 {
     /**
      * @param callable $pql
+     * @param class-string<TCollection>|null $collectionClass
+     * @param class-string<TItem>|null $itemClass
      * @param array<callable> $loadHooks
      * @param array<callable> $loadRowHooks
      * @param array<callable> $saveHooks
@@ -34,6 +40,9 @@ class Repository
         return $new;
     }
 
+    /**
+     * @param class-string<TCollection> $collectionClass
+     */
     public function withCollectionClass(string $collectionClass): static
     {
         $new = clone $this;
@@ -41,6 +50,9 @@ class Repository
         return $new;
     }
 
+    /**
+     * @param class-string<TItem> $itemClass
+     */
     public function withItemClass(string $itemClass): static
     {
         $new = clone $this;
@@ -101,6 +113,7 @@ class Repository
 
     /**
      * @param array<string,mixed>|null $where
+     * @return TItem[]|TCollection
      */
     public function findAll(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
@@ -116,6 +129,7 @@ class Repository
 
     /**
      * @param array<string,mixed>|null $where
+     * @return TItem|null
      */
     public function find(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
@@ -148,6 +162,7 @@ class Repository
 
     /**
      * @param array<string,mixed> $projection
+     * @return TItem
      */
     protected function item(array $projection): mixed
     {
@@ -158,7 +173,11 @@ class Repository
         if ($this->itemFactory && is_callable($this->itemFactory)) {
             return ($this->itemFactory)($projection);
         } elseif ($this->itemClass && class_exists($this->itemClass)) {
-            return (new ReflectionClass($this->itemClass))->newInstance($projection);
+            /** @var class-string $class */
+            $class = $this->itemClass;
+            $item = (new ReflectionClass($class))->newInstance($projection);
+            /** @var TItem $item */
+            return $item;
         } else {
             return $projection;
         }

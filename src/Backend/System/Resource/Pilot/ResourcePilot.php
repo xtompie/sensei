@@ -214,7 +214,7 @@ abstract class ResourcePilot
      * White list of entity keys in write operations.
      * WHen using insert or update, only these keys from $_POST will be used.
      *
-     * @return array<string,mixed>
+     * @return array<string>
      */
     public function values(string $action): array
     {

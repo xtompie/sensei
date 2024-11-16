@@ -18,6 +18,7 @@ final class ConsoleReporter
     {
         $out = '';
         foreach ($this->data->get() as $v) {
+            /** @var array{type:string,data:array<mixed>} $v */
             $out .= $v['type'] . ' | ' . json_encode($v['data']) . "\n";
         }
 

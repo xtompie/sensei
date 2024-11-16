@@ -23,11 +23,11 @@ final class Request extends ServerRequest implements Provider
     public static function provide(string $abstract, Container $container): object
     {
         return ServerRequestFactory::fromGlobals(
-            $_SERVER,
-            $_GET,
-            $_POST,
-            $_COOKIE,
-            $_FILES
+            server: $_SERVER, // @phpstan-ignore-line
+            query: $_GET, // @phpstan-ignore-line
+            body: $_POST, // @phpstan-ignore-line
+            cookies: $_COOKIE, // @phpstan-ignore-line
+            files: $_FILES, // @phpstan-ignore-line
         );
     }
 
@@ -61,6 +61,7 @@ final class Request extends ServerRequest implements Provider
         if ($this->resolvedBody === null) {
             $parsed = $this->getParsedBody();
             if (is_array($parsed) && $parsed) {
+                /** @var array<string,mixed> $parsed */
                 $this->resolvedBody = $parsed;
             } else {
                 $body = $this->getBody()->getContents();

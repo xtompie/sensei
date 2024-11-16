@@ -120,10 +120,6 @@ final class Kernel
             append: $this->append(),
         );
 
-        if (!$response instanceof Response) {
-            throw new Exception('Invalid response');
-        }
-
         $this->emmit($response);
     }
 
@@ -179,10 +175,6 @@ final class Kernel
         Container::container()->get(ProfileHttpResponse::class)->__invoke($response);
         Container::container()->get(ProfileStop::class)->__invoke();
         $response = Container::container()->get(HttpReporter::class)->__invoke($response);
-
-        if (!$response instanceof Response) {
-            throw new Exception('Invalid response');
-        }
 
         return $response;
     }

@@ -14,7 +14,9 @@ use App\Shared\Http\Controller;
 use App\Shared\Http\ControllerDefinition;
 use App\Shared\Http\HasControllerDefinition;
 use App\Shared\Http\Response;
-use Xtompie\Collection\Collection;
+use App\Shared\Type\Arr;
+
+use function PHPUnit\Framework\callback;
 
 abstract class IndexResourceController implements Controller, HasControllerDefinition
 {
@@ -77,7 +79,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
             'action' => static::action(),
             'all' => $all,
             'breadcrumb' => $this->pilot()->breadcrumb(action: static::action()),
-            'filters' => $this->filters() ? '/src/Backend/Resource/' . static::resource() . '/Filters.tpl.php' : null,
+            'filters' => count($this->filters()) > 0 ? '/src/Backend/Resource/' . static::resource() . '/Filters.tpl.php' : null,
             'limit' => $limit,
             'mode' => 'index',
             'more' => $this->pilot()->more(action: static::action()),
@@ -96,7 +98,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @param array<int,array<string, mixed>> $entities
+     * @param array<int,array<string,mixed>> $entities
      * @param array<string,mixed> $where
      */
     protected function view(
@@ -118,7 +120,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array<int, string>
      */
     protected function filters(): array
     {
@@ -130,11 +132,11 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
      */
     protected function whereQuery(): array
     {
-        return Collection::of($this->ctrl()->query())
-            ->only($this->filters())
-            ->filter()
-            ->toArray()
-        ;
+        return array_filter(
+            $this->ctrl()->query(),
+            fn ($key) => in_array($key, $this->filters(), true),
+            ARRAY_FILTER_USE_KEY
+        );
     }
 
     /**
@@ -162,7 +164,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     }
 
     /**
-     * @return array<string>
+     * @return array<int,string>
      */
     protected function orders(): array
     {
@@ -174,11 +176,18 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
      */
     protected function orderQueryAvailable(): array
     {
-        return array_reduce($this->orders(), function (array $carry, string $item) {
-            $carry[] = $item . ':asc';
-            $carry[] = $item . ':desc';
-            return $carry;
-        }, []);
+        /** @var array<string> $orders */
+        $orders = array_reduce(
+            $this->orders(),
+            function (array $carry, string $item) {
+                $carry[] = $item . ':asc';
+                $carry[] = $item . ':desc';
+                return $carry;
+            },
+            []
+        );
+
+        return $orders;
     }
 
     protected function orderQuery(): ?string
@@ -192,7 +201,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
         }
 
         $order = $query['order'];
-        return in_array($order, $this->orderQueryAvailable()) ? $order : null;
+        return in_array($order, $this->orderQueryAvailable(), true) ? $order : null;
     }
 
     protected function order(): ?string
@@ -232,7 +241,8 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
         if ($cancel) {
             return $this->ctrl()->selection()->cancel();
         }
-        if ($result) {
+        if ($result !== null) {
+            $result = array_filter($result, 'is_string');
             return $this->ctrl()->selection()->result(
                 resource: static::resource(),
                 ids: $result,
@@ -244,12 +254,12 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
     public function __invoke(): Response
     {
         $init = $this->init();
-        if ($init) {
+        if ($init !== null) {
             return $init;
         }
 
         $selection = $this->selection();
-        if ($selection) {
+        if ($selection !== null) {
             return $selection;
         }
 
@@ -257,9 +267,9 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
         $order = $this->order();
         $limit = $this->limit();
         $offset = $this->offset();
-        $all = $this->repository()->count(where: $where ?: null);
+        $all = $this->repository()->count(where: count($where) > 0 ? $where : null);
         $entities = $this->repository()->findAll(
-            where: $where ?: null,
+            where: count($where) > 0 ? $where : null,
             order: $order,
             limit: $limit,
             offset: $offset

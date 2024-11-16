@@ -10,7 +10,7 @@ use App\Shared\Optimize\Optimizer;
 use Generator;
 
 /**
- * @template T
+ * @template T of object
  */
 abstract class Discoverer implements Optimizer
 {
@@ -46,10 +46,10 @@ abstract class Discoverer implements Optimizer
     protected function discovered(): Generator
     {
         if ($this->discovered === null) {
-            $this->discovered = $this->sort(iterator_to_array($this->source->classes(
+            $this->discovered = $this->sort(array_values(iterator_to_array($this->source->classes(
                 instanceof: $this->instanceof(),
                 suffix: $this->suffix(),
-            )));
+            ))));
         }
 
         yield from $this->discovered;

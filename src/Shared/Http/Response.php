@@ -261,7 +261,7 @@ final class Response extends DiactorosResponse
         return static::errors(errors: $errors, status: $status, msg: '409 Conflict');
     }
 
-    public static function InternalServerError(): Response
+    public static function internalServerError(): Response
     {
         return Container::container()->get(InternalServerError::class)->__invoke();
     }

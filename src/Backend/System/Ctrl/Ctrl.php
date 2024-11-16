@@ -30,9 +30,9 @@ class Ctrl
 
     public function init(
         ?string $sentry = null,
-        ?bool $logged = true,
-        ?bool $csrf = true,
-        ?bool $selection = true,
+        bool $logged = true,
+        bool $csrf = true,
+        bool $selection = true,
     ): ?Response {
         if ($selection) {
             $this->selection->init();
@@ -75,11 +75,12 @@ class Ctrl
         $body = $this->body();
         $submits = $body['_submit'] ?? null;
 
-        if (!$submits || !is_array($submits)) {
+        if ($submits === null || !is_array($submits)) {
             return null;
         }
 
         $submit = array_key_first($submits);
+        $submit = is_string($submit) ? $submit : null;
 
         return $submit;
     }

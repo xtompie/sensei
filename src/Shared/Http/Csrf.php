@@ -39,9 +39,6 @@ class Csrf
     public function verify(): bool
     {
         $body = $this->request->body();
-        if (!is_array($body)) {
-            return false;
-        }
         if (!isset($body['_csrf'])) {
             return false;
         }

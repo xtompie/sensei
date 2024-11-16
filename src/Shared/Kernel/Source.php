@@ -52,7 +52,7 @@ class Source
     }
 
     /**
-     * @template T
+     * @template T of object
      * @param class-string<T> $instanceof
      * @param string $suffix
      * @return Generator<class-string<T>>
@@ -69,11 +69,10 @@ class Source
             if (!is_a($class, $instanceof, true)) {
                 continue;
             }
-            /** @var class-string<object> $class */
+            /** @var class-string<T> $class */
             if ((new ReflectionClass($class))->isAbstract()) {
                 continue;
             }
-            /** @var class-string<T> $class */
             yield $class;
         }
     }

@@ -114,7 +114,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array<string>
      */
     protected function valuePositiveList(): array
     {
@@ -130,7 +130,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
         $positive = $this->valuePositiveList();
         return array_filter(
             $value,
-            fn ($k) => in_array($k, $positive),
+            fn ($k) => in_array($k, $positive, true),
             ARRAY_FILTER_USE_KEY
         );
     }
@@ -238,11 +238,11 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
     public function __invoke(): Response
     {
         $init = $this->init();
-        if ($init) {
+        if ($init !== null) {
             return $init;
         }
 
-        $value = $this->value(value: $this->body() ?: $this->dummy());
+        $value = $this->value(value: $this->body() ?? $this->dummy());
         if (!$this->commit()) {
             return $this->stagged(value: $value);
         }

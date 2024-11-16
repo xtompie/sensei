@@ -112,7 +112,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array<string>
      */
     protected function valuePositiveList(): array
     {
@@ -127,12 +127,9 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     protected function valuePositive(array $entity, array $value): array
     {
         $list = $this->valuePositiveList();
-        if (!$list) {
-            return $value;
-        }
 
         foreach ($value as $k => $v) {
-            if (!in_array($k, $list)) {
+            if (!in_array($k, $list, true)) {
                 unset($value[$k]);
             }
         }
@@ -245,12 +242,12 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
     public function __invoke(string $id): Response
     {
         $init = $this->init();
-        if ($init) {
+        if ($init !== null) {
             return $init;
         }
 
         $entity = $this->findEntity(id: $id);
-        if (!$entity) {
+        if ($entity === null) {
             return $this->ctrl()->notFound();
         }
 

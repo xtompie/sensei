@@ -17,7 +17,6 @@ final class ImagePreset extends EnumIdCases
         'l',
     ];
 
-    /** @var class-string<ImagePresetCollection> */
     protected static string $collection = ImagePresetCollection::class;
 
     public static function s(): static

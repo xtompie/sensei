@@ -43,10 +43,16 @@ class Flash
     public function pull(): array
     {
         $flashes = $this->session->pull($this->namespace);
-        if (is_array($flashes)) {
-            return $flashes;
+        if (!is_array($flashes)) {
+            return [];
         }
-
-        return [];
+        $flashes = array_filter($flashes, function ($flash) {
+            return is_array($flash) &&
+                   isset($flash['msg'], $flash['type'], $flash['format']) &&
+                   is_string($flash['msg']) &&
+                   is_string($flash['type']) &&
+                   is_string($flash['format']);
+        });
+        return $flashes;
     }
 }

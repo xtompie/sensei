@@ -9,7 +9,7 @@ use App\Backend\System\Resource\Controller\IndexResourceController;
 class IndexController extends IndexResourceController
 {
     /**
-     * @return array<string>
+     * @return array<int,string>
      */
     protected function filters(): array
     {
@@ -20,6 +20,9 @@ class IndexController extends IndexResourceController
         ];
     }
 
+    /**
+     * @return array<int,string>
+     */
     protected function orders(): array
     {
         return [

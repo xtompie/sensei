@@ -6,7 +6,7 @@ namespace App\Backend\System\Flash;
 
 use App\Shared\Http\Flash as BaseFlash;
 
-class Flash extends BaseFlash
+class Flash
 {
     public function __construct(
         protected BaseFlash $flash,
@@ -15,7 +15,7 @@ class Flash extends BaseFlash
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array<array{msg:string,type:string,format:string}>
      */
     public function __invoke(): array
     {
@@ -30,7 +30,7 @@ class Flash extends BaseFlash
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array<array{msg:string,type:string,format:string}>
      */
     public function pull(): array
     {

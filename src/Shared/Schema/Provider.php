@@ -49,7 +49,7 @@ class Provider implements SchemaProvider
         $doctrineTable = $doctrineSchema->createTable($table->name());
         $this->columns($table->columns(), $doctrineTable);
         $this->indexes($table, $doctrineTable);
-        if ($table->primary()) {
+        if ($table->primary() !== null) {
             $doctrineTable->setPrimaryKey($table->primary());
         }
     }
@@ -83,7 +83,7 @@ class Provider implements SchemaProvider
         if ($column->autoincrement()) {
             $options['autoincrement'] = true;
         }
-        if ($column->length()) {
+        if ($column->length() !== null) {
             $options['length'] = $column->length();
         }
         if ($column->default() !== null) {

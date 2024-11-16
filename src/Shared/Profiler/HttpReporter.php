@@ -26,6 +26,7 @@ final class HttpReporter
     private function headerXDebug(Response $response): Response
     {
         foreach ($this->data->get() as $k => $v) {
+            /** @var array{type:string,data:array<mixed>} $v */
             $data = json_encode($v['data']);
             if ($data === false) {
                 continue;
@@ -43,6 +44,7 @@ final class HttpReporter
     {
         $out = '';
         foreach ($this->data->get() as $v) {
+            /** @var array{type:string,data:array<mixed>} $v */
             $out .= $v['type'] . ' | ' . json_encode($v['data']) . "\n";
         }
 

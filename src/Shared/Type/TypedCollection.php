@@ -49,7 +49,7 @@ abstract class TypedCollection
      */
     public function filter(?callable $fn = null): static
     {
-        if (!$fn) {
+        if ($fn === null) {
             $fn = fn (mixed $v, int $k): bool => !empty($v);
         }
         return new static(array_values(array_filter($this->collection, $fn, ARRAY_FILTER_USE_BOTH)));
@@ -78,7 +78,7 @@ abstract class TypedCollection
     public function toArray(?callable $map = null): array
     {
         $result = $this->collection;
-        if ($map) {
+        if ($map !== null) {
             $result = array_map($map, $result, array_keys($result));
             $result = array_filter($result);
             $result = array_values($result);

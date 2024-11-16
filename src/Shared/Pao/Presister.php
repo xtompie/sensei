@@ -91,6 +91,7 @@ class Presister
         foreach ($projection as $projection_value) {
             if (is_array($projection_value)) {
                 foreach ($projection_value as $child) {
+                    /** @var array<string,mixed> $child */
                     $records += $this->records($child);
                 }
             }
@@ -105,7 +106,9 @@ class Presister
      */
     protected function record(array $projection): array
     {
+        /** @var string $table */
         $table = $projection[':table'];
+        /** @var string $id */
         $id = $projection['id'];
         unset($projection[':table'], $projection['id']);
         foreach ($projection as $key => $value) {

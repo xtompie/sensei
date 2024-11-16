@@ -8,7 +8,6 @@ use App\Shared\Pao\CreatedAtHook;
 use App\Shared\Pao\PatchHook;
 use App\Shared\Pao\Repository as BasePaoRepository;
 use App\Shared\Pao\UpdatedAtHook;
-use Exception;
 use Xtompie\Result\Result;
 
 abstract class PaoRepository implements ResourceRepository
@@ -18,6 +17,9 @@ abstract class PaoRepository implements ResourceRepository
         return array_slice(explode('\\', static::class), -2, 1)[0];
     }
 
+    /**
+     * @param BasePaoRepository<array<string,mixed>,array<array<string,mixed>>> $repository
+     */
     public function __construct(
         protected BasePaoRepository $repository,
     ) {
@@ -75,9 +77,6 @@ abstract class PaoRepository implements ResourceRepository
     public function findAll(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
     {
         $entities = $this->repository->findAll($where, $order, $limit, $offset);
-        if (!is_array($entities)) {
-            throw new Exception();
-        }
         return $entities;
     }
 
@@ -86,11 +85,7 @@ abstract class PaoRepository implements ResourceRepository
      */
     public function findById(string $id): ?array
     {
-        $entity = $this->repository->find(['id' => $id]);
-        if (!is_array($entity) && !is_null($entity)) {
-            throw new Exception();
-        }
-        return $entity;
+        return $this->repository->find(['id' => $id]);
     }
 
     /**

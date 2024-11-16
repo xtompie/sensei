@@ -117,12 +117,12 @@ abstract class DetailResourceController implements Controller, HasControllerDefi
     public function __invoke(string $id): Response
     {
         $init = $this->init();
-        if ($init) {
+        if ($init !== null) {
             return $init;
         }
 
         $entity = $this->findEntity(id: $id);
-        if (!$entity) {
+        if ($entity === null) {
             return $this->ctrl()->notFound();
         }
 
