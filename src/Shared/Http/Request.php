@@ -23,11 +23,11 @@ final class Request extends ServerRequest implements Provider
     public static function provide(string $abstract, Container $container): object
     {
         return ServerRequestFactory::fromGlobals(
-            server: $_SERVER, // @phpstan-ignore-line
-            query: $_GET, // @phpstan-ignore-line
-            body: $_POST, // @phpstan-ignore-line
-            cookies: $_COOKIE, // @phpstan-ignore-line
-            files: $_FILES, // @phpstan-ignore-line
+            server: $_SERVER,
+            query: $_GET,
+            body: $_POST,
+            cookies: $_COOKIE,
+            files: $_FILES,
         );
     }
 

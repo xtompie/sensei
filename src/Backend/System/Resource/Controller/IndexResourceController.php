@@ -14,9 +14,6 @@ use App\Shared\Http\Controller;
 use App\Shared\Http\ControllerDefinition;
 use App\Shared\Http\HasControllerDefinition;
 use App\Shared\Http\Response;
-use App\Shared\Type\Arr;
-
-use function PHPUnit\Framework\callback;
 
 abstract class IndexResourceController implements Controller, HasControllerDefinition
 {
