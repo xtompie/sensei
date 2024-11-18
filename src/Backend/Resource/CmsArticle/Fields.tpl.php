@@ -11,7 +11,7 @@
 
 <?php if (in_array($action, ['list', 'detail', 'create', 'update'])) : ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Field.tpl.php', [
-        'type' => 'text',
+        'type' => 'Text',
         'name' => 'title',
         ...get_defined_vars(),
     ]) ?>
@@ -19,18 +19,8 @@
 
 <?php if (in_array($action, ['list', 'detail', 'create', 'update'])) : ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Field.tpl.php', [
-        'type' => 'relone',
-        'name' => 'category_id',
-        'reltype' => 'category',
-        ...get_defined_vars(),
-    ]) ?>
-<?php endif ?>
-
-<?php if (in_array($action, ['detail', 'create', 'update'])) : ?>
-    <?= $this->render('/src/Backend/System/Resource/Field/Field.tpl.php', [
-        'type' => 'relmany',
-        'name' => 'children',
-        'reltype' => 'category',
+        'type' => 'Textarea',
+        'name' => 'body',
         ...get_defined_vars(),
     ]) ?>
 <?php endif ?>

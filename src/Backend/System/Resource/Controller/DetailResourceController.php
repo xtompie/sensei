@@ -29,7 +29,7 @@ abstract class DetailResourceController implements Controller, HasControllerDefi
 
     public static function controllerDefinition(): ControllerDefinition
     {
-        return new ControllerDefinition(path: '/backend/resource/' . static::resource() . '/' . static::action() . '/{id}');
+        return new ControllerDefinition(path: '/backend/resource/' . strtolower(static::resource()) . '/' . static::action() . '/{id}');
     }
 
     protected function ctrl(): Ctrl

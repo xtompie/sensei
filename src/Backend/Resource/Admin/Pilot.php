@@ -52,4 +52,9 @@ class Pilot extends ResourcePilot
             'admin' => 'Admin',
         ];
     }
+
+    public function priority(): int
+    {
+        return -100;
+    }
 }

@@ -117,7 +117,5 @@ $list_removeitem = $mode == 'rel';
         </div>
     </div>
 
-    <?= $this->render('/src/Backend/System/Resource/Selection/Submits.tpl.php', [
-        'resource' => $resource,
-    ]) ?>
+    <?= $this->render('/src/Backend/System/Resource/Selection/Submits.tpl.php', get_defined_vars()) ?>
 <?php endif ?>

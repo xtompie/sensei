@@ -1,3 +1,4 @@
+<?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 <!DOCTYPE html>
 <html class="h-full bg-white">
 	<head>
@@ -6,8 +7,8 @@
 				<?php foreach (array_reverse($breadcrumb) as $link): ?>
 					<?= $this->e($link['title']); ?>
 					»
-				<?php endforeach; ?>
-			<?php endif; ?>
+				<?php endforeach ?>
+			<?php endif ?>
 			Backend
 		</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -19,19 +20,28 @@
 		class="h-full"
 		onclick="backend.dropdown.closeall(event)"
 	>
-		<div>
-			<div class="fixed inset-y-0 z-50 flex w-72 flex-col">
-				<?= $this->render('/src/Backend/System/Layout/Sidebar.tpl.php') ?>
+		<?php if ($this->service(\App\Backend\System\Modal\Modal::class)->is()): ?>
+			<main class="py-10">
+				<div class="px-14">
+					<?= $this->content() ?>
+				</div>
+			</main>
+		<?php else: ?>
+			<div>
+				<div class="fixed inset-y-0 z-50 flex w-72 flex-col">
+					<?= $this->render('/src/Backend/System/Layout/Sidebar.tpl.php') ?>
+				</div>
+				<div class="pl-72">
+					<?= $this->render('/src/Backend/System/Layout/Topbar.tpl.php', get_defined_vars()) ?>
+					<main class="py-10">
+						<div class="px-14">
+							<?= $this->content() ?>
+						</div>
+					</main>
+				</div>
 			</div>
-			<div class="pl-72">
-				<?= $this->render('/src/Backend/System/Layout/Topbar.tpl.php', get_defined_vars()) ?>
-				<main class="py-10">
-					<div class="px-14">
-                        <?= $this->content() ?>
-					</div>
-				</main>
-			</div>
-		</div>
+		<?php endif ?>
+		<?= $this->import('/src/Backend/System/Moveto/Moveto.tpl.php') ?>
 	</body>
 </html>
 

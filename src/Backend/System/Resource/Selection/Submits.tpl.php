@@ -5,13 +5,13 @@
     <div>
         <button
             type="button"
-            onclick="backend.selection.commit(this, '<?php $this->e($resource) ?>')"
+            onclick="backend.selection.commit(this, '<?= $this->e(strtolower($resource)) ?>')"
         >
             Select
         </button>
         <button
             type="button"
-            onclick="backend.selection.cancel('<?php $this->e($resource) ?>')"
+            onclick="backend.selection.cancel('<?= $this->e(strtolower($resource)) ?>')"
         >
             Cancel
         </button>

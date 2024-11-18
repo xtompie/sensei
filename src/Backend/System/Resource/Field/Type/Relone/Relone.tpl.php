@@ -55,7 +55,7 @@
         onclick='
             var ctx = this;
             backend.selection.select(
-                "{{ reltype }}",
+                "<?= $this->e(strtolower($reltype)) ?>",
                 true,
                 function (result) { backend.formsubmit.set(ctx, "<?= $this->e($name) ?>", result.data[0].id); }
             );

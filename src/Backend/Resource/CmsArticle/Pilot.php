@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\Resource\Category;
+namespace App\Backend\Resource\CmsArticle;
 
 use App\Backend\System\Resource\Pilot\ResourcePilot;
 use App\Backend\System\Validation\Validation;
@@ -15,12 +15,8 @@ class Pilot extends ResourcePilot
     public function values(string $action): array
     {
         return [
-            'category_id',
-            'index',
             'title',
-            'description',
-            'url',
-            'children',
+            'body',
         ];
     }
 
@@ -34,5 +30,10 @@ class Pilot extends ResourcePilot
             ->group()
             ->key('url')->unique(repository: $this->repository(), field: 'url', entity: $entity)
         ;
+    }
+
+    public function titlePlural(): string
+    {
+        return 'Articles';
     }
 }

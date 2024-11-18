@@ -21,13 +21,28 @@ abstract class PaoRepository implements ResourceRepository
      * @param BasePaoRepository<array<string,mixed>,array<array<string,mixed>>> $repository
      */
     public function __construct(
-        protected BasePaoRepository $repository,
+        protected BasePaoRepository $read,
+        protected BasePaoRepository $write,
     ) {
-        $this->repository = $repository
-            ->withPql(fn (...$args) => $this->pql(...$args))
-            ->withLoadRowHooks([fn (...$args) => $this->load(...$args)])
-            ->withSaveHooks([new CreatedAtHook(), new UpdatedAtHook(), new PatchHook()])
+        $this->read = $read
+            ->withPql(fn (...$args) => $this->pqlForRead(...$args))
+            ->withLoadRowHooks([fn (...$args) => $this->loadForRead(...$args)])
         ;
+        $this->write = $write
+            ->withPql(fn (...$args) => $this->pqlForWrite(...$args))
+            ->withLoadRowHooks([fn (...$args) => $this->loadForWrite(...$args)])
+            ->withSaveHooks($this->saveHooks())
+        ;
+    }
+
+    protected function table(): string
+    {
+        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', static::resource()));
+    }
+
+    protected function saveHooks(): array
+    {
+        return [new CreatedAtHook(), new UpdatedAtHook(), new PatchHook()];
     }
 
     /**
@@ -38,7 +53,7 @@ abstract class PaoRepository implements ResourceRepository
     {
         return [
             ...$value,
-            ':table' => strtolower(static::resource()),
+            ':table' => $this->table(),
             'id' => $id,
         ];
     }
@@ -50,8 +65,8 @@ abstract class PaoRepository implements ResourceRepository
     protected function pql(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
     {
         $query = [
-            'select' => strtolower(static::resource()) . '.*',
-            'from' => strtolower(static::resource()),
+            'select' => $this->table() . '.*',
+            'from' => $this->table(),
         ];
 
         $query['where'] = (isset($query['where']) || isset($where)) ? array_merge($query['where'] ?? [], (array) $where) : null; /** @phpstan-ignore-line */
@@ -64,10 +79,28 @@ abstract class PaoRepository implements ResourceRepository
 
     /**
      * @param array<string,mixed>|null $where
+     * @return array<string,mixed>
+     */
+    protected function pqlForWrite(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
+    {
+        return $this->pql($where, $order, $limit, $offset);
+    }
+
+    /**
+     * @param array<string,mixed>|null $where
+     * @return array<string,mixed>
+     */
+    protected function pqlForRead(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
+    {
+        return $this->pql($where, $order, $limit, $offset);
+    }
+
+    /**
+     * @param array<string,mixed>|null $where
      */
     public function count(?array $where): int
     {
-        return $this->repository->count($where);
+        return $this->read->count($where);
     }
 
     /**
@@ -76,7 +109,7 @@ abstract class PaoRepository implements ResourceRepository
      */
     public function findAll(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): array
     {
-        $entities = $this->repository->findAll($where, $order, $limit, $offset);
+        $entities = $this->read->findAll($where, $order, $limit, $offset);
         return $entities;
     }
 
@@ -85,7 +118,7 @@ abstract class PaoRepository implements ResourceRepository
      */
     public function findById(string $id): ?array
     {
-        return $this->repository->find(['id' => $id]);
+        return $this->read->find(['id' => $id]);
     }
 
     /**
@@ -93,13 +126,13 @@ abstract class PaoRepository implements ResourceRepository
      */
     public function save(string $id, array $value): Result
     {
-        $this->repository->save($this->future(id: $id, value: $value));
+        $this->write->save($this->future(id: $id, value: $value));
         return Result::ofSuccess();
     }
 
     public function remove(string $id): Result
     {
-        $this->repository->remove(id: $id);
+        $this->write->remove(id: $id);
         return Result::ofSuccess();
     }
 
@@ -110,6 +143,24 @@ abstract class PaoRepository implements ResourceRepository
     protected function load(array $tuple): array
     {
         return $tuple;
+    }
+
+    /**
+     * @param array<string,mixed> $tuple
+     * @return array<string,mixed>
+     */
+    protected function loadForWrite(array $tuple): array
+    {
+        return $this->load($tuple);
+    }
+
+    /**
+     * @param array<string,mixed> $tuple
+     * @return array<string,mixed>
+     */
+    protected function loadForRead(array $tuple): array
+    {
+        return $this->load($tuple);
     }
 
     protected function order(string $order): string
