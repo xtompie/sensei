@@ -16,7 +16,6 @@ final class Role extends EnumIdCases
         'admin',
     ];
 
-    /** @var class-string<RoleCollection> */
     protected static string $collection = RoleCollection::class;
 
     public static function superadmin(): static

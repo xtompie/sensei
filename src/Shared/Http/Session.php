@@ -47,7 +47,9 @@ class Session
     {
         $this->activate();
         if ($this->space) {
-            assert(is_array($_SESSION[$this->space]));
+            if (!isset($_SESSION[$this->space])) {
+                $_SESSION[$this->space] = [];
+            }
             $_SESSION[$this->space][$key] = $value;
         } else {
             $_SESSION[$key] = $value;
@@ -65,8 +67,7 @@ class Session
     {
         $this->activate();
         if ($this->space) {
-            assert(is_array($_SESSION[$this->space]));
-            return $_SESSION[$this->space][$key] ?? null;
+            return isset($_SESSION[$this->space], $_SESSION[$this->space][$key]) ? $_SESSION[$this->space][$key] : null;
         }
         return $_SESSION[$key] ?? null;
     }
@@ -75,7 +76,6 @@ class Session
     {
         $this->activate();
         if ($this->space) {
-            assert(is_array($_SESSION[$this->space]));
             unset($_SESSION[$this->space][$key]);
             if (empty($_SESSION[$this->space])) {
                 unset($_SESSION[$this->space]);

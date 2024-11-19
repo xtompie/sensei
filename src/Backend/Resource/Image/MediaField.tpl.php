@@ -9,36 +9,30 @@
     <?= $this->e($value) ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php', get_defined_vars()) ?>
 <?php elseif ($mode == 'form'): ?>
+    <?= $this->import('/src/Backend/Resource/Image/Upload.tpl.php') ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
+    <div backend-resource-image-upload>
         <input
+            backend-resource-image-upload-source
             type="text"
             name="<?= $this->e($name) ?>"
             value="<?= $this->e($value) ?>"
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400"
+            data-mediaimageupload-sources
         />
-    <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php', get_defined_vars()) ?>
-
-    <?= $this->import('/src/Backend/Resource/Image/Upload.tpl.php') ?>
-
-
-
-    <div backend-resource-image-upload>
-                <div>
-                    <input type="hidden" name="{{ field.name }}" value="{{ field.value }}" data-mediaimageupload-sources/>
-
-                    <input
-                        type="file"
-                        accept="image/*"
-                        name="image"
-                        onchange="mediaImageUpload.upload(this)"
-                        data-mediaimageupload-input
-                        class="
-                            form-control
-                            {% if field.errors|any %}
-                                is-invalid
-                            {% endif %}
-                        "
-                    />
+        <input
+            type="file"
+            accept="image/*"
+            name="<?= $this->e($name) ?>__the_name_is_needed_question_mark_TODO"
+            onchange="backend.resource.image.upload.upload(this)"
+            backend-resource-image-upload-file
+            backend-resource-image-upload-cls-error="is-invalid"
+            class="
+                form-control
+                {% if field.errors|any %}
+                    is-invalid
+                {% endif %}
+            "
+        />
                     <div class="invalid-feedback mt-1" data-mediaimageupload-error>
                         <div class="fs-6">
                             <span class="{% if field.errors|any %} is-invalid {% endif %} "></span>
@@ -98,5 +92,6 @@
                     </div>
                 </div>
             </div>
+            <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php', get_defined_vars()) ?>
 
 <?php endif ?>

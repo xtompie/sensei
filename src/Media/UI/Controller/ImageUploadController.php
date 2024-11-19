@@ -14,7 +14,7 @@ use App\Shared\Http\Route\POST;
 use Xtompie\Result\Error;
 
 #[Path(path: '/media/image/upload'), POST]
-class ImageVariantController implements Controller
+class ImageUploadController implements Controller
 {
     public function __invoke(string $path, CreateImageVariantById $createImageVariantById): Response
     {
