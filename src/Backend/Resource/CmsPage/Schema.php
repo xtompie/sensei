@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\Resource\CmsArticle;
+namespace App\Backend\Resource\CmsPage;
 
 use App\Shared\Schema\Column;
 use App\Shared\Schema\DateTimeType;
@@ -17,7 +17,7 @@ class Schema implements DbSchema
     public function tables(): Generator
     {
         yield new Table(
-            name: 'cms_article',
+            name: 'cms_page',
             columns: [
                 new Column(name: 'id', type: new StringType(), primary: true),
                 new Column(name: 'created_at', type: new DateTimeType(), index: true),

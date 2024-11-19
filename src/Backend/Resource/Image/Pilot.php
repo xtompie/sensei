@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\Resource\CmsArticle;
+namespace App\Backend\Resource\Image;
 
 use App\Backend\System\Resource\Pilot\ResourcePilot;
 use App\Backend\System\Validation\Validation;
+use App\Media\Application\Model\Image;
 
 class Pilot extends ResourcePilot
 {
@@ -15,8 +16,7 @@ class Pilot extends ResourcePilot
     public function values(string $action): array
     {
         return [
-            'title',
-            'body',
+            'media',
         ];
     }
 
@@ -26,14 +26,7 @@ class Pilot extends ResourcePilot
     public function validation(Validation $validation, string $action, ?array $entity): Validation
     {
         return $validation
-            ->key('title')->required()
-            ->group()
-            ->key('url')->unique(repository: $this->repository(), field: 'url', entity: $entity)
+            ->key('media')->callback(fn($v) => Image::tryFrom($v) instanceof Image)
         ;
-    }
-
-    public function titlePlural(): string
-    {
-        return 'Articles';
     }
 }

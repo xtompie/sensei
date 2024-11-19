@@ -5,7 +5,7 @@ $fields = $fields ?? "/src/Backend/Resource/$resource/Fields.tpl.php";
 $mode = isset($mode) && in_array($mode, ['index', 'card', 'rel']) ? $mode : 'index';
 $list_selection = $mode === 'index' && $selection->enabled();
 $list_link = $list_selection ? false : true;
-$list_more = !$list_selection || $mode == 'rel' ? false : true;
+$list_more = $list_selection || $mode == 'rel' ? false : true;
 $list_link_blank = $list_selection || $mode == 'rel' ? true : false;
 $list_selection_single = $selection->enableSingle();
 $list_sort = $mode == 'index';

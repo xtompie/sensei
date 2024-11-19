@@ -1,5 +1,5 @@
 <?php /** @var App\Shared\Tpl\Tpl $this */ ?>
-<?php $pilot = $this->service(\App\Backend\Resource\Admin\Pilot::class) ?>
+<?php $pilot = $this->service(\App\Backend\Resource\BackendUser\Pilot::class) ?>
 
 <?php if (in_array($action, ['list', 'detail'])) : ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Field.tpl.php', [

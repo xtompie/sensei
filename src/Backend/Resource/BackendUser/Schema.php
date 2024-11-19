@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\Resource\Admin;
+namespace App\Backend\Resource\BackendUser;
 
 use App\Shared\Schema\Column;
 use App\Shared\Schema\DateTimeType;
@@ -16,7 +16,7 @@ class Schema implements DbSchema
     public function tables(): Generator
     {
         yield new Table(
-            name: 'admin',
+            name: 'backend_user',
             columns: [
                 new Column(name: 'id', type: new StringType(), primary: true),
                 new Column(name: 'created_at', type: new DateTimeType(), index: true),

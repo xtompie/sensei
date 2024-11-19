@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\Resource\Admin;
+namespace App\Backend\Resource\BackendUser;
 
 use App\Backend\System\Resource\Pilot\ResourcePilot;
 use App\Backend\System\Validation\Validation;
@@ -57,4 +57,15 @@ class Pilot extends ResourcePilot
     {
         return -100;
     }
+
+    public function titlePlural(): string
+    {
+        return 'Admins';
+    }
+
+    public function titleSingular(): string
+    {
+        return 'Admin';
+    }
+
 }
