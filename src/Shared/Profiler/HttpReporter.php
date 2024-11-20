@@ -19,7 +19,7 @@ final class HttpReporter
     {
         $this->toolsProfilerHttpLog();
         $response = $this->headerXDebug($response);
-        $response = $this->htmlScriptConsoleLog($response);
+        // $response = $this->htmlScriptConsoleLog($response);
         return $response;
     }
 

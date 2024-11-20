@@ -10,9 +10,11 @@ use App\Media\Application\Service\CreateImageVariantById\CreateImageVariantById;
 use App\Shared\Http\Controller;
 use App\Shared\Http\Response;
 use App\Shared\Http\Route\Path;
+use App\Shared\Http\Route\Priority;
 use Xtompie\Result\Error;
 
 #[Path(path: '/media/image/{path}', requirements: ['path' => '.+'])]
+#[Priority(-1)]
 class ImageVariantController implements Controller
 {
     public function __invoke(string $path, CreateImageVariantById $createImageVariantById): Response

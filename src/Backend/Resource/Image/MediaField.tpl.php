@@ -6,92 +6,102 @@
     <?= $this->e($value) ?>
 <?php elseif ($mode == 'detail'): ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php', get_defined_vars()) ?>
+    <?php
+        $src = null;
+        if ($value) {
+            $src = App\Media\Application\Model\Image::tryFrom($value)
+                ?->variants()
+                ->filterByPreset(\App\Media\Application\Model\ImagePreset::l())
+                ->first()
+                ?->url()
+            ;
+        }
+    ?>
+
     <?= $this->e($value) ?>
+
     <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php', get_defined_vars()) ?>
 <?php elseif ($mode == 'form'): ?>
     <?= $this->import('/src/Backend/Resource/Image/Upload.tpl.php') ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
-    <div backend-resource-image-upload>
+    <?php /** @var \App\Backend\System\Validation\UberErrorCollection $errors */
+ ?>
+    <?php
+        $src = null;
+        if ($value) {
+            $src = App\Media\Application\Model\Image::tryFrom($value)
+                ?->variants()
+                ->filterByPreset(\App\Media\Application\Model\ImagePreset::l())
+                ->first()
+                ?->url()
+            ;
+        }
+    ?>
+    <div
+        backend-resource-image-media-space
+    >
         <input
-            backend-resource-image-upload-source
+            backend-resource-image-media-source
             type="text"
             name="<?= $this->e($name) ?>"
             value="<?= $this->e($value) ?>"
-            data-mediaimageupload-sources
         />
         <input
+            backend-resource-image-media-file
+            onchange="backend.resource.image.media.upload(this)"
             type="file"
             accept="image/*"
-            name="<?= $this->e($name) ?>__the_name_is_needed_question_mark_TODO"
-            onchange="backend.resource.image.upload.upload(this)"
-            backend-resource-image-upload-file
-            backend-resource-image-upload-cls-error="is-invalid"
-            class="
-                form-control
-                {% if field.errors|any %}
-                    is-invalid
-                {% endif %}
-            "
         />
-                    <div class="invalid-feedback mt-1" data-mediaimageupload-error>
-                        <div class="fs-6">
-                            <span class="{% if field.errors|any %} is-invalid {% endif %} "></span>
-                            {% include '@backend/resource/field/field_errors.html.twig' %}
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div data-mediaimageupload-previewwrapper style="display: none;">
-                            <div class="mt-3">
+        <div
+            backend-resource-image-media-errors
+        >
+            <?= $this->render('/src/Backend/System/Resource/Field/Form/Errors.tpl.php', get_defined_vars()) ?>
+        </div>
+        <div
+            backend-resource-image-media-preview
+            class="relative"
+            <?php if ($src === null) : ?>
+                style="display: none;"
+            <?php endif ?>
+        >
+            <div
+                onclick="this.up('[backend-resource-image-media-space]').one('[backend-resource-image-media-modal]').classList.remove('hidden')"
+                class="mt-3 cursor-pointer"
+            >
+                <img
+                    backend-resource-image-media-img
+                    src="<?= $this->e($src ?? '') ?>"
+                    class="w-full rounded shadow"
+                />
+            </div>
 
-                                <div style="cursor: pointer;" class="mt-3" data-bs-toggle="modal" data-bs-target="#imgUploadedNew">
-                                    <img src="" class="img-fluid w-100" data-mediaimageupload-preview/>
-                                </div>
-
-                                <div class="modal fade" id="imgUploadedNew" data-bs-keyboard="false" tabindex="-1" aria-labelledby="imgUploadedNew" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content ">
-                                            <img src="" data-bs-toggle="modal" data-bs-target="#imgUploadedNew" class="img-fluid w-100" data-mediaimageupload-preview/>
-                                            <button type="button" class="btn btn-light btn-sm position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button class="btn btn-light mt-2" onclick='mediaImageUpload.reset(this)' data-mediaimageupload-remove>
-                                    <i class="bi bi-x-lg"></i>
-                                </button>
-
-                            </div>
-                        </div>
-                        {% if field.image is not null %}
-                            <div data-mediaimageupload-byserverpreviewwrapper>
-                                <div class="mt-3">
-                                    <div style="cursor: pointer;" class="mt-3" data-bs-toggle="modal" data-bs-target="#imgFromServerUpload">
-                                        <img src="{{ field.image.variants.all[2].url }}" class="img-fluid w-100"/>
-                                    </div>
-
-                                    <div class="modal fade" id="imgFromServerUpload" data-bs-keyboard="false" tabindex="-1" aria-labelledby="imgFromServerUpload" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <img src="{{ field.image.variants.all[2].url }}" data-bs-toggle="modal" data-bs-target="#imgFromServerUpload" class="img-fluid w-100"/>
-                                                <button type="button" class="btn btn-light btn-sm position-absolute top-0 start-100 translate-middle" data-bs-dismiss="modal">
-                                                    <i class="bi bi-x-lg"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <button class="btn btn-light mt-2" onclick='mediaImageUpload.reset(this)' data-mediaimageupload-remove>
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
+            <div
+                backend-resource-image-media-modal
+                class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden"
+                onclick="if (event.target === this) this.classList.add('hidden')"
+            >
+                <div class="relative bg-white rounded shadow-lg max-w-md w-full">
+                    <img
+                        backend-resource-image-media-img
+                        src="<?= $this->e($src ?? '') ?>"
+                        class="w-full rounded-t"
+                    />
+                    <a class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                        onclick="this.up('[backend-resource-image-media-space]').one('[backend-resource-image-media-modal]').classList.add('hidden')">
+                        ✕
+                </a>
                 </div>
             </div>
-            <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php', get_defined_vars()) ?>
 
+            <a
+                backend-resoruce-image-media-reset
+                onclick="backend.resource.image.media.reset(this)"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+            </a>
+
+        </div>
+    </div>
 <?php endif ?>

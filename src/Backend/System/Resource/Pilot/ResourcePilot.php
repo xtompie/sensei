@@ -51,9 +51,15 @@ abstract class ResourcePilot
                 $this->link('index', $entity),
                 $this->link('detail', $entity),
             ],
-            'update', 'delete' => [
+            'update' => [
                 $this->link('index', $entity),
                 $this->link('detail', $entity),
+                $this->link('update', $entity),
+            ],
+            'delete' => [
+                $this->link('index', $entity),
+                $this->link('detail', $entity),
+                $this->link('delete', $entity),
             ],
             default => [
                 $this->link('index', $entity),

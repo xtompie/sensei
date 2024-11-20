@@ -39,9 +39,9 @@ final class Tpl extends BaseTpl
     protected function render(string $template, array $data = []): string
     {
         if ($this->debug->__invoke()) {
-            return "\n<!-- #template: $template  -->\n"
+            return "\n<!-- #tpl: $template  -->\n"
                 . parent::render($template, $data)
-                . "\n<!-- /template: $template -->\n"
+                . "\n<!-- /tpl: $template -->\n"
             ;
         }
 
