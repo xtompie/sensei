@@ -8,6 +8,7 @@ use App\Shared\Pao\CreatedAtHook;
 use App\Shared\Pao\PatchHook;
 use App\Shared\Pao\Repository as BasePaoRepository;
 use App\Shared\Pao\UpdatedAtHook;
+use Exception;
 use Xtompie\Result\Result;
 
 abstract class PaoRepository implements ResourceRepository
@@ -18,7 +19,8 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param BasePaoRepository<array<string,mixed>,array<array<string,mixed>>> $repository
+     * @param BasePaoRepository<array<string,mixed>,array<array<string,mixed>>> $read
+     * @param BasePaoRepository<array<string,mixed>,array<array<string,mixed>>> $write
      */
     public function __construct(
         protected BasePaoRepository $read,
@@ -37,9 +39,16 @@ abstract class PaoRepository implements ResourceRepository
 
     protected function table(): string
     {
-        return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', static::resource()));
+        $s = preg_replace('/(?<!^)[A-Z]/', '_$0', static::resource());
+        if (!is_string($s)) {
+            throw new Exception();
+        }
+        return strtolower($s);
     }
 
+    /**
+     * @return array<callable>
+     */
     protected function saveHooks(): array
     {
         return [new CreatedAtHook(), new UpdatedAtHook(), new PatchHook()];
