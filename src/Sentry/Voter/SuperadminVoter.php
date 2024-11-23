@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Sentry\Application\Voter;
+namespace App\Sentry\Voter;
 
-use App\Sentry\Application\Model\Role;
-use App\Sentry\Application\Model\RoleContext;
-use App\Sentry\Application\Model\Voter;
+use App\Sentry\System\Rid;
+use App\Sentry\System\Role;
+use App\Sentry\System\RoleContext;
+use App\Sentry\System\Voter;
 
 class SuperadminVoter implements Voter
 {
@@ -15,7 +16,7 @@ class SuperadminVoter implements Voter
     ) {
     }
 
-    public function __invoke(string $resource): bool
+    public function __invoke(Rid $rid): bool
     {
         if (!$this->roleContext->equals(Role::superadmin())) {
             return false;

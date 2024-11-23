@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Backend\System\Menu;
 
 use App\Backend\System\Resource\Pilot\Pilots;
-use App\Sentry\Application\Service\Sentry\Sentry;
+use App\Sentry\System\Sentry;
 
 class Menu
 {

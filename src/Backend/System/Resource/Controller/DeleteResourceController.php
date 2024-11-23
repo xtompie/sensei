@@ -11,6 +11,7 @@ use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
 use App\Backend\System\Validation\UberErrorCollection;
 use App\Backend\System\Validation\Validation;
+use App\Sentry\Rid\BackendResourceRid;
 use App\Shared\Container\Container;
 use App\Shared\Http\Controller;
 use App\Shared\Http\ControllerDefinition;
@@ -66,17 +67,17 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
         return $this->repository()->findById($id);
     }
 
-    protected function sentryInit(): string
+    protected function sentryInit(): BackendResourceRid
     {
         return $this->pilot()->sentry(action: static::action());
     }
 
-    protected function sentryEntity(string $id): string
+    protected function sentryEntity(string $id): BackendResourceRid
     {
         return $this->pilot()->sentry(action: static::action(), id: $id);
     }
 
-    protected function sentryProp(string $id, string $prop): string
+    protected function sentryProp(string $id, string $prop): BackendResourceRid
     {
         return $this->pilot()->sentry(action: static::action(), id: $id, prop: $prop);
     }

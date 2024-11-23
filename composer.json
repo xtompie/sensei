@@ -59,9 +59,9 @@
             "composer tpl-cs-fixer",
             "composer tpl-audit",
             "composer check-psr4",
+            "composer phpstan",
             "composer deptrac-l",
-            "composer deptrac-m",
-            "composer phpstan"
+            "composer deptrac-m"
         ],
         "pc": "composer precommit",
         "serve": [

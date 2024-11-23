@@ -7,7 +7,8 @@ namespace App\Backend\System\Ctrl;
 use App\Backend\System\Flash\Flash;
 use App\Backend\System\Resource\Selection\Selection;
 use App\Backend\System\Validation\Validation;
-use App\Sentry\Application\Service\Sentry\Sentry;
+use App\Sentry\System\Rid;
+use App\Sentry\System\Sentry;
 use App\Shared\Http\Csrf;
 use App\Shared\Http\Request;
 use App\Shared\Http\Response;
@@ -29,7 +30,7 @@ class Ctrl
     }
 
     public function init(
-        ?string $sentry = null,
+        ?Rid $sentry = null,
         bool $logged = true,
         bool $csrf = true,
         bool $selection = true,
@@ -57,9 +58,9 @@ class Ctrl
         return null;
     }
 
-    public function sentry(string $resource): bool
+    public function sentry(Rid $rid): bool
     {
-        return $this->sentry->__invoke($resource);
+        return $this->sentry->__invoke($rid);
     }
 
     /**

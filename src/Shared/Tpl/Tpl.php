@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Tpl;
 
+use App\Sentry\System\Rid;
 use App\Shared\Container\Container;
 use App\Shared\Http\Csrf;
 use App\Shared\Http\Request;
@@ -68,10 +69,9 @@ final class Tpl extends BaseTpl
         return $this->render($template);
     }
 
-    protected function sentry(string $sid): bool
+    protected function sentry(Rid $rid): bool
     {
-        return true; // @TEST
-        // return $this->service(\App\Sentry\Application\Service\Sentry\Sentry::class)->__invoke($sid);
+        return $this->service(\App\Sentry\System\Sentry::class)->__invoke($rid);
     }
 
     protected function csrf(): string

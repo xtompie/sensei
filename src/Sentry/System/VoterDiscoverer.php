@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Sentry\Infrastructure;
+namespace App\Sentry\System;
 
-use App\Sentry\Application\Model\Voter;
 use App\Shared\Kernel\Discoverer;
 
 /**

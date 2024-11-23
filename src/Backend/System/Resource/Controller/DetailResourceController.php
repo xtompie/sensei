@@ -9,6 +9,7 @@ use App\Backend\System\Resource\Pilot\Pilots;
 use App\Backend\System\Resource\Pilot\ResourcePilot;
 use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
+use App\Sentry\Rid\BackendResourceRid;
 use App\Shared\Container\Container;
 use App\Shared\Http\Controller;
 use App\Shared\Http\ControllerDefinition;
@@ -62,12 +63,12 @@ abstract class DetailResourceController implements Controller, HasControllerDefi
         return $this->repository()->findById($id);
     }
 
-    protected function sentryInit(): string
+    protected function sentryInit(): BackendResourceRid
     {
         return $this->pilot()->sentry(action: static::action());
     }
 
-    protected function sentryEntity(string $id): string
+    protected function sentryEntity(string $id): BackendResourceRid
     {
         return $this->pilot()->sentry(action: static::action(), id: $id);
     }

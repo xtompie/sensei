@@ -8,6 +8,7 @@ use App\Backend\System\Ctrl\Ctrl;
 use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
 use App\Backend\System\Validation\Validation;
+use App\Sentry\Rid\BackendResourceRid;
 use App\Shared\Container\Container;
 
 abstract class ResourcePilot
@@ -70,7 +71,7 @@ abstract class ResourcePilot
 
     /**
      * @param array<string,mixed>|null $entity
-     * @return array{resource:string,action:string,sentry:string,title:string,url:string}
+     * @return array{resource:string,action:string,sentry:BackendResourceRid,title:string,url:string}
      */
     public function link(string $action, ?array $entity = null, ?string $title = null): array
     {
@@ -91,14 +92,14 @@ abstract class ResourcePilot
         ];
     }
 
-    public function sentry(string $action, ?string $id = null, ?string $prop = null): string
+    public function sentry(string $action, ?string $id = null, ?string $prop = null): BackendResourceRid
     {
-        return 'backend'
-            . '.resource.' . strtolower(static::resource())
-            . '.action.' . $action
-            . ($id ? '.id.' . $id : '')
-            . ($prop ? '.prop.' . $prop : '')
-        ;
+        return new BackendResourceRid(
+            resource: strtolower(static::resource()),
+            action: $action,
+            id: $id,
+            prop: $prop
+        );
     }
 
     /**

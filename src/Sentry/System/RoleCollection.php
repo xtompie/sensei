@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Sentry\Application\Model;
+namespace App\Sentry\System;
 
 use App\Shared\Type\TypedCollection;
 

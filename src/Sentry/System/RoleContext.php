@@ -2,12 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Sentry\Application\Model;
+namespace App\Sentry\System;
 
-class RoleContext
+use Xtompie\Container\Container;
+use Xtompie\Container\Provider;
+
+final class RoleContext implements Provider
 {
+    public static function provide(string $abstract, Container $container): object
+    {
+        return new static(Role::guest());
+    }
+
     public function __construct(
-        private ?Role $role = null,
+        private Role $role,
     ) {
     }
 
@@ -18,9 +26,6 @@ class RoleContext
 
     public function get(): Role
     {
-        if ($this->role === null) {
-            throw new \RuntimeException('Role not set');
-        }
         return $this->role;
     }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Sentry\Application\Model;
+namespace App\Sentry\System;
 
 use App\Shared\Type\EnumIdCases;
 
@@ -12,11 +12,17 @@ use App\Shared\Type\EnumIdCases;
 final class Role extends EnumIdCases
 {
     protected static array $valid = [
+        'guest',
         'superadmin',
         'admin',
     ];
 
     protected static string $collection = RoleCollection::class;
+
+    public static function guest(): static
+    {
+        return new static(__FUNCTION__);
+    }
 
     public static function superadmin(): static
     {

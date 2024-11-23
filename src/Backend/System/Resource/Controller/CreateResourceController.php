@@ -11,6 +11,7 @@ use App\Backend\System\Resource\Repository\Repositories;
 use App\Backend\System\Resource\Repository\ResourceRepository;
 use App\Backend\System\Validation\UberErrorCollection;
 use App\Backend\System\Validation\Validation;
+use App\Sentry\Rid\BackendResourceRid;
 use App\Shared\Container\Container;
 use App\Shared\Gen\Gen;
 use App\Shared\Http\Controller;
@@ -68,12 +69,12 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
         return $this->repository()->findById($id);
     }
 
-    protected function sentryInit(): string
+    protected function sentryInit(): BackendResourceRid
     {
         return $this->pilot()->sentry(action: static::action());
     }
 
-    protected function sentryProp(string $prop): string
+    protected function sentryProp(string $prop): BackendResourceRid
     {
         return $this->pilot()->sentry(action: static::action(), prop: $prop);
     }

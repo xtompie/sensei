@@ -6,6 +6,8 @@ namespace App\Media\UI\Controller;
 
 use App\Media\Application\Model\ImageVariant;
 use App\Media\Application\Service\CreateImageByUpload\CreateImageByUpload;
+use App\Sentry\Http\Sentry;
+use App\Sentry\Rid\MediaUploadRid;
 use App\Shared\Http\Controller;
 use App\Shared\Http\Request;
 use App\Shared\Http\Response;
@@ -16,6 +18,7 @@ use Xtompie\Result\Error;
 #[Path(path: '/media/image/upload'), POST]
 class ImageUploadController implements Controller
 {
+    #[Sentry(MediaUploadRid::class)]
     public function __invoke(
         Request $request,
         CreateImageByUpload $createImageByUpload,
