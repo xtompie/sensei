@@ -21,8 +21,8 @@ final class GenerateId
         $uuid = Gen::uuid4();
 
         return
-            $type
-            . '/' . $space->value()
+            $type->value
+            . '/' . $space->value
             . '/' . $uuid[0] . $uuid[1]
             . '/' . $uuid[2] . $uuid[3]
             . '/' . $uuid

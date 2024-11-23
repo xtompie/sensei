@@ -20,7 +20,7 @@ class AdminVoter implements Voter
 
     public function __invoke(Rid $rid): bool
     {
-        if (!$this->roleContext->equals(Role::admin())) {
+        if ($this->roleContext->get() !== Role::ADMIN) {
             return false;
         }
 

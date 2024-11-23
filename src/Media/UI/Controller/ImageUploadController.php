@@ -37,7 +37,7 @@ class ImageUploadController implements Controller
             'id' => $result->id(),
             'name' => $result->name(),
             'variants' => $result->variants()->toArray(fn (ImageVariant $variant) => [
-                'name' => $variant->preset()->value(),
+                'name' => $variant->preset()->value,
                 'url' => $variant->url(),
             ]),
         ]);

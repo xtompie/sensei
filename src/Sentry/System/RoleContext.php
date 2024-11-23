@@ -11,7 +11,7 @@ final class RoleContext implements Provider
 {
     public static function provide(string $abstract, Container $container): object
     {
-        return new static(Role::guest());
+        return new static(Role::GUEST);
     }
 
     public function __construct(
@@ -27,10 +27,5 @@ final class RoleContext implements Provider
     public function get(): Role
     {
         return $this->role;
-    }
-
-    public function equals(Role $role): bool
-    {
-        return $this->get()->equals($role);
     }
 }

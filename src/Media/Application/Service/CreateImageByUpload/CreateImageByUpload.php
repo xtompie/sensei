@@ -43,10 +43,10 @@ class CreateImageByUpload
         }
 
         $id = $this->generateId->__invoke(
-            type: MediaType::image(),
-            space: $space ?? ImageSpace::default(),
-            name: $name ?? $uploadedImage->name() ?? MediaType::image()->value(),
-            extension: $mimeType->extension()->value(),
+            type: MediaType::IMAGE,
+            space: $space ?? ImageSpace::DEFAULT,
+            name: $name ?? $uploadedImage->name() ?? MediaType::IMAGE->value,
+            extension: $mimeType->extension()->value,
         );
         $image = new Image(id: $id);
         Dir::ensureForFile($image->path());

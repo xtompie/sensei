@@ -4,31 +4,9 @@ declare(strict_types=1);
 
 namespace App\Media\Application\Model;
 
-use App\Shared\Type\EnumId;
-
-/**
- * @extends EnumId<ImageExtension>
- */
-final class ImageExtension extends EnumId
+enum ImageExtension: string
 {
-    protected static array $valid = [
-        'jpg',
-        'jpeg',
-        'png',
-    ];
-
-    public static function jpg(): static
-    {
-        return new static(__FUNCTION__);
-    }
-
-    public static function jpeg(): static
-    {
-        return new static(__FUNCTION__);
-    }
-
-    public static function png(): static
-    {
-        return new static(__FUNCTION__);
-    }
+    case JPG = 'jpg';
+    case JPEG = 'jpeg';
+    case PNG = 'png';
 }

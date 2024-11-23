@@ -72,10 +72,10 @@ final class CreateImageByPathOrUrl
         }
 
         return $this->generateId->__invoke(
-            type: MediaType::image(),
-            space: $space ?? ImageSpace::default(),
+            type: MediaType::IMAGE,
+            space: $space ?? ImageSpace::DEFAULT,
             name: $name,
-            extension: $mimeType->extension()->value(),
+            extension: $mimeType->extension()->value,
         );
     }
 }

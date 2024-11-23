@@ -28,10 +28,10 @@ final class Url
         bool $useParamContext = true,
     ): string {
         $referenceType = match ($reference) {
-            UrlReference::absoluteUrl() => UrlGenerator::ABSOLUTE_URL,
-            UrlReference::absolutePath() => UrlGenerator::ABSOLUTE_PATH,
-            UrlReference::relativePath() => UrlGenerator::RELATIVE_PATH,
-            UrlReference::newtworkPath() => UrlGenerator::NETWORK_PATH,
+            UrlReference::ABSOLUTE_URL => UrlGenerator::ABSOLUTE_URL,
+            UrlReference::ABSOLUTE_PATH => UrlGenerator::ABSOLUTE_PATH,
+            UrlReference::RELATIVE_PATH => UrlGenerator::RELATIVE_PATH,
+            UrlReference::NETWORK_PATH => UrlGenerator::NETWORK_PATH,
             default => UrlGenerator::ABSOLUTE_PATH,
         };
 

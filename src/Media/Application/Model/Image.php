@@ -31,7 +31,7 @@ final class Image
 
     private static function isValidId(string $id): bool
     {
-        $mediaTypePrefix = MediaType::image()->value() . '/';
+        $mediaTypePrefix = MediaType::IMAGE->value . '/';
         if (strpos($id, $mediaTypePrefix) !== 0) {
             return false;
         }
@@ -80,7 +80,7 @@ final class Image
 
     public function variants(): ImageVariantCollection
     {
-        return ImagePreset::cases()->to(
+        return ImagePreset::collection()->to(
             class: ImageVariantCollection::class,
             map: fn (ImagePreset $preset) => $this->variant($preset)
         );
@@ -102,7 +102,7 @@ final class Image
     private function variant(ImagePreset $preset): ImageVariant
     {
         $parts = explode('.', $this->id);
-        $variant = $parts[0] . '.' . $parts[1] . '.' . $preset->value() . '.' . $parts[2];
+        $variant = $parts[0] . '.' . $parts[1] . '.' . $preset->value . '.' . $parts[2];
         return new ImageVariant($variant);
     }
 

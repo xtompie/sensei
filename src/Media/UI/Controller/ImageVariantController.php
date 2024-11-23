@@ -19,7 +19,7 @@ class ImageVariantController implements Controller
 {
     public function __invoke(string $path, CreateImageVariantById $createImageVariantById): Response
     {
-        $id = MediaType::image()->value() . '/' . $path;
+        $id = MediaType::IMAGE->value . '/' . $path;
         $variant = ImageVariant::tryFrom($id);
         if ($variant == null) {
             return Response::notFound();

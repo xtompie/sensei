@@ -18,7 +18,7 @@ class TenantVoter implements Voter
 
     public function __invoke(Rid $rid): bool
     {
-        if ($this->roleContext->equals(Role::superadmin())) {
+        if ($this->roleContext->get() === Role::SUPERADMIN) {
             return true;
         }
 

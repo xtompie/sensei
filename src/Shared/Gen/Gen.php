@@ -10,7 +10,7 @@ class Gen
 {
     public static function id(): string
     {
-        return Uuid::uuid4()->__toString();
+        return Uuid::uuid7()->__toString();
     }
 
     public static function token(): string

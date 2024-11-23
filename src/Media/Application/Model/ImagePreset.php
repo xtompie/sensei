@@ -4,53 +4,32 @@ declare(strict_types=1);
 
 namespace App\Media\Application\Model;
 
-use App\Shared\Type\EnumIdCases;
-
-/**
- * @extends EnumIdCases<ImagePreset>
- */
-final class ImagePreset extends EnumIdCases
+enum ImagePreset: string
 {
-    protected static array $valid = [
-        's',
-        'm',
-        'l',
-    ];
+    case S = 's';
+    case M = 'm';
+    case L = 'l';
 
-    protected static string $collection = ImagePresetCollection::class;
-
-    public static function s(): static
+    public static function collection(): ImagePresetCollection
     {
-        return new static(__FUNCTION__);
-    }
-
-    public static function m(): static
-    {
-        return new static(__FUNCTION__);
-    }
-
-    public static function l(): static
-    {
-        return new static(__FUNCTION__);
+        return new ImagePresetCollection(static::cases());
     }
 
     public function width(): int
     {
-        return match ($this->value) {
-            's' => 300,
-            'm' => 480,
-            'l' => 1080,
-            default => throw new \InvalidArgumentException('Invalid preset'),
+        return match ($this) {
+            self::S => 300,
+            self::M => 480,
+            self::L => 1080,
         };
     }
 
     public function height(): int
     {
-        return match ($this->value) {
-            's' => 300,
-            'm' => 480,
-            'l' => 1080,
-            default => throw new \InvalidArgumentException('Invalid preset'),
+        return match ($this) {
+            self::S => 300,
+            self::M => 480,
+            self::L => 1080,
         };
     }
 }
