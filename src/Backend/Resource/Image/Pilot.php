@@ -26,7 +26,7 @@ class Pilot extends ResourcePilot
     public function validation(Validation $validation, string $action, ?array $entity): Validation
     {
         return $validation
-            ->key('media')->callback(fn($v) => Image::tryFrom($v) instanceof Image)
+            ->key('media')->callback(fn ($v) => Image::tryFrom($v) instanceof Image)
         ;
     }
 }

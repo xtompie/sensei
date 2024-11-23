@@ -67,5 +67,4 @@ class Pilot extends ResourcePilot
     {
         return 'Admin';
     }
-
 }

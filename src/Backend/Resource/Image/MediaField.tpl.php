@@ -16,7 +16,7 @@
                 ?->url()
             ;
         }
-    ?>
+        ?>
 
     <?= $this->e($value) ?>
 
@@ -27,7 +27,7 @@
     <?php /** @var \App\Backend\System\Validation\UberErrorCollection $errors */
  ?>
     <?php
-        $src = null;
+            $src = null;
         if ($value) {
             $src = App\Media\Application\Model\Image::tryFrom($value)
                 ?->variants()
@@ -36,7 +36,7 @@
                 ?->url()
             ;
         }
-    ?>
+        ?>
     <div
         backend-resource-image-media-space
     >
