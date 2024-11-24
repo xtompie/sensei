@@ -11,7 +11,7 @@
         if ($value) {
             $src = App\Media\Application\Model\Image::tryFrom($value)
                 ?->variants()
-                ->filterByPreset(\App\Media\Application\Model\ImagePreset::l())
+                ->filterByPreset(\App\Media\Application\Model\ImagePreset::L)
                 ->first()
                 ?->url()
             ;
@@ -31,7 +31,7 @@
         if ($value) {
             $src = App\Media\Application\Model\Image::tryFrom($value)
                 ?->variants()
-                ->filterByPreset(\App\Media\Application\Model\ImagePreset::l())
+                ->filterByPreset(\App\Media\Application\Model\ImagePreset::L)
                 ->first()
                 ?->url()
             ;
