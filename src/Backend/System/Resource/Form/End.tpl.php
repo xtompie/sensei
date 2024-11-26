@@ -1,5 +1,5 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
-<?php /** @var \App\Backend\System\Resource\UberErrorCollection $errors */ ?>
+<?php /** @var \App\Backend\System\Validation\UberErrorCollection $errors */ ?>
 
             <div class="col-span-full">
                 <?= $this->render('/src/Backend/System/Resource/Form/Submit.tpl.php', [

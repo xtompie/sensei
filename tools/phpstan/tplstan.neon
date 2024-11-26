@@ -1,0 +1,7 @@
+includes:
+    - tplpaths.neon
+parameters:
+    errorFormat: raw
+    level: 9
+    ignoreErrors:
+        - '#Variable \$.+ might not be defined#'

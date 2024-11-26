@@ -52,6 +52,7 @@
         "php-cs-fixer": "tools/php-cs-fixer/vendor/bin/php-cs-fixer --config=tools/php-cs-fixer/.php-cs-fixer.php fix src",
         "php-cs-fixer-install": "composer install --working-dir=tools/php-cs-fixer",
         "phpstan": "./tools/phpstan/vendor/bin/phpstan analyse --memory-limit=2G --configuration=tools/phpstan/phpstan.neon",
+        "phpstan-tpl": "php tools/phpstan/tplpaths.php && ./tools/phpstan/vendor/bin/phpstan analyse --memory-limit=2G --configuration=tools/phpstan/tplstan.neon",
         "phpstan-install": "composer install --working-dir=tools/phpstan",
         "phpstan-clear": "./tools/phpstan/vendor/bin/phpstan clear-result-cache",
         "precommit": [
@@ -60,6 +61,7 @@
             "composer tpl-audit",
             "composer check-psr4",
             "composer phpstan",
+            "composer phpstan-tpl",
             "composer deptrac-l",
             "composer deptrac-m"
         ],

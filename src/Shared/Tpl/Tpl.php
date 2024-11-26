@@ -10,43 +10,99 @@ use App\Shared\Http\Csrf;
 use App\Shared\Http\Request;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Kernel\Debug;
+use Throwable;
 use Xtompie\Tpl\Tpl as BaseTpl;
 
 final class Tpl extends BaseTpl
 {
-    /**
-     * @param array<string,bool> $import
-     */
+    private string $dir;
+    /** @var array<string,bool> */
+    private array $import = [];
+    /** @var array<int,array{template:string,data:array<string,mixed>}> */
+    private array $stack = [];
+    private string $content = '';
+
     public function __construct(
         private AppDir $appDir,
         private Csrf $csrf,
         private Debug $debug,
         private Request $request,
-        private ?string $templatePath = null,
-        private array $import = [],
     ) {
-    }
-
-    protected function templatePathPrefix(): string
-    {
-        return $this->templatePath ??= $this->appDir->__invoke();
+        $this->dir = $this->appDir->__invoke();
     }
 
     /**
-     * @param string $template
      * @param array<string,mixed> $data
-     * @return string
      */
-    protected function render(string $template, array $data = []): string
+    public function __invoke(string $template, array $data = []): string
+    {
+        $this->push($template, $data);
+        while ($this->stack) {
+            $level = array_pop($this->stack);
+            $this->content = $this->render($level['template'], $level['data']);
+        }
+
+        return $this->content;
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     */
+    public function wrap(string $template, array $data = []): void
+    {
+        $this->__stack[] = ['template' => $template, 'data' => $data];
+    }
+
+    public function content(): string
+    {
+        return $this->__content;
+    }
+
+    public function raw(string|int|float|null $value): string
+    {
+        return (string) $value;
+    }
+
+    public function e(string|int|float|null $value): string
+    {
+        return htmlspecialchars((string) $value);
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     */
+    private function _render(string $template, array $data = []): string
+    {
+        $path = $this->dir . $template;
+        $level = ob_get_level();
+        ob_start();
+        try {
+            (function () { // @phpstan-ignore-line
+                extract(func_get_arg(1)); // @phpstan-ignore-line
+                include func_get_arg(0);
+            })($path, $data);
+        } catch (Throwable $e) {
+            while (ob_get_level() > $level) {
+                ob_end_clean();
+            }
+            throw $e;
+        }
+        return ob_get_clean(); // @phpstan-ignore-line
+    }
+
+    /**
+     * @param array<string,mixed> $data
+     */
+    public function render(string $template, array $data = []): string
     {
         if ($this->debug->__invoke()) {
             return "\n<!-- #tpl: $template  -->\n"
-                . parent::render($template, $data)
+                . $this->_render($template, $data)
                 . "\n<!-- /tpl: $template -->\n"
             ;
         }
 
-        return parent::render($template, $data);
+        return $this->_render($template, $data);
     }
 
     /**
@@ -54,12 +110,12 @@ final class Tpl extends BaseTpl
      * @param class-string<T> $service
      * @return T
      */
-    protected function service(string $service): object
+    public function service(string $service): object
     {
         return Container::container()->get($service);
     }
 
-    protected function import(string $template): string
+    public function import(string $template): string
     {
         if (isset($this->import[$template])) {
             return '';
@@ -69,12 +125,12 @@ final class Tpl extends BaseTpl
         return $this->render($template);
     }
 
-    protected function sentry(Rid $rid): bool
+    public function sentry(Rid $rid): bool
     {
         return $this->service(\App\Sentry\System\Sentry::class)->__invoke($rid);
     }
 
-    protected function csrf(): string
+    public function csrf(): string
     {
         return $this->csrf->get();
     }
@@ -82,17 +138,17 @@ final class Tpl extends BaseTpl
     /**
      * @param array<string,mixed> $query
      */
-    protected function alterUri(array $query): string
+    public function alterUri(array $query): string
     {
         return $this->request->alterUri($query);
     }
 
-    protected function t(string $module, string $text): string
+    public function t(string $module, string $text): string
     {
         return $text;
     }
 
-    protected function isUriAciive(string $url): bool
+    public function isUriAciive(string $url): bool
     {
         return str_starts_with($this->request->getUri()->getPath(), $url);
     }

@@ -1,7 +1,7 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 <?php $modal = $this->service(\App\Backend\System\Modal\Modal::class)->is() ?>
 
-<?php $this->push('/src/Backend/System/Layout/Layout.tpl.php', [
+<?php $this->wrap('/src/Backend/System/Layout/Layout.tpl.php', [
     'title' => '404 Not Found',
     ...get_defined_vars(),
 ]) ?>

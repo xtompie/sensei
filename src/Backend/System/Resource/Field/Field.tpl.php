@@ -3,7 +3,7 @@
 $type = $type ?? 'Info';
 $view = $view ?? "/src/Backend/System/Resource/Field/Type/{$type}/{$type}.tpl.php";
 $entity = $entity ?? null;
-$sentry = $sentry ?? "backend.resource.$resource.action.$action" . ($entity ? ".id.{$entity['id']}" : '') . ".prop.$name";
+$sentry = $sentry ?? new \App\Sentry\Rid\BackendResourceRid(resource: $resource, action: $action, id: $entity ? $entity['id'] : null, prop: $name);
 $list_sort = $list_sort ?? false;
 $sort = $sort ?? false;
 $more = $more ?? false;
@@ -31,7 +31,7 @@ $more = $more ?? false;
 $label = $label ?? ucfirst($name);
 ?>
 
-            <?php if ($list_sort_link && $list_sort_link): ?>
+            <?php if ($list_sort_link): ?>
                 <a href="<?= $this->e($list_sort_link) ?>">
             <?php endif ?>
 

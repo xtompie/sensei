@@ -106,7 +106,7 @@ abstract class ResourcePilot
      * Returns array of links.
      *
      * @param array<string,mixed>|null $entity
-     * @return array<int,mixed>
+     * @return array<int,array{resource:string,action:string,sentry:BackendResourceRid,title:string,url:string}>
      */
     public function more(string $action, ?array $entity = null): array
     {

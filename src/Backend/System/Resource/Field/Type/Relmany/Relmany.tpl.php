@@ -3,7 +3,7 @@
 <?php $value = $value ?: $value[$name] ?? [] ?>
 
 <?php if ($mode === 'list'): ?>
-    <?php if (is_iterable($value)): ?>
+    <?php if (is_array($value)): ?>
         <?= $this->e(count($value)) ?>
     <?php endif ?>
 <?php elseif ($mode === 'detail'): ?>
