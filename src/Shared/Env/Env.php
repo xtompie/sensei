@@ -23,6 +23,7 @@ final class Env
         if ($this->envs === null) {
             $this->envs = $this->loader->__invoke();
         }
+
         return $this->envs[$key] ?? '';
     }
 
@@ -35,8 +36,9 @@ final class Env
         yield new Entry('APP_DB_NAME', 'Database name');
         yield new Entry('APP_DB_PASS', 'Database password');
         yield new Entry('APP_DB_USER', 'Database user');
-        yield new Entry('APP_DEBUG', 'Debug mode', default: '0');
+        yield new Entry('APP_DEBUG', 'Debug mode', optional: true, default: '0');
         yield new Entry('APP_KERNEL_WHOOPS_EDITOR', 'Whoops editor: phpstorm, vscode, ...', optional: true, default: 'vscode');
+        yield new AppSecretEntry('APP_SECRET', 'Application secret');
     }
 
     public function APP_DB_HOST(): string
@@ -65,6 +67,11 @@ final class Env
     }
 
     public function APP_KERNEL_WHOOPS_EDITOR(): string
+    {
+        return $this(__FUNCTION__);
+    }
+
+    public function APP_SECRET(): string
     {
         return $this(__FUNCTION__);
     }

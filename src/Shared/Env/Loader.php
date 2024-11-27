@@ -26,7 +26,7 @@ final class Loader
             if (!is_file($path)) {
                 continue;
             }
-            $parsed = parse_ini_file($path);
+            $parsed = parse_ini_file($path, false, INI_SCANNER_RAW);
             if ($parsed === false) {
                 continue;
             }
