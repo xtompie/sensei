@@ -7,16 +7,9 @@ namespace App\Shared\Http;
 class Flash
 {
     public function __construct(
-        protected Session $session,
-        protected string $namespace = 'shared.flash',
+        protected SessionVar $sessionVar,
     ) {
-    }
-
-    public function withNamespace(string $namespace): static
-    {
-        $new = clone $this;
-        $new->namespace = $namespace;
-        return $new;
+        $this->sessionVar = $sessionVar->withModule('shared')->withProperty('flash');
     }
 
     /**
@@ -29,10 +22,7 @@ class Flash
 
     public function add(string $msg, string $type = 'info', string $format = 'text'): static
     {
-        $this->session->push(
-            key: $this->namespace,
-            value: ['msg' => $msg, 'type' => $type, 'format' => $format]
-        );
+        $this->sessionVar->add(['msg' => $msg, 'type' => $type, 'format' => $format]);
 
         return $this;
     }
@@ -42,7 +32,7 @@ class Flash
      */
     public function pull(): array
     {
-        $flashes = $this->session->pull($this->namespace);
+        $flashes = $this->sessionVar->pull();
         if (!is_array($flashes)) {
             return [];
         }

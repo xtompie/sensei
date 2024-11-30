@@ -16,11 +16,11 @@ class ProfileHttpSession
 
     public function start(): void
     {
-        $this->data->add(type: 'shared.http.session.start', data: $this->session->all());
+        $this->data->add(type: 'shared.http.session.start', data: $this->session->dump());
     }
 
     public function stop(): void
     {
-        $this->data->add(type: 'shared.http.session.stop', data: $this->session->all());
+        $this->data->add(type: 'shared.http.session.stop', data: $this->session->dump());
     }
 }

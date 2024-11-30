@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace App\Shared\Http;
 
-class Session
+use App\Shared\Tenant\TenantContext;
+
+final class Session
 {
     public function __construct(
-        protected ?string $space = null
+        private TenantContext $tenantContext
     ) {
-        $this->activate();
     }
 
-    protected function activate(): void
+    private function activate(): void
     {
         if ($this->active()) {
+            $this->tenant();
             return;
         }
         session_start();
+        $this->tenant();
     }
 
     public function active(): bool
@@ -25,71 +28,83 @@ class Session
         return session_status() === PHP_SESSION_ACTIVE;
     }
 
-    public function withSpace(string $space): static
+    public function set(string $module, string $property, mixed $value): void
     {
-        $clone = clone $this;
-        $clone->space = $space;
-        return $clone;
+        $this->activate();
+        $_SESSION[$module][$property] = $value;
+    }
+
+    public function get(string $module, string $property): mixed
+    {
+        $this->activate();
+        return $_SESSION[$module][$property] ?? null;
+    }
+
+    public function has(string $module, string $property): bool
+    {
+        $this->activate();
+        return isset($_SESSION[$module][$property]);
+    }
+
+    public function remove(string $module, string $property): void
+    {
+        $this->activate();
+        unset($_SESSION[$module][$property]);
+        if (empty($_SESSION[$module])) {
+            unset($_SESSION[$module]);
+        }
     }
 
     /**
-     * @return array<string,mixed>
+     * @return array<string, array<string, mixed>>
      */
-    public function all(): array
+    public function all(string $module): array
     {
         $this->activate();
-        $all = $this->space ? $_SESSION[$this->space] : $_SESSION;
-        /** @var array<string,mixed> $all */
-        return $all;
+        return $_SESSION[$module] ?? [];
     }
 
-    public function set(string $key, mixed $value): void
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    public function dump(): array
     {
         $this->activate();
-        if ($this->space) {
-            if (!isset($_SESSION[$this->space])) {
-                $_SESSION[$this->space] = [];
-            }
-            $_SESSION[$this->space][$key] = $value;
-        } else {
-            $_SESSION[$key] = $value;
+        return $_SESSION;
+    }
+
+    public function clear(string $module): void
+    {
+        $this->activate();
+        unset($_SESSION[$module]);
+    }
+
+    public function regenerateId(): void
+    {
+        session_regenerate_id(true);
+    }
+
+    public function destroy(): void
+    {
+        if ($this->active()) {
+            session_unset();
+            session_destroy();
         }
+        $_SESSION = [];
     }
 
-    public function pull(string $key): mixed
+    private function tenant(): void
     {
-        $data = $this->get($key);
-        $this->remove($key);
-        return $data;
-    }
+        $tenantId = $this->tenantContext->id();
+        $currentTenant = $this->get('app', 'tenant');
 
-    public function get(string $key): mixed
-    {
-        $this->activate();
-        if ($this->space) {
-            return isset($_SESSION[$this->space], $_SESSION[$this->space][$key]) ? $_SESSION[$this->space][$key] : null;
+        if ($currentTenant === null) {
+            $this->set('app', 'tenant', $tenantId);
+            return;
         }
-        return $_SESSION[$key] ?? null;
-    }
 
-    public function remove(string $key): void
-    {
-        $this->activate();
-        if ($this->space) {
-            unset($_SESSION[$this->space][$key]);
-            if (empty($_SESSION[$this->space])) {
-                unset($_SESSION[$this->space]);
-            }
-        } else {
-            unset($_SESSION[$key]);
+        if ($currentTenant !== $tenantId) {
+            $this->destroy();
         }
-    }
-
-    public function push(string $key, mixed $value): void
-    {
-        $data = $this->get($key);
-        $data = is_array($data) ? $data : [];
-        $data[] = $value;
-        $this->set($key, $data);
     }
 }
