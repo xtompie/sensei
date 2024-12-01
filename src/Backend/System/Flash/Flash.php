@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Backend\System\Flash;
 
 use App\Shared\Http\Flash as BaseFlash;
-use App\Shared\Http\SessionVar;
+use App\Shared\Http\SessionProperty;
 
 class Flash extends BaseFlash
 {
     public function __construct(
-        protected SessionVar $sessionVar,
+        protected SessionProperty $sessionProperty,
     ) {
-        $this->sessionVar = $sessionVar->withModule('backend')->withProperty('flash');
+        $this->sessionProperty = $sessionProperty->withProperty('backend.flash');
     }
 }

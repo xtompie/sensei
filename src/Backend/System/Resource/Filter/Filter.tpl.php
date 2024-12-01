@@ -2,7 +2,7 @@
 <?php
 $type = isset($type) ? $type : 'info';
 $view = isset($view) ? $view : '/src/Backend/System/Resource/Filter/Type/' . $type . '/' . $type . '.tpl.php';
-$sentry = isset($sentry) ? $sentry : 'backend.resource.' . $resource . '.action.' . $action . '.prop.' . $name;
+$sentry = isset($sentry) ? $sentry : new \App\Sentry\Rid\BackendResourceRid(resource: $resource, action: $action, prop: $name);
 ?>
 
 <?php if ($this->sentry($sentry)): ?>

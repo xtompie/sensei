@@ -8,4 +8,8 @@ use App\Backend\System\Resource\Repository\PaoRepository;
 
 class Repository extends PaoRepository
 {
+    // protected function tenant(): bool
+    // {
+    //     return true;
+    // }
 }

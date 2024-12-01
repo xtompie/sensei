@@ -6,60 +6,63 @@ namespace App\Shared\Http;
 
 use Exception;
 
-final class SessionVar
+final class SessionProperty
 {
     public function __construct(
         private Session $session,
-        private ?string $module = null,
         private ?string $property = null,
+        private bool $critical = false,
     ) {
-    }
-
-    public function withModule(string $module): static
-    {
-        $clone = clone $this;
-        $clone->module = $module;
-        return $clone;
     }
 
     public function withProperty(string $property): static
     {
-        $clone = clone $this;
-        $clone->property = $property;
-        return $clone;
+        $new = clone $this;
+        $new->property = $property;
+        return $new;
+    }
+
+    public function withCritical(bool $critical): static
+    {
+        $new = clone $this;
+        $new->critical = $critical;
+        return $new;
     }
 
     public function set(mixed $value): void
     {
-        if ($this->module === null) {
-            throw new Exception('Module is not set');
-        }
         if ($this->property === null) {
             throw new Exception('Property is not set');
         }
-        $this->session->set($this->module, $this->property, $value);
+        $this->session->set($this->property, $value);
+        if ($this->critical) {
+            $this->session->regenerateId();
+        }
     }
 
     public function get(): mixed
     {
-        if ($this->module === null) {
-            throw new Exception('Module is not set');
-        }
         if ($this->property === null) {
             throw new Exception('Property is not set');
         }
-        return $this->session->get($this->module, $this->property);
+        return $this->session->get($this->property);
+    }
+
+    public function getAsString(): ?string
+    {
+        $value = $this->get();
+        return is_string($value) ? $value : null;
     }
 
     public function clear(): void
     {
-        if ($this->module === null) {
-            throw new Exception('Module is not set');
-        }
         if ($this->property === null) {
             throw new Exception('Property is not set');
         }
-        $this->session->remove($this->module, $this->property);
+        $this->session->remove($this->property);
+        if ($this->critical) {
+            $this->session->regenerateId();
+        }
     }
 
     public function add(mixed $item): void

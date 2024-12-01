@@ -8,12 +8,12 @@ use App\Sentry\System\Rid;
 use App\Shared\Container\Container;
 use App\Shared\Http\Csrf;
 use App\Shared\Http\Request;
+use App\Shared\I18n\Translator;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Kernel\Debug;
 use Throwable;
-use Xtompie\Tpl\Tpl as BaseTpl;
 
-final class Tpl extends BaseTpl
+final class Tpl
 {
     private string $dir;
     /** @var array<string,bool> */
@@ -27,6 +27,7 @@ final class Tpl extends BaseTpl
         private Csrf $csrf,
         private Debug $debug,
         private Request $request,
+        private Translator $translator,
     ) {
         $this->dir = $this->appDir->__invoke();
     }
@@ -36,7 +37,7 @@ final class Tpl extends BaseTpl
      */
     public function __invoke(string $template, array $data = []): string
     {
-        $this->push($template, $data);
+        $this->wrap($template, $data);
         while ($this->stack) {
             $level = array_pop($this->stack);
             $this->content = $this->render($level['template'], $level['data']);
@@ -50,12 +51,12 @@ final class Tpl extends BaseTpl
      */
     public function wrap(string $template, array $data = []): void
     {
-        $this->__stack[] = ['template' => $template, 'data' => $data];
+        $this->stack[] = ['template' => $template, 'data' => $data];
     }
 
     public function content(): string
     {
-        return $this->__content;
+        return $this->content;
     }
 
     public function raw(string|int|float|null $value): string
@@ -143,9 +144,12 @@ final class Tpl extends BaseTpl
         return $this->request->alterUri($query);
     }
 
-    public function t(string $module, string $text): string
+    /**
+     * @param array<string,string> $replacements
+     */
+    public function t(string $key, array $replacements = []): string
     {
-        return $text;
+        return $this->translator->__invoke($key, $replacements);
     }
 
     public function isUriAciive(string $url): bool

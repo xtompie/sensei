@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Shared\Encrypter;
+namespace App\Shared\Crypter;
 
 use App\Shared\Secret\Secret;
 
-class Encrypter
+class Crypter
 {
     public function __construct(
         private Secret $secret,

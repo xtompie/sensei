@@ -51,9 +51,9 @@ class Ctrl
         //     return $this->responder->redirectToRoute('backend.index');
         // }
 
-        // if ($sentry !== null && !$this->sentry->__invoke($sentry)) {
-        //     return $this->forbidden();
-        // }
+        if ($sentry !== null && !$this->sentry->__invoke($sentry)) {
+            return $this->forbidden();
+        }
 
         return null;
     }
@@ -88,17 +88,17 @@ class Ctrl
 
     public function forbidden(): Response
     {
-        return Response::html(body: $this->tpl->__invoke('/src/Backend/System/Kernel/Error403.tpl.php'), status: 403);
+        return Response::html(body: $this->tpl->__invoke('/src/Backend/System/Error/Error403.tpl.php'), status: 403);
     }
 
     public function unauthorized(): Response
     {
-        return Response::html(body: $this->tpl->__invoke('/src/Backend/System/Kernel/Error401.tpl.php'), status: 401);
+        return Response::html(body: $this->tpl->__invoke('/src/Backend/System/Error/Error401.tpl.php'), status: 401);
     }
 
     public function notFound(): Response
     {
-        return Response::html(body: $this->tpl->__invoke('/src/Backend/System/Kernel/Error404.tpl.php'), status: 404);
+        return Response::html(body: $this->tpl->__invoke('/src/Backend/System/Error/Error404.tpl.php'), status: 404);
     }
 
     public function flash(string $msg, string $type = 'info', string $format = 'text'): void

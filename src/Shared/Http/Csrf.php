@@ -9,11 +9,11 @@ use Ramsey\Uuid\Uuid;
 class Csrf
 {
     public function __construct(
-        private SessionVar $sessionVar,
+        private SessionProperty $sessionProperty,
         private Request $request,
         private bool $enabled = true,
     ) {
-        $this->sessionVar = $sessionVar->withModule('app')->withProperty('csrf');
+        $this->sessionProperty = $sessionProperty->withProperty('shared.csrf');
     }
 
     public function enabled(): bool
@@ -28,10 +28,10 @@ class Csrf
 
     public function get(): string
     {
-        $csrf = $this->sessionVar->get();
+        $csrf = $this->sessionProperty->get();
         if (!$csrf || !is_string($csrf)) {
             $csrf = Uuid::uuid4()->toString();
-            $this->sessionVar->set($csrf);
+            $this->sessionProperty->set($csrf);
         }
 
         return $csrf;

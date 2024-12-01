@@ -7,9 +7,9 @@ namespace App\Shared\Http;
 class Flash
 {
     public function __construct(
-        protected SessionVar $sessionVar,
+        protected SessionProperty $sessionProperty,
     ) {
-        $this->sessionVar = $sessionVar->withModule('shared')->withProperty('flash');
+        $this->sessionProperty = $sessionProperty->withProperty('shared.flash');
     }
 
     /**
@@ -22,7 +22,7 @@ class Flash
 
     public function add(string $msg, string $type = 'info', string $format = 'text'): static
     {
-        $this->sessionVar->add(['msg' => $msg, 'type' => $type, 'format' => $format]);
+        $this->sessionProperty->add(['msg' => $msg, 'type' => $type, 'format' => $format]);
 
         return $this;
     }
@@ -32,16 +32,17 @@ class Flash
      */
     public function pull(): array
     {
-        $flashes = $this->sessionVar->pull();
+        $flashes = $this->sessionProperty->pull();
         if (!is_array($flashes)) {
             return [];
         }
         $flashes = array_filter($flashes, function ($flash) {
-            return is_array($flash) &&
-                   isset($flash['msg'], $flash['type'], $flash['format']) &&
-                   is_string($flash['msg']) &&
-                   is_string($flash['type']) &&
-                   is_string($flash['format']);
+            return is_array($flash)
+                && isset($flash['msg'], $flash['type'], $flash['format'])
+                && is_string($flash['msg'])
+                && is_string($flash['type'])
+                && is_string($flash['format'])
+            ;
         });
         return $flashes;
     }

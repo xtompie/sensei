@@ -8,6 +8,7 @@ use App\Shared\Pao\CreatedAtHook;
 use App\Shared\Pao\PatchHook;
 use App\Shared\Pao\Repository as BasePaoRepository;
 use App\Shared\Pao\UpdatedAtHook;
+use App\Shared\Tenant\TenantContext;
 use Exception;
 use Xtompie\Result\Result;
 
@@ -25,6 +26,7 @@ abstract class PaoRepository implements ResourceRepository
     public function __construct(
         protected BasePaoRepository $read,
         protected BasePaoRepository $write,
+        protected TenantContext $tenantContext,
     ) {
         $this->read = $read
             ->withPql(fn (...$args) => $this->pqlForRead(...$args))
@@ -46,6 +48,21 @@ abstract class PaoRepository implements ResourceRepository
         return strtolower($s);
     }
 
+    protected function tenant(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    protected function static(): array
+    {
+        return array_filter([
+            'tenant' => $this->tenant() ? $this->tenantContext->id() : null,
+        ]);
+    }
+
     /**
      * @return array<callable>
      */
@@ -64,6 +81,7 @@ abstract class PaoRepository implements ResourceRepository
             ...$value,
             ':table' => $this->table(),
             'id' => $id,
+            ...$this->static(),
         ];
     }
 
@@ -76,14 +94,13 @@ abstract class PaoRepository implements ResourceRepository
         $query = [
             'select' => $this->table() . '.*',
             'from' => $this->table(),
+            'where' => [...$where ?? [], ...$this->static()],
+            'order' => $order ? $this->order($order) : null,
+            'limit' => $limit,
+            'offset' => $offset,
         ];
 
-        $query['where'] = (isset($query['where']) || isset($where)) ? array_merge($query['where'] ?? [], (array) $where) : null; /** @phpstan-ignore-line */
-        $query['order'] = $order ? $this->order($order) : null;
-        $query['limit'] = $limit;
-        $query['offset'] = $offset;
-
-        return $query;
+        return array_filter($query);
     }
 
     /**
