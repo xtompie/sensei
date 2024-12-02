@@ -176,7 +176,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
      */
     protected function save(string $id, array $value): Result
     {
-        return $this->repository()->save(id: $id, value: $value);
+        return $this->repository()->insert(id: $id, value: $value);
     }
 
     /**

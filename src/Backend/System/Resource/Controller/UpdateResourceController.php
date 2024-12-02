@@ -185,9 +185,9 @@ abstract class UpdateResourceController implements Controller, HasControllerDefi
     /**
      * @param array<string,mixed> $value
      */
-    protected function save(string $id, array $value): Result
+    protected function update(string $id, array $value): Result
     {
-        return $this->repository()->save(id: $id, value: $value);
+        return $this->repository()->update(id: $id, value: $value);
     }
 
     /**
@@ -273,7 +273,7 @@ abstract class UpdateResourceController implements Controller, HasControllerDefi
             return $this->stagged(entity: $entity, value: $value, errors: $validate->errors());
         }
 
-        $save = $this->save(id: $id, value: $value);
+        $save = $this->update(id: $id, value: $value);
         if ($save->fail()) {
             return $this->stagged(entity: $entity, value: $value, errors: $save->errors());
         }

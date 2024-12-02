@@ -28,13 +28,23 @@ class Csrf
 
     public function get(): string
     {
-        $csrf = $this->sessionProperty->get();
-        if (!$csrf || !is_string($csrf)) {
-            $csrf = Uuid::uuid4()->toString();
+        $csrf = $this->sessionProperty->getAsString();
+        if (!$csrf) {
+            $csrf = $this->generate();
             $this->sessionProperty->set($csrf);
         }
 
         return $csrf;
+    }
+
+    private function generate(): string
+    {
+        return Uuid::uuid4()->toString();
+    }
+
+    public function revoke(): void
+    {
+        $this->sessionProperty->remove();
     }
 
     public function verify(): bool

@@ -179,9 +179,9 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
         return $validation;
     }
 
-    protected function remove(string $id): Result
+    protected function delete(string $id): Result
     {
-        return $this->repository()->remove(id: $id);
+        return $this->repository()->delete(id: $id);
     }
 
     /**
@@ -267,7 +267,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
             return $this->stagged(entity: $entity, value: $value, errors: $validate->errors());
         }
 
-        $save = $this->remove(id: $id);
+        $save = $this->delete(id: $id);
         if ($save->fail()) {
             return $this->stagged(entity: $entity, value: $value, errors: $save->errors());
         }

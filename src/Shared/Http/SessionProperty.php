@@ -11,7 +11,6 @@ final class SessionProperty
     public function __construct(
         private Session $session,
         private ?string $property = null,
-        private bool $critical = false,
     ) {
     }
 
@@ -22,22 +21,12 @@ final class SessionProperty
         return $new;
     }
 
-    public function withCritical(bool $critical): static
-    {
-        $new = clone $this;
-        $new->critical = $critical;
-        return $new;
-    }
-
     public function set(mixed $value): void
     {
         if ($this->property === null) {
             throw new Exception('Property is not set');
         }
         $this->session->set($this->property, $value);
-        if ($this->critical) {
-            $this->session->regenerateId();
-        }
     }
 
     public function get(): mixed
@@ -54,15 +43,12 @@ final class SessionProperty
         return is_string($value) ? $value : null;
     }
 
-    public function clear(): void
+    public function remove(): void
     {
         if ($this->property === null) {
             throw new Exception('Property is not set');
         }
         $this->session->remove($this->property);
-        if ($this->critical) {
-            $this->session->regenerateId();
-        }
     }
 
     public function add(mixed $item): void
@@ -78,7 +64,7 @@ final class SessionProperty
     public function pull(): mixed
     {
         $value = $this->get();
-        $this->clear();
+        $this->remove();
         return $value;
     }
 }

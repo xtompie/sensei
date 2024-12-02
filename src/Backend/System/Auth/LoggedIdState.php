@@ -11,7 +11,7 @@ class LoggedUserIdState
     public function __construct(
         private SessionProperty $sessionProperty,
     ) {
-        $this->sessionProperty = $sessionProperty->withProperty('backend.system.auth.id')->withCritical(true);
+        $this->sessionProperty = $sessionProperty->withProperty('backend.system.auth.id');
     }
 
     public function __invoke(): ?string
@@ -29,8 +29,8 @@ class LoggedUserIdState
         $this->sessionProperty->set($id);
     }
 
-    public function clear(): void
+    public function remove(): void
     {
-        $this->sessionProperty->clear();
+        $this->sessionProperty->remove();
     }
 }
