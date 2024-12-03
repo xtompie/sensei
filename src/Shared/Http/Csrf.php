@@ -4,59 +4,19 @@ declare(strict_types=1);
 
 namespace App\Shared\Http;
 
-use Ramsey\Uuid\Uuid;
+use Xtompie\Container\Container;
+use Xtompie\Container\Provider;
 
-class Csrf
+abstract class Csrf implements Provider
 {
-    public function __construct(
-        private SessionProperty $sessionProperty,
-        private Request $request,
-        private bool $enabled = true,
-    ) {
-        $this->sessionProperty = $sessionProperty->withProperty('shared.csrf');
-    }
-
-    public function enabled(): bool
+    public static function provide(string $abstract, Container $container): object
     {
-        return $this->enabled;
+        return $container->get(CsrfUsingCookie::class);
     }
 
-    public function enable(bool $enable): void
-    {
-        $this->enabled = $enable;
-    }
+    abstract public function get(): string;
 
-    public function get(): string
-    {
-        $csrf = $this->sessionProperty->getAsString();
-        if (!$csrf) {
-            $csrf = $this->generate();
-            $this->sessionProperty->set($csrf);
-        }
+    abstract public function revoke(): void;
 
-        return $csrf;
-    }
-
-    private function generate(): string
-    {
-        return Uuid::uuid4()->toString();
-    }
-
-    public function revoke(): void
-    {
-        $this->sessionProperty->remove();
-    }
-
-    public function verify(): bool
-    {
-        $body = $this->request->body();
-        if (!isset($body['_csrf'])) {
-            return false;
-        }
-        if (!is_string($body['_csrf'])) {
-            return false;
-        }
-
-        return hash_equals($this->get(), $body['_csrf']);
-    }
+    abstract public function verify(): bool;
 }

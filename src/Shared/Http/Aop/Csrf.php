@@ -6,7 +6,7 @@ namespace App\Shared\Http\Aop;
 
 use App\Shared\Aop\Advice;
 use App\Shared\Aop\Invocation;
-use App\Shared\Http\Csrf as HttpCsrf;
+use App\Shared\Http\CsrfEnabled;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
@@ -17,9 +17,9 @@ class Csrf implements Advice
     ) {
     }
 
-    public function __invoke(Invocation $invocation, HttpCsrf $csrf): mixed
+    public function __invoke(Invocation $invocation, CsrfEnabled $csrfEnabled): mixed
     {
-        $csrf->enable($this->enable);
+        $csrfEnabled->enable($this->enable);
 
         return $invocation();
     }

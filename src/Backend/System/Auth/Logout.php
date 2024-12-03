@@ -10,14 +10,14 @@ use App\Shared\Messenger\Messenger;
 class Logout
 {
     public function __construct(
-        protected LoggedUserIdState $loggedUserIdState,
+        protected LoggedIdState $loggedIdState,
         protected Messenger $messenger,
     ) {
     }
 
     public function __invoke(): void
     {
-        $this->loggedUserIdState->remove();
+        $this->loggedIdState->remove();
         $this->messenger->__invoke(new IdentityChanged());
     }
 }

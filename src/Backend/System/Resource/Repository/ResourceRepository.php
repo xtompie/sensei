@@ -36,6 +36,5 @@ interface ResourceRepository
      */
     public function update(string $id, array $value): Result;
 
-
     public function delete(string $id): Result;
 }

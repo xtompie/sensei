@@ -10,14 +10,14 @@ use App\Shared\Messenger\Messenger;
 class LoginById
 {
     public function __construct(
-        private LoggedUserIdState $loggedUserIdState,
+        private LoggedIdState $loggedIdState,
         private Messenger $messenger,
     ) {
     }
 
     public function __invoke(string $id): void
     {
-        $this->loggedUserIdState->set($id);
+        $this->loggedIdState->set($id);
         $this->messenger->__invoke(new IdentityChanged());
     }
 }

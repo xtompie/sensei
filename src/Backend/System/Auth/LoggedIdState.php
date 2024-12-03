@@ -6,7 +6,7 @@ namespace App\Backend\System\Auth;
 
 use App\Shared\Http\SessionProperty;
 
-class LoggedUserIdState
+class LoggedIdState
 {
     public function __construct(
         private SessionProperty $sessionProperty,

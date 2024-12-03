@@ -7,14 +7,14 @@ namespace App\Backend\System\Auth;
 class GetLoggedUser
 {
     public function __construct(
-        protected LoggedUserIdState $loggedUserIdState,
+        protected LoggedIdState $loggedIdState,
         protected UserRepository $userRepository,
     ) {
     }
 
     public function __invoke(): ?User
     {
-        $id = $this->loggedUserIdState->get();
+        $id = $this->loggedIdState->get();
         if ($id === null) {
             return null;
         }
@@ -22,4 +22,3 @@ class GetLoggedUser
         return $this->userRepository->findById($id);
     }
 }
-
