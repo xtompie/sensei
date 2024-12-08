@@ -29,7 +29,7 @@ interface ResourceRepository
     /**
      * @param array<string,mixed> $value
      */
-    public function insert(string $id, array $value): Result;
+    public function insert(?string $id, array $value): Result;
 
     /**
      * @param array<string,mixed> $value

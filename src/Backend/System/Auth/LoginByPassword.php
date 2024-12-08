@@ -8,23 +8,18 @@ class LoginByPassword
 {
     public function __construct(
         private LoginById $loginById,
-        private UserRepository $userRepository,
+        private AuthRepository $authRepository,
     ) {
     }
 
     public function __invoke(string $email, string $password): bool
     {
-        $user = $this->userRepository->getByEmail($email);
-        if ($user === null) {
+        $auth = $this->authRepository->getByEmailAndPassword(email: $email, password: $password);
+        if ($auth === null) {
             return false;
         }
 
-        if (!$user->passwordMatches($password)) {
-            return false;
-        }
-
-        $this->loginById->__invoke($user->id());
-
+        $this->loginById->__invoke($auth->id());
         return true;
     }
 }

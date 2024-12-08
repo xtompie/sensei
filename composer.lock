@@ -3162,24 +3162,21 @@
         },
         {
             "name": "xtompie/dao",
-            "version": "1.9.1",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xtompie/dao.git",
-                "reference": "852cb937b7383a44cf27ba099575c1aaecbfd9bd"
+                "reference": "18a163ac4dc98f8e7d831d08c22d44c3961cfa07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xtompie/dao/zipball/852cb937b7383a44cf27ba099575c1aaecbfd9bd",
-                "reference": "852cb937b7383a44cf27ba099575c1aaecbfd9bd",
+                "url": "https://api.github.com/repos/xtompie/dao/zipball/18a163ac4dc98f8e7d831d08c22d44c3961cfa07",
+                "reference": "18a163ac4dc98f8e7d831d08c22d44c3961cfa07",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
                 "xtompie/aql": "^5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "autoload": {
@@ -3205,9 +3202,9 @@
             ],
             "support": {
                 "issues": "https://github.com/xtompie/dao/issues",
-                "source": "https://github.com/xtompie/dao/tree/1.9.1"
+                "source": "https://github.com/xtompie/dao/tree/1.10.0"
             },
-            "time": "2024-11-15T21:57:08+00:00"
+            "time": "2024-12-07T19:32:10+00:00"
         },
         {
             "name": "xtompie/monitor",

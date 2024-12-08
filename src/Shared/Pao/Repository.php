@@ -24,12 +24,12 @@ class Repository
     public function __construct(
         protected Pao $pao,
         protected mixed $pql = null,
+        protected array $hooks = [],
+        protected mixed $readPql = null,
+        protected array $readHooks = [],
         protected ?string $collectionClass = null,
         protected ?string $itemClass = null,
         protected mixed $itemFactory = null,
-        protected array $loadHooks = [],
-        protected array $loadRowHooks = [],
-        protected array $saveHooks = [],
     ) {
     }
 
@@ -37,6 +37,33 @@ class Repository
     {
         $new = clone $this;
         $new->pql = $pql;
+        return $new;
+    }
+
+    /**
+     * @param array<Hook> $hooks
+     */
+    public function withHooks(array $hooks): static
+    {
+        $new = clone $this;
+        $new->hooks = $hooks;
+        return $new;
+    }
+
+    public function withReadPql(callable $pql): static
+    {
+        $new = clone $this;
+        $new->readPql = $pql;
+        return $new;
+    }
+
+    /**
+     * @param array<Hook> $hooks
+     */
+    public function withReadHooks(array $hooks): static
+    {
+        $new = clone $this;
+        $new->readHooks = $hooks;
         return $new;
     }
 
@@ -68,36 +95,6 @@ class Repository
     }
 
     /**
-     * @param array<callable> $hooks
-     */
-    public function withSaveHooks(array $hooks): static
-    {
-        $new = clone $this;
-        $new->saveHooks = $hooks;
-        return $new;
-    }
-
-    /**
-     * @param array<callable> $hooks
-     */
-    public function withLoadHooks(array $hooks): static
-    {
-        $new = clone $this;
-        $new->loadHooks = $hooks;
-        return $new;
-    }
-
-    /**
-     * @param array<callable> $hooks
-     */
-    public function withLoadRowHooks(array $hooks): static
-    {
-        $new = clone $this;
-        $new->loadRowHooks = $hooks;
-        return $new;
-    }
-
-    /**
      * @param array<string,mixed>|null $where
      */
     public function count(?array $where = null, ?string $count = null): int
@@ -118,7 +115,7 @@ class Repository
     public function findAll(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
         return Collection::of(
-            $this->pao->findAll(($this->pql)($where, $order, $limit, $offset), $this->loadRowHooks)
+            $this->pao->findAll(($this->pql)($where, $order, $limit, $offset), $this->readHooks ?: $this->hooks),
         )
             ->into(
                 $this->collectionClass,
@@ -133,7 +130,7 @@ class Repository
      */
     public function find(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
-        $projection = $this->pao->find(($this->pql)($where, $order, $limit, $offset), $this->loadRowHooks);
+        $projection = $this->pao->find(($this->pql)($where, $order, $limit, $offset), $this->readHooks ?: $this->hooks);
         if (!$projection) {
             return null;
         }
@@ -145,7 +142,7 @@ class Repository
      */
     public function save(array $projection): void
     {
-        $this->pao->save($projection, $this->presentProvider($projection['id']), $this->saveHooks); // @phpstan-ignore-line
+        $this->pao->save($projection, $this->presentProvider($projection['id']), $this->hooks); // @phpstan-ignore-line
     }
 
     public function remove(string $id): void
@@ -166,10 +163,6 @@ class Repository
      */
     protected function item(array $projection): mixed
     {
-        foreach ($this->loadHooks as $hook) {
-            $projection = $hook($projection);
-        }
-
         if ($this->itemFactory && is_callable($this->itemFactory)) {
             return ($this->itemFactory)($projection);
         } elseif ($this->itemClass && class_exists($this->itemClass)) {

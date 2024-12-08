@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Backend\System\Resource\Repository;
 
+use App\Shared\Gen\Gen;
 use App\Shared\Pao\CreatedAtHook;
 use App\Shared\Pao\PatchHook;
 use App\Shared\Pao\Repository as BasePaoRepository;
@@ -150,8 +151,9 @@ abstract class PaoRepository implements ResourceRepository
     /**
      * @param array<string,mixed> $value
      */
-    public function insert(string $id, array $value): Result
+    public function insert(?string $id, array $value): Result
     {
+        $id = $id ?? Gen::id();
         $this->write->save($this->future(id: $id, value: $value));
         return Result::ofSuccess();
     }
