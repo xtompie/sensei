@@ -6,7 +6,7 @@ namespace App\Shared\Pao;
 
 use Carbon\Carbon;
 
-class UpdatedAtHook implements HookSaveProjection
+class HookCreatedAt implements HookSaveProjection
 {
     /**
      * @param array<string,mixed>|null $present
@@ -15,7 +15,9 @@ class UpdatedAtHook implements HookSaveProjection
      */
     public function saveProjection(?array $present, array $future): array
     {
-        $future['updated_at'] = Carbon::now()->toDateTimeString();
+        if ($present === null) {
+            $future['created_at'] = Carbon::now()->toDateTimeString();
+        }
 
         return $future;
     }

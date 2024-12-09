@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Pao;
 
+use Reflection;
 use ReflectionClass;
 use Xtompie\Collection\Collection;
 
@@ -17,19 +18,17 @@ class Repository
      * @param callable $pql
      * @param class-string<TCollection>|null $collectionClass
      * @param class-string<TItem>|null $itemClass
-     * @param array<callable> $loadHooks
-     * @param array<callable> $loadRowHooks
-     * @param array<callable> $saveHooks
+     * @param array<Hook> $hooks
+     * @param null|array<string,array<string,mixed>> $cache
      */
     public function __construct(
         protected Pao $pao,
         protected mixed $pql = null,
         protected array $hooks = [],
-        protected mixed $readPql = null,
-        protected array $readHooks = [],
         protected ?string $collectionClass = null,
         protected ?string $itemClass = null,
         protected mixed $itemFactory = null,
+        protected ?array $cache = null,
     ) {
     }
 
@@ -47,23 +46,6 @@ class Repository
     {
         $new = clone $this;
         $new->hooks = $hooks;
-        return $new;
-    }
-
-    public function withReadPql(callable $pql): static
-    {
-        $new = clone $this;
-        $new->readPql = $pql;
-        return $new;
-    }
-
-    /**
-     * @param array<Hook> $hooks
-     */
-    public function withReadHooks(array $hooks): static
-    {
-        $new = clone $this;
-        $new->readHooks = $hooks;
         return $new;
     }
 
@@ -94,6 +76,13 @@ class Repository
         return $new;
     }
 
+    public function withCache(bool $cache): static
+    {
+        $new = clone $this;
+        $new->cache = $cache ? [] : null;
+        return $new;
+    }
+
     /**
      * @param array<string,mixed>|null $where
      */
@@ -115,7 +104,10 @@ class Repository
     public function findAll(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
         return Collection::of(
-            $this->pao->findAll(($this->pql)($where, $order, $limit, $offset), $this->readHooks ?: $this->hooks),
+            $this->pao->findAll(
+                pql: ($this->pql)($where, $order, $limit, $offset),
+                hooks: $this->hooks
+            ),
         )
             ->into(
                 $this->collectionClass,
@@ -130,9 +122,27 @@ class Repository
      */
     public function find(?array $where = null, ?string $order = null, ?int $limit = null, ?int $offset = null): mixed
     {
-        $projection = $this->pao->find(($this->pql)($where, $order, $limit, $offset), $this->readHooks ?: $this->hooks);
+        $projection = $this->pao->find(($this->pql)($where, $order, $limit, $offset), $this->hooks);
         if (!$projection) {
             return null;
+        }
+        return $this->item($projection);
+    }
+
+    /**
+     * @return TItem|null
+     */
+    public function findById(string $id): mixed
+    {
+        if ($this->cache !== null && isset($this->cache[$id])) {
+            return $this->item($this->cache[$id]);
+        }
+        $projection = $this->pao->find(($this->pql)(['id' => $id]), $this->hooks);
+        if (!$projection) {
+            return null;
+        }
+        if ($this->cache !== null) {
+            $this->cache[$id] = $projection;
         }
         return $this->item($projection);
     }
@@ -142,7 +152,12 @@ class Repository
      */
     public function save(array $projection): void
     {
-        $this->pao->save($projection, $this->presentProvider($projection['id']), $this->hooks); // @phpstan-ignore-line
+        /** @var array{id:string} $projection */
+        $this->pao->save(
+            future: $projection,
+            presentProvider: $this->presentProvider($projection['id']),
+            hooks: $this->hooks
+        );
     }
 
     public function remove(string $id): void
@@ -153,7 +168,7 @@ class Repository
     protected function presentProvider(string $id): callable
     {
         return function () use ($id) {
-            return $this->pao->find(($this->pql)(['id' => $id]));
+            return $this->findById($id);
         };
     }
 
@@ -172,7 +187,7 @@ class Repository
             /** @var TItem $item */
             return $item;
         } else {
-            return $projection;
+            return $projection; // @phpstan-ignore-line
         }
     }
 }

@@ -24,6 +24,7 @@ class AuthRepository
 
     public function findById(string $id): ?Auth
     {
+        /** @var array{id:string}|null $tuple */
         $tuple = $this->repository->find(['id' => $id]);
         if ($tuple === null) {
             return null;
@@ -33,6 +34,7 @@ class AuthRepository
 
     public function getByEmailAndPassword(string $email, string $password): ?Auth
     {
+        /** @var array{id:string,email:string,password:string|null}|null $tuple */
         $tuple = $this->repository->find(['email' => $email]);
         if ($tuple === null) {
             return null;

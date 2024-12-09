@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Pao;
 
-class PatchHook implements HookSaveProjection
+class HookPatch implements HookSaveProjection
 {
     /**
      * @param array<string,mixed>|null $present

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Backend\System\Resource\Repository;
 
 use App\Shared\Gen\Gen;
-use App\Shared\Pao\CreatedAtHook;
-use App\Shared\Pao\PatchHook;
-use App\Shared\Pao\Repository as BasePaoRepository;
-use App\Shared\Pao\UpdatedAtHook;
+use App\Shared\Pao\Hook;
+use App\Shared\Pao\HookCreatedAt;
+use App\Shared\Pao\HookLoadRowCallback;
+use App\Shared\Pao\HookPatch;
+use App\Shared\Pao\Repository;
+use App\Shared\Pao\HookUpdatedAt;
 use App\Shared\Tenant\TenantContext;
 use Exception;
 use Xtompie\Result\Result;
@@ -21,22 +23,21 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param BasePaoRepository<array<string,mixed>,array<array<string,mixed>>> $read
-     * @param BasePaoRepository<array<string,mixed>,array<array<string,mixed>>> $write
+     * @param Repository<array<string,mixed>,array<array<string,mixed>>> $read
+     * @param Repository<array<string,mixed>,array<array<string,mixed>>> $write
      */
     public function __construct(
-        protected BasePaoRepository $read,
-        protected BasePaoRepository $write,
+        protected Repository $read,
+        protected Repository $write,
         protected TenantContext $tenantContext,
     ) {
         $this->read = $read
             ->withPql(fn (...$args) => $this->pqlForRead(...$args))
-            ->withLoadRowHooks([fn (...$args) => $this->loadForRead(...$args)])
+            ->withHooks($this->hooksForRead())
         ;
         $this->write = $write
             ->withPql(fn (...$args) => $this->pqlForWrite(...$args))
-            ->withLoadRowHooks([fn (...$args) => $this->loadForWrite(...$args)])
-            ->withSaveHooks($this->saveHooks())
+            ->withHooks($this->hooksForWrite())
         ;
     }
 
@@ -65,11 +66,37 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @return array<callable>
+     * @return array<Hook>
      */
-    protected function saveHooks(): array
+    protected function hooks(): array
     {
-        return [new CreatedAtHook(), new UpdatedAtHook(), new PatchHook()];
+        return [
+            new HookCreatedAt(),
+            new HookUpdatedAt(),
+            new HookPatch(),
+        ];
+    }
+
+    /**
+     * @return array<Hook>
+     */
+    protected function hooksForRead(): array
+    {
+        return [
+            ...$this->hooks(),
+            new HookLoadRowCallback(fn (array $row) => $this->loadRowForRead($row)),
+        ];
+    }
+
+    /**
+     * @return array<Hook>
+     */
+    protected function hooksForWrite(): array
+    {
+        return [
+            ...$this->hooks(),
+            new HookLoadRowCallback(fn (array $row) => $this->loadRowForWrite($row)),
+        ];
     }
 
     /**
@@ -174,30 +201,30 @@ abstract class PaoRepository implements ResourceRepository
     }
 
     /**
-     * @param array<string,mixed> $tuple
+     * @param array<string,mixed> $row
      * @return array<string,mixed>
      */
-    protected function load(array $tuple): array
+    protected function loadRow(array $row): array
     {
-        return $tuple;
+        return $row;
     }
 
     /**
-     * @param array<string,mixed> $tuple
+     * @param array<string,mixed> $row
      * @return array<string,mixed>
      */
-    protected function loadForWrite(array $tuple): array
+    protected function loadRowForWrite(array $row): array
     {
-        return $this->load($tuple);
+        return $this->loadRow($row);
     }
 
     /**
-     * @param array<string,mixed> $tuple
+     * @param array<string,mixed> $row
      * @return array<string,mixed>
      */
-    protected function loadForRead(array $tuple): array
+    protected function loadRowForRead(array $row): array
     {
-        return $this->load($tuple);
+        return $this->loadRow($row);
     }
 
     protected function order(string $order): string

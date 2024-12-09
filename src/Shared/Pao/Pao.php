@@ -59,17 +59,19 @@ class Pao
      */
     public function findAll(array $pql, array $hooks = []): array
     {
-        $projections = $this->fetchPql(
+        /** @var array<HookLoadRow> $hookLoadRow */
+        $hookLoadRow = array_filter($hooks, fn (Hook $hook) => $hook instanceof HookLoadRow);
+        $projections = $this->dao->transaction(fn () => $this->fetch(
             pql: $pql,
             parents: [],
-            hooks: array_filter($hooks, fn (Hook $hook) => $hook instanceof HookLoadRow)
-        );
+            hooks: $hookLoadRow,
+        ));
 
-        /** @var array<HookLoadProjection> $loadProjectionHooks */
-        $loadProjectionHooks = array_filter($hooks, fn (Hook $hook) => $hook instanceof HookLoadProjection);
-        if ($loadProjectionHooks) {
+        /** @var array<HookLoadProjection> $hookLoadProjection */
+        $hookLoadProjection = array_filter($hooks, fn (Hook $hook) => $hook instanceof HookLoadProjection);
+        if ($hookLoadProjection) {
             foreach ($projections as $index => $projection) {
-                foreach ($loadProjectionHooks as $hook) {
+                foreach ($hookLoadProjection as $hook) {
                     $projection = $hook->loadProjection($projection);
                 }
                 $projections[$index] = $projection;
@@ -82,22 +84,13 @@ class Pao
     /**
      * @param array<string,mixed> $future
      * @param callable $presentProvider
-     * @param array<callable> $hooks
+     * @param array<Hook> $hooks
      */
     public function save(array $future, callable $presentProvider, array $hooks = []): SaveResult
     {
         return $this->dao->transaction(function () use ($future, $presentProvider, $hooks) {
             $present = $presentProvider();
-
-            /** @var array<SaveProjectionHook> $saveProjectionHooks */
-            $saveProjectionHooks = array_filter($hooks, fn (Hook $hook) => $hook instanceof HookSaveProjection);
-            if ($saveProjectionHooks) {
-                foreach ($saveProjectionHooks as $hook) {
-                    $future = $hook->saveProjection(present: $present, future: $future);
-                }
-            }
-
-            return $this->saveSync(
+            return $this->sync(
                 presentProjection: $present,
                 futureProjection: $future,
                 hooks: $hooks,
@@ -112,7 +105,7 @@ class Pao
             if ($present === null) {
                 return;
             }
-            $this->saveSync(
+            $this->sync(
                 presentProjection: $present,
                 futureProjection: null,
                 hooks: []
@@ -123,12 +116,12 @@ class Pao
     /**
      * @param array<string,mixed> $pql
      * @param array<string> $parents
-     * @param array<LoadRowHook> $hooks
+     * @param array<HookLoadRow> $hooks
      * @return array<array<string, mixed>>
      */
-    protected function fetchPql(array $pql, array $parents, array $hooks): array
+    protected function fetch(array $pql, array $parents, array $hooks): array
     {
-        $projections = $this->dao->query($this->fetchQuery($pql, $parents));
+        $projections = $this->dao->query($this->query($pql, $parents));
         $projections = array_map(
             function (array $tuple) use ($pql, $hooks) {
                 $tuple[':table'] = $pql['from'];
@@ -140,17 +133,15 @@ class Pao
             $projections
         );
         $ids = array_column($projections, 'id');
-
         if ($projections) {
             foreach ($pql as $key => $value) {
                 if (str_starts_with($key, 'pql:children:')) {
                     $field = substr($key, strlen('pql:children:'));
                     /** @var array<string,mixed> $value */
-                    $projections = $this->fetchChildren($projections, $field, $value, $ids, $hooks);
+                    $projections = $this->children($projections, $field, $value, $ids, $hooks);
                 }
             }
         }
-
         return $projections;
     }
 
@@ -158,12 +149,12 @@ class Pao
      * @param array<array<string, mixed>> $results
      * @param array<string,mixed> $pql
      * @param array<string> $ids
-     * @param array<Hook> $hooks
+     * @param array<HookLoadRow> $hooks
      * @return array<array<string, mixed>>
      */
-    protected function fetchChildren(array $results, string $field, array $pql, array $ids, array $hooks): array
+    protected function children(array $results, string $field, array $pql, array $ids, array $hooks): array
     {
-        $children = $this->fetchPql($pql, $ids, $hooks);
+        $children = $this->fetch($pql, $ids, $hooks);
         $pql_parent = $pql['pql:parent'];
 
         return array_map(
@@ -183,7 +174,7 @@ class Pao
      * @param array<string> $parents
      * @return array<string,mixed>
      */
-    protected function fetchQuery(array $pql, array $parents): array
+    protected function query(array $pql, array $parents): array
     {
         $aql = $pql;
 
@@ -216,15 +207,26 @@ class Pao
     /**
      * @param array<string,mixed>|null $presentProjection
      * @param array<string,mixed>|null $futureProjection
+     * @param array<Hook> $hooks
      */
-    protected function saveSync(?array $presentProjection, ?array $futureProjection, array $hooks): SaveResult
+    protected function sync(?array $presentProjection, ?array $futureProjection, array $hooks): SaveResult
     {
-        /** @var array<HookSync> $syncHooks */
-        $syncHooks = $futureProjection ? array_filter($hooks, fn (Hook $hook) => $hook instanceof HookSync) : [];
+        /** @var array<HookSaveProjection> $hookSaveProjection */
+        $hookSaveProjection = $futureProjection !== null ? array_filter($hooks, fn (Hook $hook) => $hook instanceof HookSaveProjection) : [];
+
+        // HookSaveProjection: ->saveProjection()
+        if ($hookSaveProjection && $futureProjection !== null) {
+            foreach ($hookSaveProjection as $hook) {
+                $futureProjection = $hook->saveProjection(present: $presentProjection, future: $futureProjection);
+            }
+        }
+
+        /** @var array<HookSync> $hookSync */
+        $hookSync = $futureProjection ? array_filter($hooks, fn (Hook $hook) => $hook instanceof HookSync) : [];
 
         // HookSync: ->syncCheck(), ->syncFutureProjection()
-        if ($syncHooks) {
-            foreach ($syncHooks as $hook) {
+        if ($hookSync && $futureProjection && $presentProjection) {
+            foreach ($hookSync as $hook) {
                 $result = $hook->syncCheck(present: $presentProjection, future: $futureProjection);
                 if ($result !== null) {
                     return $result;
@@ -233,15 +235,18 @@ class Pao
             }
         }
 
-        $presentRecords = $this->saveRecords($presentProjection);
-        $futureRecords = $this->saveRecords($futureProjection);
+        /** @var array<string,array{id:string,table:string,data:array<string,mixed>}> $presentRecords */
+        $presentRecords = $this->records($presentProjection);
+        /** @var array<string,array{id:string,table:string,data:array<string,mixed>}> $futureRecords */
+        $futureRecords = $this->records($futureProjection);
 
         // HookSync: ->syncUpdateWhere(), ->syncAffectedRows()
-        if ($syncHooks) {
+        if ($hookSync && $futureProjection && $presentProjection) {
             array_shift($presentRecords);
+            /** @var array{id:string,table:string,data:array<string,mixed>} $futureRoot */
             $futureRoot = array_shift($futureRecords);
             $where = [];
-            foreach ($syncHooks as $hook) {
+            foreach ($hookSync as $hook) {
                 $where = $hook->syncUpdateWhere(present: $presentProjection, future: $futureProjection, where: $where);
             }
             $where['id'] = $futureRoot['id'];
@@ -250,7 +255,7 @@ class Pao
                 set: $futureRoot['data'],
                 where: $where,
             );
-            foreach ($syncHooks as $hook) {
+            foreach ($hookSync as $hook) {
                 $result = $hook->syncAffectedRows(affectedRows: $affectedRows);
                 if ($result !== null) {
                     return $result;
@@ -280,14 +285,14 @@ class Pao
             );
         }
 
-        return new SaveSuccessResult();
+        return new SaveResultSuccess();
     }
 
     /**
      * @param array<string,mixed>|null $projection
      * @return array<string,array<string, mixed>>
      */
-    protected function saveRecords(?array $projection): array
+    protected function records(?array $projection): array
     {
         if ($projection === null) {
             return [];
@@ -312,7 +317,7 @@ class Pao
             if (is_array($projection_value)) {
                 foreach ($projection_value as $child) {
                     /** @var array<string,mixed> $child */
-                    $records += $this->saveRecords($child);
+                    $records += $this->records($child);
                 }
             }
         }
