@@ -7,7 +7,7 @@ namespace App\Shared\Http;
 use App\Shared\Secret\Secret;
 use Ramsey\Uuid\Uuid;
 
-class CsrfUsingCookie extends Csrf
+class CsrfUsingCookie implements Csrf
 {
     public function __construct(
         private Request $request,

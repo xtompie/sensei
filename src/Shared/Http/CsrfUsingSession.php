@@ -6,7 +6,7 @@ namespace App\Shared\Http;
 
 use Ramsey\Uuid\Uuid;
 
-class CsrfUsingSession extends Csrf
+class CsrfUsingSession implements Csrf
 {
     public function __construct(
         private SessionProperty $sessionProperty,

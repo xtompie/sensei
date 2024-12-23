@@ -35,6 +35,7 @@
 					<?= $this->render('/src/Backend/System/Layout/Topbar.tpl.php', get_defined_vars()) ?>
 					<main class="py-10">
 						<div class="px-14">
+							<?= $this->render('/src/Backend/System/Layout/Flash.tpl.php', get_defined_vars()) ?>
 							<?= $this->content() ?>
 						</div>
 					</main>

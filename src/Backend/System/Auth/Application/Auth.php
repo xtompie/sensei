@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\System\Auth;
+namespace App\Backend\System\Auth\Application;
 
 class Auth
 {

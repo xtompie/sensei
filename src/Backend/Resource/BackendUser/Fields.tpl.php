@@ -18,7 +18,7 @@
     ]) ?>
 <?php endif ?>
 
-<?php if (in_array($action, ['create', 'update', 'detail'])) : ?>
+<?php if (in_array($action, ['list', 'create', 'update', 'detail'])) : ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Field.tpl.php', [
         'type' => 'Select',
         'name' => 'role',

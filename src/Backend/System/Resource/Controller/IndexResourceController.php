@@ -209,25 +209,30 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
 
     protected function limit(): int
     {
-        return 10;
+        return 2;
     }
 
     protected function page(): int
     {
         $query = $this->ctrl()->query();
         if (!isset($query['page'])) {
-            return 0;
+            return 1;
         }
         if (!is_string($query['page'])) {
-            return 0;
+            return 1;
         }
 
-        return intval($query['page']);
+        $page = intval($query['page']);
+        if ($page < 1) {
+            return 1;
+        }
+
+        return $page;
     }
 
     protected function offset(): int
     {
-        return $this->page() * $this->limit();
+        return ($this->page()-1) * $this->limit();
     }
 
     protected function selection(): ?Response

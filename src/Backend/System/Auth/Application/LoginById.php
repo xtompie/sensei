@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\System\Auth;
+namespace App\Backend\System\Auth\Application;
 
 use App\Shared\Http\IdentityChanged;
 use App\Shared\Messenger\Messenger;
 
-class Logout
+class LoginById
 {
     public function __construct(
-        protected LoggedState $loggedState,
-        protected Messenger $messenger,
+        private LoggedState $loggedState,
+        private Messenger $messenger,
     ) {
     }
 
-    public function __invoke(): void
+    public function __invoke(string $id): void
     {
-        $this->loggedState->remove();
+        $this->loggedState->set($id);
         $this->messenger->__invoke(new IdentityChanged());
     }
 }

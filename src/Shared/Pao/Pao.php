@@ -265,23 +265,23 @@ class Pao
 
         $presentIds = array_keys($presentRecords);
         $futureIds = array_keys($futureRecords);
-        foreach (array_diff($presentIds, $futureIds) as $id) {
+        foreach (array_diff($presentIds, $futureIds) as $uid) {
             $this->dao->delete(
-                table: $presentRecords[$id]['table'],
-                where: ['id' => $id]
+                table: $presentRecords[$uid]['table'],
+                where: ['id' => $futureRecords[$uid]['id']],
             );
         }
-        foreach (array_diff($futureIds, $presentIds) as $id) {
+        foreach (array_diff($futureIds, $presentIds) as $uid) {
             $this->dao->insert(
-                table: $futureRecords[$id]['table'],
-                values: $futureRecords[$id]['data']
+                table: $futureRecords[$uid]['table'],
+                values: $futureRecords[$uid]['data']
             );
         }
-        foreach (array_intersect($presentIds, $futureIds) as $id) {
+        foreach (array_intersect($presentIds, $futureIds) as $uid) {
             $this->dao->update(
-                table: $futureRecords[$id]['table'],
-                set: $futureRecords[$id]['data'],
-                where: ['id' => $id],
+                table: $futureRecords[$uid]['table'],
+                set: $futureRecords[$uid]['data'],
+                where: ['id' => $futureRecords[$uid]['id']],
             );
         }
 
@@ -299,7 +299,7 @@ class Pao
         }
 
         $data = $projection;
-        unset($data[':table'], $data['id']);
+        unset($data[':table']);
         $data = array_filter($data, fn ($value) => !is_array($value));
 
         /** @var string $table */
