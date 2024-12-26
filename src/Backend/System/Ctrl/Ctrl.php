@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Backend\System\Ctrl;
 
+use App\Backend\System\Auth\Application\Auth;
+use App\Backend\System\Auth\Application\GetLoggedAuth;
+use App\Backend\System\Auth\UI\LoginController;
 use App\Backend\System\Flash\Flash;
+use App\Backend\System\Index\IndexController;
 use App\Backend\System\Resource\Selection\Selection;
 use App\Backend\System\Validation\Validation;
 use App\Sentry\System\Rid;
@@ -20,12 +24,13 @@ class Ctrl
     public function __construct(
         protected Csrf $csrf,
         protected Flash $flash,
+        protected GetLoggedAuth $getLoggedAuth,
         protected Request $request,
         protected Selection $selection,
         protected Sentry $sentry,
         protected Tpl $tpl,
-        protected Validation $validation,
         protected Url $url,
+        protected Validation $validation,
     ) {
     }
 
@@ -43,13 +48,13 @@ class Ctrl
             return $this->forbidden();
         }
 
-        // if ($logged && !$this->getLoggedAdminService->__invoke() instanceof Admin) {
-        //     return $this->responder->redirectToRoute('backend.auth.login', ['goto' => $this->requester->uri()]);
-        // }
+        if ($logged && !$this->getLoggedAuth->__invoke() instanceof Auth) {
+            return Response::redirectToController(LoginController::class, ['goto' => $this->request->getPathAndQuery()]);
+        }
 
-        // if (!$logged && $this->getLoggedAdminService->__invoke() instanceof Admin) {
-        //     return $this->responder->redirectToRoute('backend.index');
-        // }
+        if (!$logged && $this->getLoggedAuth->__invoke() instanceof Auth) {
+            return Response::redirectToController(IndexController::class);
+        }
 
         if ($sentry !== null && !$this->sentry->__invoke($sentry)) {
             return $this->forbidden();

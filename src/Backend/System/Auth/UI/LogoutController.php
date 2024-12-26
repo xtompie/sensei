@@ -19,7 +19,7 @@ class LogoutController
     ) {
     }
 
-    public function __invoke()
+    public function __invoke(): Response
     {
         if (!$this->getLoggedAuth->__invoke()) {
             return $this->redirect();

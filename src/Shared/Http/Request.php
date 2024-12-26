@@ -44,7 +44,7 @@ final class Request extends ServerRequest implements Provider
      * @param class-string<T> $type
      * @return T|Response
      */
-    public function queryTyped($type): object
+    public function queryTypedOrResponse($type): object
     {
         $result = Typed::object(type: $type, input: $this->query());
         if ($result instanceof ErrorCollection) {
@@ -76,9 +76,19 @@ final class Request extends ServerRequest implements Provider
     /**
      * @template T of object
      * @param class-string<T> $type
+     * @return T|ErrorCollection
+     */
+    public function bodyTypedOrErrors(string $type): object
+    {
+        return Typed::object(type: $type, input: $this->body());
+    }
+
+    /**
+     * @template T of object
+     * @param class-string<T> $type
      * @return T|Response
      */
-    public function bodyTyped($type): object
+    public function bodyTypedOrResponse($type): object
     {
         $result = Typed::object(type: $type, input: $this->body());
         if ($result instanceof ErrorCollection) {
@@ -142,5 +152,14 @@ final class Request extends ServerRequest implements Provider
         $qs = http_build_query($qa);
 
         return (string) $uri->withQuery($qs);
+    }
+
+    public function getPathAndQuery(): string
+    {
+        $uri = $this->getUri();
+        $path = $uri->getPath();
+        $query = $uri->getQuery();
+
+        return $query === '' ? $path : $path . '?' . $query;
     }
 }

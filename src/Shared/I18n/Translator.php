@@ -21,6 +21,10 @@ final class Translator
      */
     public function __invoke(string $key, array $replacements = [], ?string $language = null): string
     {
+        if ($key[0] === '|') {
+            return $key;
+        }
+
         $language = $language ?? $this->languageContext->__invoke();
 
         if (!isset($this->wordings[$language])) {

@@ -3,7 +3,9 @@
 <html class="h-full bg-white">
 	<head>
 		<title>
-			<?php if (isset($breadcrumb)): ?>
+			<?php if (isset($title)): ?>
+				<?= $this->e($title) ?> |
+			<?php elseif (isset($breadcrumb)): ?>
 				<?php foreach (array_reverse($breadcrumb) as $link): ?>
 					<?= $this->e($link['title']); ?>
 					»
@@ -20,7 +22,13 @@
 		class="h-full"
 		onclick="backend.dropdown.closeall(event)"
 	>
-		<?php if ($this->service(\App\Backend\System\Modal\Modal::class)->is()): ?>
+		<?php if (isset($layout_clean) && $layout_clean === true): ?>
+			<main class="py-10">
+				<div class="px-14">
+					<?= $this->content() ?>
+				</div>
+			</main>
+		<?php elseif ($this->service(\App\Backend\System\Modal\Modal::class)->is()): ?>
 			<main class="py-10">
 				<div class="px-14">
 					<?= $this->content() ?>

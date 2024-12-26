@@ -146,10 +146,10 @@ final class Kernel
             return null;
         }
         if ($class->implementsInterface(Body::class)) {
-            return fn () => $this->request->bodyTyped($abstract);
+            return fn () => $this->request->bodyTypedOrResponse($abstract);
         }
         if ($class->implementsInterface(Query::class)) {
-            return fn () => $this->request->queryTyped($abstract);
+            return fn () => $this->request->queryTypedOrResponse($abstract);
         }
         return null;
     }

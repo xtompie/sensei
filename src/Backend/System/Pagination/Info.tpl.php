@@ -7,5 +7,5 @@ $to = $to > $all ? $all : $to;
 ?>
 
 <?php if ($all > 0 && $from <= $all && $from > 0): ?>
-    <?= $from ?> - <?= $to ?> / <?= $all ?>
+    <?= $this->e($from) ?> - <?= $this->e($to) ?> / <?= $this->e($all) ?>
 <?php endif ?>

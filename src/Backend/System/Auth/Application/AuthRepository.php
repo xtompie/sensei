@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Backend\System\Auth\Application;
 
+use App\Shared\Gen\Gen;
 use App\Shared\Tenant\TenantContext;
+use App\Shared\Type\Time;
+use App\Shared\Validation\Validation;
 use Xtompie\Dao\Repository;
 
 class AuthRepository
 {
     /**
-     * @param Repository<array<string,mixed>,array<array<string,mixed>>> $repository
+     * @param Repository<Auth,array<array<string,mixed>>> $repository
      */
     public function __construct(
         private Repository $repository,
@@ -18,36 +21,82 @@ class AuthRepository
     ) {
         $this->repository = $repository
             ->withTable('backend_user')
+            ->withItemClass(Auth::class)
             ->withCallableStatic(fn () => ['tenant' => $this->tenantContext->id()])
         ;
     }
 
     public function findById(string $id): ?Auth
     {
-        /** @var array{id:string}|null $tuple */
-        $tuple = $this->repository->find(['id' => $id]);
-        if ($tuple === null) {
-            return null;
-        }
-        return new Auth($tuple);
+        return $this->repository->find(where: ['id' => $id]);
     }
 
-    public function getByEmailAndPassword(string $email, string $password): ?Auth
+    public function findByEmail(string $email): ?Auth
     {
-        /** @var array{id:string,email:string,password:string|null}|null $tuple */
-        $tuple = $this->repository->find(['email' => $email]);
-        if ($tuple === null) {
+        return $this->repository->find(where: ['email' => $email]);
+    }
+
+    protected function findByResetToken(string $token): ?Auth
+    {
+        return $this->repository->find(where: ['reset_token' => $token]);
+    }
+
+    public function findByEmailAndPassword(string $email, string $password): ?Auth
+    {
+        $auth = $this->findByEmail($email);
+        if ($auth === null) {
             return null;
         }
 
-        if ($tuple['password'] === null || $tuple['password'] === '') {
+        if (!$auth->passwordEquals($password)) {
             return null;
         }
 
-        if (!password_verify($password, $tuple['password'])) {
-            return null;
+        return $auth;
+    }
+
+    public function beginReset(string $id): bool|string
+    {
+        $auth = $this->findById($id);
+        if ($auth === null) {
+            return false;
         }
 
-        return new Auth($tuple);
+        if ($auth->resetAt() && Time::now()->lt($auth->resetAt()->addSeconds(3600))) {
+            return false;
+        }
+
+        $token = Gen::token();
+        $this->repository->update(
+            set: ['reset_token' => $token, 'reset_at' => Time::now()->toDateTimeString()],
+            where: ['id' => $auth->id()],
+        );
+
+        return $token;
+    }
+
+    public function finalizeReset(string $token, string $password): bool
+    {
+        if (Validation::of($token)->required()->fail()) {
+            return false;
+        }
+
+        $auth = $this->findByResetToken($token);
+        if (!$auth) {
+            return false;
+        }
+
+        $this->repository->update(
+            set: [
+                'reset_token' => null,
+                'reset_at' => null,
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+            ],
+            where: [
+                'id' => $auth->id(),
+            ],
+        );
+
+        return true;
     }
 }

@@ -8,6 +8,7 @@ use App\Sentry\System\Rid;
 use App\Shared\Container\Container;
 use App\Shared\Http\Csrf;
 use App\Shared\Http\Request;
+use App\Shared\Http\Url;
 use App\Shared\I18n\Translator;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Kernel\Debug;
@@ -28,6 +29,7 @@ final class Tpl
         private Debug $debug,
         private Request $request,
         private Translator $translator,
+        private Url $url,
     ) {
         $this->dir = $this->appDir->__invoke();
     }
@@ -155,5 +157,14 @@ final class Tpl
     public function isUriAciive(string $url): bool
     {
         return str_starts_with($this->request->getUri()->getPath(), $url);
+    }
+
+    /**
+     * @param class-string $controller
+     * @param array<string,mixed> $parameters
+     */
+    public function url(string $controller, array $parameters = []): string
+    {
+        return $this->url->__invoke(controller: $controller, parameters: $parameters);
     }
 }

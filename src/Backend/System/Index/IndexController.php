@@ -13,6 +13,6 @@ class IndexController implements Controller
 {
     public function __invoke(): Response
     {
-        return Response::html("TODO: Implement the backend index page");
+        return Response::html('TODO: Implement the backend index page');
     }
 }

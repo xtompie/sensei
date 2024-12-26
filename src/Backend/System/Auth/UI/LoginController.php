@@ -2,20 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Backend\System\Auth;
+namespace App\Backend\System\Auth\UI;
 
 use App\Backend\System\Auth\Application\GetLoggedAuth;
 use App\Backend\System\Auth\Application\LoginByPassword;
-use App\Backend\System\Auth\UI\LoginBody;
 use App\Backend\System\Index\IndexController;
+use App\Backend\System\Validation\UberErrorCollection;
 use App\Shared\Http\Controller;
 use App\Shared\Http\Request;
 use App\Shared\Http\Response;
+use App\Shared\Http\Route\GET;
 use App\Shared\Http\Route\Path;
+use App\Shared\Http\Route\POST;
 use Xtompie\Result\ErrorCollection;
-use Xtompie\Typed\Typed;
 
-#[Path('/backend/system/auth/login')]
+#[Path('/backend/system/auth/login'), GET, POST]
 class LoginController implements Controller
 {
     public function __construct(
@@ -31,25 +32,29 @@ class LoginController implements Controller
             return $this->redirect();
         }
 
-        $body = Typed::object(LoginBody::class, $this->request->query());
-        if ($body instanceof ErrorCollection) {
-            return $this->view($body);
+        if (!$this->request->post()) {
+            return $this->view();
         }
 
-        $ok = $this->loginByPassword->__invoke($body->email(), $body->password());
+        $value = $this->request->bodyTypedOrErrors(LoginBody::class);
+        if ($value instanceof ErrorCollection) {
+            return $this->view($value);
+        }
 
-        if (!$ok) {
+        $logged = $this->loginByPassword->__invoke($value->email(), $value->password());
+
+        if (!$logged) {
             return $this->view(ErrorCollection::ofErrorMsg('Invalid email or password'));
         }
 
         return $this->redirect();
     }
 
-    private function view(?ErrorCollection $errors): Response
+    private function view(?ErrorCollection $errors = null): Response
     {
         return Response::tpl('/src/Backend/System/Auth/UI/LoginController.tpl.php', [
-            'data' => $this->request->body(),
-            'errors' => $errors ?: ErrorCollection::ofEmpty(),
+            'value' => $this->request->body(),
+            'errors' => UberErrorCollection::of($errors ?: ErrorCollection::ofEmpty()),
         ]);
     }
 

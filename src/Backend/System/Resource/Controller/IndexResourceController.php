@@ -232,7 +232,7 @@ abstract class IndexResourceController implements Controller, HasControllerDefin
 
     protected function offset(): int
     {
-        return ($this->page()-1) * $this->limit();
+        return ($this->page() - 1) * $this->limit();
     }
 
     protected function selection(): ?Response

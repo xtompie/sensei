@@ -14,7 +14,7 @@ class LoginByPassword
 
     public function __invoke(string $email, string $password): bool
     {
-        $auth = $this->authRepository->getByEmailAndPassword(email: $email, password: $password);
+        $auth = $this->authRepository->findByEmailAndPassword(email: $email, password: $password);
         if ($auth === null) {
             return false;
         }

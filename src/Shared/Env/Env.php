@@ -38,6 +38,9 @@ final class Env
         yield new Entry('APP_DB_USER', 'Database user');
         yield new Entry('APP_DEBUG', 'Debug mode', optional: true, default: '0');
         yield new Entry('APP_KERNEL_WHOOPS_EDITOR', 'Whoops editor: phpstorm, vscode, ...', optional: true, default: 'vscode');
+        yield new Entry('APP_MAILER_DSN', 'Mailer DSN', default: 'smtp://127.0.0.1:1025');
+        yield new Entry('APP_MAILER_FROM', 'Mailer from', default: 'no-reply@localhost');
+        yield new Entry('APP_MAILER_SUBJECT_PREFIX', 'Mailer subject prefix', optional: true, default: '[local] ');
         yield new AppSecretEntry('APP_SECRET', 'Application secret');
     }
 
@@ -67,6 +70,21 @@ final class Env
     }
 
     public function APP_KERNEL_WHOOPS_EDITOR(): string
+    {
+        return $this(__FUNCTION__);
+    }
+
+    public function APP_MAILER_DSN(): string
+    {
+        return $this(__FUNCTION__);
+    }
+
+    public function APP_MAILER_FROM(): string
+    {
+        return $this(__FUNCTION__);
+    }
+
+    public function APP_MAILER_SUBJECT_PREFIX(): string
     {
         return $this(__FUNCTION__);
     }

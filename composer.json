@@ -37,7 +37,8 @@
         "symfony/translation-contracts": "^3.5",
         "intervention/image": "^3.9.1",
         "nesbot/carbon": "^3.8.2",
-        "symfony/lock": "^7.1.6"
+        "symfony/lock": "^7.1.6",
+        "symfony/mailer": "^7.2"
     },
     "scripts": {
         "build": "(cd assets/backend && npm ci && npm run build)",
