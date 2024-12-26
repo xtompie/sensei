@@ -14,15 +14,21 @@ use App\Shared\Http\Response;
 use App\Shared\Http\Route\GET;
 use App\Shared\Http\Route\Path;
 use App\Shared\Http\Route\POST;
+use App\Shared\Http\Url;
+use App\Shared\I18n\Translator;
+use App\Shared\Mailer\Mailer;
 use Xtompie\Result\ErrorCollection;
 
 #[Path('/backend/system/auth/reset'), GET, POST]
 class ResetBeginController implements Controller
 {
     public function __construct(
-        private GetLoggedAuth $getLoggedAuth,
         private AuthRepository $authRepository,
+        private GetLoggedAuth $getLoggedAuth,
+        private Mailer $mailer,
         private Request $request,
+        private Url $url,
+        private Translator $translator,
     ) {
     }
 
@@ -51,6 +57,8 @@ class ResetBeginController implements Controller
             return $this->view(done: true);
         }
 
+        $this->mail(email: $auth->email(), token: $token);
+
         return $this->view(done: true);
     }
 
@@ -61,5 +69,21 @@ class ResetBeginController implements Controller
             'value' => $this->request->body(),
             'errors' => UberErrorCollection::of($errors ?: ErrorCollection::ofEmpty()),
         ]);
+    }
+
+    private function mail(string $email, string $token): void
+    {
+        $url = $this->url->__invoke(
+            controller: ResetFinalizeController::class,
+            parameters: ['token' => $token]
+        );
+
+        $t = $this->translator;
+
+        $this->mailer->__invoke(
+            to: $email,
+            subject: $t('backend.Reset password'),
+            text: $t('backend.system.auth.reset_begin.body', ['link' => $url]),
+        );
     }
 }
