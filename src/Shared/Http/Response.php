@@ -212,6 +212,20 @@ final class Response extends DiactorosResponse
         return static::redirect($url, $status, $headers);
     }
 
+    /**
+     * Create a response that refreshes the current page.
+     *
+     * @return Response
+     *
+     * @example
+     * Response::refresh();
+     */
+    public static function refresh(): Response
+    {
+        $uri = (string) Container::container()->get(Request::class)->getUri();
+        return static::redirect($uri);
+    }
+
     public static function errors(?ErrorCollection $errors = null, int $status = 400, ?string $msg = null): Response
     {
         if ($errors !== null) {

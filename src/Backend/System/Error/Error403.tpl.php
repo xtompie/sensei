@@ -3,6 +3,7 @@
 
 <?php $this->wrap('/src/Backend/System/Layout/Layout.tpl.php', [
     'title' => '403 Forbidden',
+    'layout_clean' => true,
     ...get_defined_vars(),
 ]) ?>
 

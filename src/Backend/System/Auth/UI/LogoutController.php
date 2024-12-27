@@ -7,15 +7,20 @@ namespace App\Backend\System\Auth\UI;
 use App\Backend\System\Auth\Application\GetLoggedAuth;
 use App\Backend\System\Auth\Application\Logout;
 use App\Backend\System\Index\IndexController;
+use App\Shared\Http\Controller;
+use App\Shared\Http\Request;
 use App\Shared\Http\Response;
+use App\Shared\Http\Route\GET;
 use App\Shared\Http\Route\Path;
+use App\Shared\Http\Route\POST;
 
-#[Path('/backend/system/auth/logout')]
-class LogoutController
+#[Path('/backend/system/auth/logout'), GET, POST]
+class LogoutController implements Controller
 {
     public function __construct(
         private GetLoggedAuth $getLoggedAuth,
         private Logout $logout,
+        private Request $request,
     ) {
     }
 
@@ -23,6 +28,10 @@ class LogoutController
     {
         if (!$this->getLoggedAuth->__invoke()) {
             return $this->redirect();
+        }
+
+        if (!$this->request->post()) {
+            return Response::tpl('/src/Backend/System/Auth/UI/LogoutController.tpl.php');
         }
 
         $this->logout->__invoke();

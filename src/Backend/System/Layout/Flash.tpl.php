@@ -7,10 +7,10 @@
         <div
             backend-flash
             class="
-                px-4 py-3 rounded-lg shadow-md flex items-center justify-between
+                px-4 py-3 rounded-lg flex items-center justify-between
                 <?php if ($type == 'error'): ?>
                     bg-red-100 text-red-800
-                <?php elseif ($type == 'ok'): ?>
+                <?php elseif ($type == 'success'): ?>
                     bg-green-100 text-green-800
                 <?php elseif ($type == 'warning'): ?>
                     bg-yellow-100 text-yellow-800
@@ -21,7 +21,7 @@
             role="alert"
         >
             <span class="font-medium">
-                <?= $this->e($flash['msg']) ?>
+                <?= $this->e($this->t($flash['msg'])) ?>
             </span>
             <button type="button" class="text-gray-500 hover:text-gray-800 focus:outline-none" data-dismiss="alert" aria-label="Close"
                 onclick="this.up('[backend-flash]').remove();"

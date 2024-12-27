@@ -11,9 +11,10 @@ use Symfony\Component\Mime\Email;
 
 class Mailer
 {
+    private BaseMailer $mailer;
+
     public function __construct(
-        protected Env $env,
-        protected BaseMailer $mailer,
+        private Env $env,
     ) {
         $this->mailer = new BaseMailer(
             transport: Transport::fromDsn(

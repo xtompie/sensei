@@ -7,7 +7,7 @@ namespace App\Backend\System\Auth\UI;
 use Xtompie\Typed\Email;
 use Xtompie\Typed\NotBlank;
 
-class ResetBeginBody
+class ResetBody
 {
     public function __construct(
         #[NotBlank()]

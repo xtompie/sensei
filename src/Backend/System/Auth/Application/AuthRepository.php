@@ -36,7 +36,7 @@ class AuthRepository
         return $this->repository->find(where: ['email' => $email]);
     }
 
-    protected function findByResetToken(string $token): ?Auth
+    public function findByResetToken(string $token): ?Auth
     {
         return $this->repository->find(where: ['reset_token' => $token]);
     }
@@ -55,7 +55,7 @@ class AuthRepository
         return $auth;
     }
 
-    public function beginReset(string $id): bool|string
+    public function reset(string $id): bool|string
     {
         $auth = $this->findById($id);
         if ($auth === null) {
@@ -75,7 +75,7 @@ class AuthRepository
         return $token;
     }
 
-    public function finalizeReset(string $token, string $password): bool
+    public function updatePasswordByResetToken(string $token, string $password): bool
     {
         if (Validation::of($token)->required()->fail()) {
             return false;

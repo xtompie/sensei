@@ -20,11 +20,26 @@ class Flash
         return $this->pull();
     }
 
-    public function add(string $msg, string $type = 'info', string $format = 'text'): static
+    public function add(string $msg, string $type = 'success', string $format = 'text'): static
     {
         $this->sessionProperty->add(['msg' => $msg, 'type' => $type, 'format' => $format]);
 
         return $this;
+    }
+
+    public function success(string $msg, string $format = 'text'): static
+    {
+        return $this->add($msg, 'success', $format);
+    }
+
+    public function warning(string $msg, string $format = 'text'): static
+    {
+        return $this->add($msg, 'warning', $format);
+    }
+
+    public function error(string $msg, string $format = 'text'): static
+    {
+        return $this->add($msg, 'error', $format);
     }
 
     /**

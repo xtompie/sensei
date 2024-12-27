@@ -109,6 +109,14 @@ final class Tpl
     }
 
     /**
+     * @param array<string,mixed> $data
+     */
+    public function renderIf(bool $condition, string $template, array $data = []): string
+    {
+        return $condition ? $this->render($template, $data) : '';
+    }
+
+    /**
      * @template T of object
      * @param class-string<T> $service
      * @return T

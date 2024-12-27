@@ -1,8 +1,6 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 <?php /** @var \Xtompie\Result\ErrorCollection $errors */ ?>
 
-<?php $value = isset($value[$name]) ? $value[$name] : '' ?>
-
 <div class="col-span-full mt-3 max-w-lg">
     <?= $this->render('/src/Backend/System/Form/Label.tpl.php', get_defined_vars()) ?>
     <?= $this->render('/src/Backend/System/Form/Type.tpl.php', get_defined_vars()) ?>

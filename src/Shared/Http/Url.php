@@ -12,6 +12,7 @@ final class Url
     public function __construct(
         private Routes $routes,
         private UrlParameterContext $urlParameterContext,
+        private Request $request,
         private ?UrlGenerator $urlGenerator = null,
     ) {
     }
@@ -49,7 +50,10 @@ final class Url
         if ($this->urlGenerator === null) {
             $this->urlGenerator = new UrlGenerator(
                 routes: $this->routes->routes(),
-                context: new RequestContext(),
+                context: new RequestContext(
+                    host: $this->request->getUri()->getHost(),
+                    httpPort: $this->request->getUri()->getPort() ?: 80,
+                ),
             );
         }
         return $this->urlGenerator;

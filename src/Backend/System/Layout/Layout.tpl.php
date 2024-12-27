@@ -25,7 +25,8 @@
 		<?php if (isset($layout_clean) && $layout_clean === true): ?>
 			<main class="py-10">
 				<div class="px-14">
-					<?= $this->content() ?>
+				<?= $this->render('/src/Backend/System/Layout/Flash.tpl.php', get_defined_vars()) ?>
+				<?= $this->content() ?>
 				</div>
 			</main>
 		<?php elseif ($this->service(\App\Backend\System\Modal\Modal::class)->is()): ?>
