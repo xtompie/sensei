@@ -25,6 +25,6 @@ class IndexController implements Controller
             return $init;
         }
 
-        return Response::html('TODO: Implement the backend index page');
+        return Response::tpl('/src/Backend/System/Index/IndexController.tpl.php');
     }
 }
