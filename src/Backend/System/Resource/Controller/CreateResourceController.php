@@ -212,7 +212,7 @@ abstract class CreateResourceController implements Controller, HasControllerDefi
      */
     protected function flash(array $entity): void
     {
-        $this->ctrl()->flash('Created');
+        $this->ctrl()->flash()->success('Created');
     }
 
     protected function tpl(): string

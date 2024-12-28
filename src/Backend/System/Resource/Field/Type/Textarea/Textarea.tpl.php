@@ -12,7 +12,12 @@
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
         <textarea
             name="<?= $this->e($name) ?>"
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400"
+            class="
+                flex mt-2 px-3 py-2 border border-gray-200 rounded-md bg-transparent
+                text-sm
+                placeholder:text-gray-400 focus-visible:outline-nonefocus:border-gray-400
+                disabled:cursor-not-allowed disabled:opacity-50
+            "
         ><?= $this->e($value) ?></textarea>
     <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php', get_defined_vars()) ?>
 <?php endif ?>

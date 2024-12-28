@@ -2,10 +2,19 @@
 <?php /** @var \App\Backend\System\Validation\UberErrorCollection $errors */ ?>
 
 <?php $err = $err ?? $errors->space($name) ?>
-<div>
-    <?php if ($err->any()): ?>
+<?php if ($err->any()): ?>
+    <div
+        class="
+            flex mt-1
+        "
+    >
         <?php foreach ($err->toArray() as $e): ?>
-            <div class="invalid-feedback"><?= $this->e($e->message()) ?></div>
+            <div
+                class="
+                    flex mt-1 text-sm leading-none text-red-500
+                ">
+                <?= $this->e($e->message()) ?>
+            </div>
         <?php endforeach ?>
-    <?php endif ?>
-</div>
+    </div>
+<?php endif ?>

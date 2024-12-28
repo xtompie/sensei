@@ -225,7 +225,7 @@ abstract class UpdateResourceController implements Controller, HasControllerDefi
      */
     protected function flash(array $entity): void
     {
-        $this->ctrl()->flash('Updated');
+        $this->ctrl()->flash()->success('Updated');
     }
 
     protected function tpl(): string

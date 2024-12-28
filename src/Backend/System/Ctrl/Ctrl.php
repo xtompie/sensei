@@ -106,9 +106,9 @@ class Ctrl
         return Response::html(body: $this->tpl->__invoke('/src/Backend/System/Error/Error404.tpl.php'), status: 404);
     }
 
-    public function flash(string $msg, string $type = 'info', string $format = 'text'): void
+    public function flash(): Flash
     {
-        $this->flash->add(msg: $msg, type: $type, format: $format);
+        return $this->flash;
     }
 
     /**

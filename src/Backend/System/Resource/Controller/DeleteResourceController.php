@@ -219,7 +219,7 @@ abstract class DeleteResourceController implements Controller, HasControllerDefi
      */
     protected function flash(array $entity): void
     {
-        $this->ctrl()->flash('Deleted');
+        $this->ctrl()->flash()->success('Deleted');
     }
 
     protected function tpl(): string

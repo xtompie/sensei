@@ -13,7 +13,7 @@ interface ResourceRepository
     /**
      * @param array<string,mixed>|null $where
      */
-    public function count(?array $where): int;
+    public function count(?array $where = null): int;
 
     /**
      * @param array<string,mixed>|null $where

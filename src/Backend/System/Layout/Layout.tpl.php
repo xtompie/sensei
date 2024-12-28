@@ -18,10 +18,7 @@
 		<link href="/assets/backend/backend.css" rel="stylesheet" type="text/css">
 		<?= $this->import('/src/Backend/System/Js/Dropdown.tpl.php') ?>
 	</head>
-	<body
-		class="h-full"
-		onclick="backend.dropdown.closeall(event)"
-	>
+	<body onclick="backend.dropdown.closeall(event)">
 		<?php if (isset($layout_clean) && $layout_clean === true): ?>
 			<main class="py-10">
 				<div class="px-14">
@@ -36,18 +33,16 @@
 				</div>
 			</main>
 		<?php else: ?>
-			<div>
-				<div class="fixed inset-y-0 z-50 flex w-72 flex-col">
+			<div class="flex divide-x divide-border h-screen">
+				<div class="w-72">
 					<?= $this->render('/src/Backend/System/Layout/Sidebar.tpl.php') ?>
 				</div>
-				<div class="pl-72">
+				<div class="flex-1">
 					<?= $this->render('/src/Backend/System/Layout/Topbar.tpl.php', get_defined_vars()) ?>
-					<main class="py-10">
-						<div class="px-14">
-							<?= $this->render('/src/Backend/System/Layout/Flash.tpl.php', get_defined_vars()) ?>
-							<?= $this->content() ?>
-						</div>
-					</main>
+					<div class="pb-8 px-8">
+						<?= $this->render('/src/Backend/System/Layout/Flash.tpl.php', get_defined_vars()) ?>
+						<?= $this->content() ?>
+					</div>
 				</div>
 			</div>
 		<?php endif ?>

@@ -152,7 +152,7 @@ abstract class PaoRepository implements ResourceRepository
     /**
      * @param array<string,mixed>|null $where
      */
-    public function count(?array $where): int
+    public function count(?array $where = null): int
     {
         return $this->read->count($where);
     }

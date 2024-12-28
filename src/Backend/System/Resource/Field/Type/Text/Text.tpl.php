@@ -9,12 +9,24 @@
     <?= $this->e($value) ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php', get_defined_vars()) ?>
 <?php elseif ($mode == 'form'): ?>
+    <?php $err = $errors->space($name) ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
-        <input
-            type="text"
-            name="<?= $this->e($name) ?>"
-            value="<?= $this->e($value) ?>"
-            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400"
-        />
+    <input
+        type="text"
+        name="<?= $this->e($name) ?>"
+        value="<?= $this->e($value) ?>"
+        placeholder="<?= $this->e($placehoder ?? '') ?>"
+        class="
+            flex mt-2 px-3 py-2 w-full border rounded-md bg-transparent
+            text-sm
+            placeholder:text-gray-400 focus-visible:outline-none focus:border-gray-400
+            disabled:cursor-not-allowed disabled:opacity-50
+            <?php if ($err->none()): ?>
+                border-gray-200
+            <?php else: ?>
+                border-red-400
+            <?php endif ?>
+        "
+    />
     <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php', get_defined_vars()) ?>
 <?php endif ?>

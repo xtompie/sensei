@@ -20,7 +20,12 @@
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
         <select
             name="<?= $this->e($name) ?>"
-            class="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400"
+            class="
+                flex mt-2 px-3 py-2 border border-gray-200 rounded-md bg-transparent
+                text-sm
+                placeholder:text-gray-400 focus-visible:outline-none focus:border-gray-400
+                disabled:cursor-not-allowed disabled:opacity-50
+            "
         >
             <?php foreach ($options as $option_value => $option_title): ?>
             <option

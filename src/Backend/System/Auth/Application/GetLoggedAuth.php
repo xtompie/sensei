@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Backend\System\Auth\Application;
 
-use App\Sentry\System\Role;
 use App\Sentry\System\RoleContext;
 
 class GetLoggedAuth

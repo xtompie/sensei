@@ -1,36 +1,68 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
-<?php $btn = $action != 'list' ?>
-<?php $more = array_filter($more ?? [], fn (array $i) => $this->sentry($i['sentry'])) ?>
+<?php
+
+$list = $action == 'list';
+$more_expose = $more_expose ?? ($list ? 0 : 1);
+$more = array_filter($more ?? [], fn (array $i) => $this->sentry($i['sentry']));
+$show = array_slice($more, 0, $more_expose);
+$hide = array_slice($more, $more_expose);
+?>
 
 <?php if ($more): ?>
     <?= $this->import('/src/Backend/System/Js/Dropdown.tpl.php') ?>
-    <div backend-dropdown-space>
-        <?php $item = $more[0] ?>
-        <a
-            href="<?= $this->e($item['url']) ?>"
-            class="
-                text-indigo-600
-                <?php if ($btn): ?>
-                    inline-flex items-center rounded-md shadow-sm font-semibold text-white bg-indigo-700 hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 px-3 py-2 text-sm
+    <div
+        backend-dropdown-space
+        class="
+            flex
+            <?php if (!$list): ?>
+                space-x-2
+            <?php endif ?>
+        "
+    >
+        <?php foreach ($show as $index => $item): ?>
+            <a
+                href="<?= $this->e($item['url']) ?>"
+                <?php if ($list): ?>
+                    class="
+                        inline-flex -my-2 px-2 py-2 items-center rounded-md
+                        text-indigo-600
+                        hover:bg-gray-100
+                    "
+                <?php elseif ($index === 0): ?>
+                    class="
+                        inline-flex px-4 py-2 items-center rounded-md
+                        text-white bg-gray-900 text-sm
+                        hover:bg-gray-800
+                    "
                 <?php else : ?>
-                    inline-flex px-1 text-indigo-600
+                    class="
+                        inline-flex px-4 py-2 items-center rounded-md
+                        text-white bg-gray-500 text-sm
+                        hover:bg-gray-400
+                    "
                 <?php endif ?>
-            "
-        >
-            <?= $this->e($item['title']) ?>
-        </a>
+            >
+                <?= $this->e($item['title']) ?>
+            </a>
+        <?php endforeach ?>
 
-        <?php if (count($more) > 1): ?>
+        <?php if (count($hide) > 0): ?>
             <div class="relative inline-block">
                 <button
                     href="#"
-                    class="
-                        <?php if ($btn): ?>
-                            inline-flex items-center rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-200
-                        <?php else : ?>
-                            inline-flex px-1 text-indigo-600
-                        <?php endif ?>
-                    "
+                    <?php if ($list): ?>
+                        class="
+                            inline-flex -my-2 px-3 py-2 items-center rounded-md
+                            text-indigo-600
+                            hover:bg-gray-100
+                        "
+                    <?php else : ?>
+                        class="
+                            inline-flex px-4 py-2 items-center rounded-md
+                            text-black bg-gray-200 text-sm
+                            hover:bg-gray-100
+                        "
+                    <?php endif ?>
                     onclick="backend.dropdown.toggle(this, event)"
                 >
                     ⋮
@@ -39,16 +71,12 @@
                 <div
                     backend-dropdown-panel
                     style="display: none;"
-                    class="opacity-100 absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 text-left ring-gray-900/5 focus:outline-none"
-                    role="menu"
-                    aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1"
+                    class="opacity-100 absolute right-0 z-10 mt-0.5 min-w-48 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 text-left ring-gray-900/5 focus:outline-none"
                 >
-                    <?php foreach (array_slice($more, 1) as $index => $item): ?>
+                    <?php foreach ($hide as $index => $item): ?>
                         <a
                             href="<?= $this->e($item['url']) ?>"
-                            class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-200"
-                            role="menuitem"
-                            tabindex="-1"
+                            class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-100"
                         >
                             <?= $this->e($item['title']) ?>
                         </a>

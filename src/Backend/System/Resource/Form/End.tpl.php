@@ -9,9 +9,11 @@
             </div>
 
             <?php $rest = $errors->rest() ?>
-            <div resterrors-list>
+            <div resterrors-list class="mt-6">
                 <?php foreach ($rest as $err): ?>
-                    <div class="invalid-feedback"><?= $this->e($err->message()) ?></div>
+                    <div class="flex mt-2 px-4 py-2 rounded-lg items-center justify-between text-sm bg-red-100 text-red-800">
+                        <?= $this->e($err->message()) ?>
+                    </div>
                 <?php endforeach ?>
             </div>
             <script>
