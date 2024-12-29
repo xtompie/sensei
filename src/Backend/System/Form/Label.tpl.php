@@ -2,6 +2,13 @@
 
 <?php $label = isset($label) ? $label : ucfirst($name) ?>
 
-<label class="block text-sm font-medium leading-6 text-gray-900 mb-2">
+<label
+    class="
+        text-sm font-medium leading-none
+        <?php if (isset($err) && $err->any()): ?>
+            text-red-500
+        <?php endif ?>
+
+    ">
     <?= $this->e($label) ?>
 </label>

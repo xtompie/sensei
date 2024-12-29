@@ -30,10 +30,6 @@ class LogoutController implements Controller
             return $this->redirect();
         }
 
-        if (!$this->request->post()) {
-            return Response::tpl('/src/Backend/System/Auth/UI/LogoutController.tpl.php');
-        }
-
         $this->logout->__invoke();
 
         return $this->redirect();

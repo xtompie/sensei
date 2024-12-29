@@ -2,7 +2,11 @@
 
 <?php if (isset($link)) : ?>
     <div class="mt-2">
-        <a href="<?= $this->e($link['uri']) ?>" class="text-sm text-blue-500 hover:underline">
+        <a
+            href="<?= $this->e($link['uri']) ?>"
+            class="
+                text-sm text-gray-700 hover:underline
+            ">
             <?= $this->e($link['text']) ?>
         </a>
     </div>

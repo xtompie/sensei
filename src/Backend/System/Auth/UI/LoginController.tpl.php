@@ -5,20 +5,24 @@
     'title' => $this->t('backend.Login'),
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Form/Begin.tpl.php', get_defined_vars()) ?>
-
-<?= $this->render('/src/Backend/System/Form/Field.tpl.php', [
-    'errors' => $errors,
-    'value' => $value,
-    'type' => 'Text',
-    'name' => 'email',
+<?= $this->render('/src/Backend/System/Layout/Title.tpl.php', [
+    'text' => $this->t('backend.Login'),
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Form/Field.tpl.php', [
+<?= $this->render('/src/Backend/System/Form/Begin.tpl.php', get_defined_vars()) ?>
+
+<?= $this->render('/src/Backend/System/Form/Text.tpl.php', [
     'errors' => $errors,
     'value' => $value,
-    'type' => 'Password',
+    'name' => 'email',
+    'class' => 'w-[400px]',
+]) ?>
+
+<?= $this->render('/src/Backend/System/Form/Password.tpl.php', [
+    'errors' => $errors,
+    'value' => $value,
     'name' => 'password',
+    'class' => 'w-[400px]',
     'link' => [
         'uri' => $this->url(\App\Backend\System\Auth\UI\ResetController::class),
         'text' => $this->t('backend.Reset password'),

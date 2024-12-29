@@ -1,17 +1,14 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
+<?php /** @var \App\Backend\System\Validation\UberErrorCollection $errors */ ?>
 
 <?php $value = isset($value[$name]) ? $value[$name] : '' ?>
 <?php $class = isset($class) ? $class : '' ?>
+<?php $err = $errors->space($name) ?>
 
-<?php if ($mode == 'list'): ?>
-    <?= $this->e($value) ?>
-<?php elseif ($mode == 'detail'): ?>
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/Begin.tpl.php', get_defined_vars()) ?>
-    <?= $this->e($value) ?>
-    <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php', get_defined_vars()) ?>
-<?php elseif ($mode == 'form'): ?>
-    <?php $err = $errors->space($name . 'x') ?>
-    <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
+<div class="mt-6">
+
+    <?= $this->render('/src/Backend/System/Form/Label.tpl.php', get_defined_vars()) ?>
+
     <input
         type="text"
         name="<?= $this->e($name) ?>"
@@ -30,5 +27,9 @@
             <?= $this->e($class) ?>
         "
     />
-    <?= $this->render('/src/Backend/System/Resource/Field/Form/End.tpl.php', get_defined_vars()) ?>
-<?php endif ?>
+
+    <?= $this->render('/src/Backend/System/Form/Errors.tpl.php', get_defined_vars()) ?>
+    <?= $this->render('/src/Backend/System/Form/Desc.tpl.php', get_defined_vars()) ?>
+    <?= $this->render('/src/Backend/System/Form/Link.tpl.php', get_defined_vars()) ?>
+
+</div>

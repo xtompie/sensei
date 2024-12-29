@@ -3,16 +3,18 @@
 
 <?php $err = $err ?? $errors->space($name) ?>
 <?php if ($err->any()): ?>
-    <div class="mt-6">
+    <div
+        class="
+            flex mt-1
+        "
+    >
         <?php foreach ($err->toArray() as $e): ?>
             <div
                 class="
-                    flex mt-2 px-4 py-2 rounded-lg items-center justify-between text-sm
-                    bg-red-100 text-red-800
-                "
-            >
+                    flex mt-1 text-sm leading-none text-red-500
+                ">
                 <?= $this->e($e->message()) ?>
-        </div>
+            </div>
         <?php endforeach ?>
     </div>
 <?php endif ?>

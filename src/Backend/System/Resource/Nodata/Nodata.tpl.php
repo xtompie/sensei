@@ -1,5 +1,5 @@
 <?php if (!$entities): ?>
-    <div class="text-muted fst-italic my-1">
+    <div class="text-gray-500 text-sm italic mt-8">
         No data
     </div>
 <?php endif ?>

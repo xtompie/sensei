@@ -3,5 +3,3 @@
 <form method="POST" enctype="multipart/form-data">
     <input type="hidden" name="_csrf" value="<?= $this->csrf() ?>" />
     <div resterrors-target></div>
-    <div class="space-y-12">
-        <div class="pb-12">

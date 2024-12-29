@@ -1,6 +1,6 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 
-<div class="mt-8">
+<div class="mt-8 border-gray-200 border-t pt-6">
     <button
         type="submit"
         name="_submit[commit]"

@@ -5,7 +5,7 @@
     'title' => $this->t('backend.Reset password'),
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Layout/H2.tpl.php', [
+<?= $this->render('/src/Backend/System/Layout/Title.tpl.php', [
     'text' => $this->t('backend.Reset password'),
 ]) ?>
 

@@ -1,6 +1,6 @@
 <?php /** @var \App\Shared\Tpl\Tpl $this */ ?>
 
-<?php if ($breadcrumb): ?>
+<?php if ($breadcrumb ?? null): ?>
     <div class="inline-flex pl-4 py-1">
         <a
             class="w-auto flex justify-center h-10 px-3 py-0 items-center rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700"

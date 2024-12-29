@@ -5,17 +5,17 @@
     'title' => $this->t('backend.Reset password'),
 ]) ?>
 
-<?= $this->render('/src/Backend/System/Layout/H2.tpl.php', [
+<?= $this->render('/src/Backend/System/Layout/Title.tpl.php', [
     'text' => $this->t('backend.Reset password'),
 ]) ?>
 
 <?= $this->render('/src/Backend/System/Form/Begin.tpl.php', get_defined_vars()) ?>
 
-<?= $this->render('/src/Backend/System/Form/Field.tpl.php', [
+<?= $this->render('/src/Backend/System/Form/Text.tpl.php', [
     'errors' => $errors,
     'value' => $value,
-    'type' => 'Text',
     'name' => 'email',
+    'class' => 'w-[400px]',
 ]) ?>
 
 <?= $this->render('/src/Backend/System/Form/Submit.tpl.php', [

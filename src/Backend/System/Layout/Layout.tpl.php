@@ -20,18 +20,14 @@
 	</head>
 	<body onclick="backend.dropdown.closeall(event)">
 		<?php if (isset($layout_clean) && $layout_clean === true): ?>
-			<main class="py-10">
-				<div class="px-14">
+			<div class="pt-8 pb-8 pl-24 pr-8">
 				<?= $this->render('/src/Backend/System/Layout/Flash.tpl.php', get_defined_vars()) ?>
 				<?= $this->content() ?>
-				</div>
-			</main>
+			</div>
 		<?php elseif ($this->service(\App\Backend\System\Modal\Modal::class)->is()): ?>
-			<main class="py-10">
-				<div class="px-14">
-					<?= $this->content() ?>
-				</div>
-			</main>
+			<div class="py-14 px-14">
+				<?= $this->content() ?>
+			</div>
 		<?php else: ?>
 			<div class="flex divide-x divide-border h-screen">
 				<div class="w-72">
