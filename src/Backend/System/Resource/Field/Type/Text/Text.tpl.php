@@ -10,7 +10,7 @@
     <?= $this->e($value) ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Detail/End.tpl.php', get_defined_vars()) ?>
 <?php elseif ($mode == 'form'): ?>
-    <?php $err = $errors->space($name . 'x') ?>
+    <?php $err = $errors->space($name) ?>
     <?= $this->render('/src/Backend/System/Resource/Field/Form/Begin.tpl.php', get_defined_vars()) ?>
     <input
         type="text"
