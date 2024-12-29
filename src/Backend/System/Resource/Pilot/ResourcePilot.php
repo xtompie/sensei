@@ -113,8 +113,6 @@ abstract class ResourcePilot
         return match ($action) {
             'index' => [
                 $this->link('create', $entity),
-                $this->link('create', $entity),
-                $this->link('create', $entity),
             ],
             'list' => [
                 $this->link('detail', $entity, 'Detail'),

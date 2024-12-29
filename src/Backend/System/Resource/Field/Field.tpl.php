@@ -5,6 +5,7 @@ $view = $view ?? "/src/Backend/System/Resource/Field/Type/{$type}/{$type}.tpl.ph
 $entity = $entity ?? null;
 $sentry = $sentry ?? new \App\Sentry\Rid\BackendResourceRid(resource: $resource, action: $action, id: $entity ? $entity['id'] : null, prop: $name);
 $list_sort = $list_sort ?? false;
+$list_link = $list_link ?? false;
 $sort = $sort ?? false;
 $more = $more ?? false;
 ?>
@@ -52,7 +53,7 @@ $label = $label ?? ucfirst($name);
     <?php elseif ($mode == 'list'): ?>
         <td class="whitespace-nowrap px-3 py-3.5 text-sm text-gray-900 [&:first-child]:pl-0 [&:last-child]:pr-0">
             <?php $more_url = null ?>
-            <?php if ($more && $list_link): ?>
+            <?php if ($more) : ?>
                 <?php $more = $more === true ? 'detail' : $more ?>
                 <?php foreach ($this->service(\App\Backend\System\Resource\Pilot\Pilots::class)->get($resource)->more(action: $action, entity: $value) as $item): ?>
                     <?php if ($item['action'] == $more && $this->sentry($item['sentry'])): ?>

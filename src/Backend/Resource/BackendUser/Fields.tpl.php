@@ -15,6 +15,7 @@
         ...get_defined_vars(),
         'type' => 'Text',
         'name' => 'email',
+        'more' => true,
         'class' => 'w-[480px]',
     ]) ?>
 <?php endif ?>
