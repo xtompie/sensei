@@ -8,7 +8,6 @@ use App\Backend\System\Auth\Application\GetLoggedAuth;
 use App\Backend\System\Auth\Application\Logout;
 use App\Backend\System\Index\IndexController;
 use App\Shared\Http\Controller;
-use App\Shared\Http\Request;
 use App\Shared\Http\Response;
 use App\Shared\Http\Route\GET;
 use App\Shared\Http\Route\Path;
@@ -20,7 +19,6 @@ class LogoutController implements Controller
     public function __construct(
         private GetLoggedAuth $getLoggedAuth,
         private Logout $logout,
-        private Request $request,
     ) {
     }
 
