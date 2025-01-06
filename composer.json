@@ -71,7 +71,7 @@
             "Composer\\Config::disableProcessTimeout",
             "php -S 127.0.0.1:8000 -t public tools/serve/router.php"
         ],
-        "setup": "composer install && composer app:env::",
+        "setup": "composer install && php console app:env:setup",
         "test": "./vendor/bin/pest",
         "tpl-audit": "./vendor/bin/xtompie-tpl-audit.sh -p src -s .tpl.php",
         "tpl-cs-fixer": "tools/tpl-cs-fixer/vendor/bin/php-cs-fixer --config=tools/tpl-cs-fixer/.php-cs-fixer.php fix",
