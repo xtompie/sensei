@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Backend\System\Auth\Application;
 
 use App\Shared\Gen\Gen;
-use App\Shared\Tenant\TenantContext;
+use App\Shared\Tenant\TenantState;
 use App\Shared\Type\Time;
 use App\Shared\Validation\Validation;
 use Xtompie\Dao\Repository;
@@ -17,12 +17,12 @@ class AuthRepository
      */
     public function __construct(
         private Repository $repository,
-        private TenantContext $tenantContext,
+        private TenantState $tenantState,
     ) {
         $this->repository = $repository
             ->withTable('backend_user')
             ->withItemClass(Auth::class)
-            ->withCallableStatic(fn () => ['tenant' => $this->tenantContext->id()])
+            ->withCallableStatic(fn () => ['tenant' => $this->tenantState->get()])
         ;
     }
 

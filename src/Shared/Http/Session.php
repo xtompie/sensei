@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Shared\Http;
 
-use App\Shared\Tenant\TenantContext;
-
 final class Session
 {
     public function __construct(
-        private TenantContext $tenantContext,
         private bool $inited = false,
     ) {
     }
@@ -22,13 +19,6 @@ final class Session
 
         $this->inited = true;
         session_start();
-        if (!isset($_SESSION['app.tenant'])) {
-            $_SESSION['app.tenant'] = $this->tenantContext->id();
-        } elseif ($this->tenantContext->id() !== $_SESSION['app.tenant']) {
-            session_unset();
-            session_destroy();
-            $_SESSION = [];
-        }
     }
 
     public function active(): bool
@@ -71,6 +61,6 @@ final class Session
 
     public function regenerateId(): void
     {
-        session_regenerate_id(true);
+        session_regenerate_id(delete_old_session: true);
     }
 }

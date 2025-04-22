@@ -11,7 +11,7 @@ use App\Shared\Pao\HookLoadRowCallback;
 use App\Shared\Pao\HookPatch;
 use App\Shared\Pao\Repository;
 use App\Shared\Pao\HookUpdatedAt;
-use App\Shared\Tenant\TenantContext;
+use App\Shared\Tenant\TenantState;
 use Exception;
 use Xtompie\Result\Result;
 
@@ -29,7 +29,7 @@ abstract class PaoRepository implements ResourceRepository
     public function __construct(
         protected Repository $read,
         protected Repository $write,
-        protected TenantContext $tenantContext,
+        protected TenantState $tenantState,
     ) {
         $this->read = $read
             ->withPql(fn (...$args) => $this->pqlForRead(...$args))
@@ -61,7 +61,7 @@ abstract class PaoRepository implements ResourceRepository
     protected function static(): array
     {
         return array_filter([
-            'tenant' => $this->tenant() ? $this->tenantContext->id() : null,
+            'tenant' => $this->tenant() ? $this->tenantState->get() : null,
         ]);
     }
 
