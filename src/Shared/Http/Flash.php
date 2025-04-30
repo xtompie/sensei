@@ -7,9 +7,9 @@ namespace App\Shared\Http;
 class Flash
 {
     public function __construct(
-        protected SessionProperty $sessionProperty,
+        protected SessionEntry $sessionEntry,
     ) {
-        $this->sessionProperty = $sessionProperty->withProperty('shared.flash');
+        $this->sessionEntry = $sessionEntry->withProperty('shared.flash');
     }
 
     /**
@@ -22,7 +22,7 @@ class Flash
 
     public function add(string $msg, string $type = 'success', string $format = 'text'): static
     {
-        $this->sessionProperty->add(['msg' => $msg, 'type' => $type, 'format' => $format]);
+        $this->sessionEntry->add(['msg' => $msg, 'type' => $type, 'format' => $format]);
 
         return $this;
     }
@@ -47,7 +47,7 @@ class Flash
      */
     public function pull(): array
     {
-        $flashes = $this->sessionProperty->pull();
+        $flashes = $this->sessionEntry->pull();
         if (!is_array($flashes)) {
             return [];
         }

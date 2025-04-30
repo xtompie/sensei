@@ -162,4 +162,16 @@ final class Request extends ServerRequest implements Provider
 
         return $query === '' ? $path : $path . '?' . $query;
     }
+
+    public function csrf(): string
+    {
+        $body = $this->body();
+        $token = $body['_csrf'] ?? $this->getHeaderLine('X-CSRF-Token');
+
+        if (is_string($token)) {
+            return $token;
+        }
+
+        return '';
+    }
 }

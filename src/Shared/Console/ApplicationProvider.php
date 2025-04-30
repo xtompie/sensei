@@ -14,6 +14,7 @@ use Doctrine\Migrations\DependencyFactory;
 use Doctrine\Migrations\Provider\SchemaProvider as DoctrineSchemaProvider;
 use Doctrine\Migrations\Tools\Console\Command as DoctrineCommand;
 use Generator;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command as SymfonyCommnd;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;

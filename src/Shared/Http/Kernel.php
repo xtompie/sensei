@@ -7,6 +7,7 @@ namespace App\Shared\Http;
 use App\Shared\Aop\Advice;
 use App\Shared\Aop\Aop;
 use App\Shared\Container\Container;
+use App\Shared\Env\Env;
 use App\Shared\Http\Aop\CsrfVerify;
 use App\Shared\Http\Contract\Body;
 use App\Shared\Http\Contract\Query;
@@ -29,9 +30,10 @@ use Xtompie\Result\ErrorCollection;
 final class Kernel
 {
     public function __construct(
-        private Router $router,
         private Debug $debug,
+        private Env $env,
         private Request $request,
+        private Router $router,
     ) {
     }
 
@@ -81,6 +83,8 @@ final class Kernel
 
     public function __invoke(): void
     {
+        $this->errorHandling();
+
         ob_start();
         $this->debugStart();
         $container = Container::container();
@@ -121,6 +125,55 @@ final class Kernel
         );
 
         $this->emmit($response);
+    }
+
+    private function errorHandling(): void
+    {
+        $debug = $this->debug->__invoke();
+
+        ini_set('log_errors', '1');
+        if ($debug) {
+            error_reporting(E_ALL);
+            ini_set('display_errors', '1');
+            ini_set('display_startup_errors', '1');
+        } else {
+            error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE & ~E_WARNING);
+            ini_set('display_errors', '0');
+            ini_set('display_startup_errors', '0');
+        }
+
+        set_error_handler(function ($severity, $message, $file, $line) {
+            if (!(error_reporting() & $severity)) {
+                return false;
+            }
+            throw new \ErrorException($message, 0, $severity, $file, $line);
+        });
+
+        if ($debug) {
+            (new \Whoops\Run())
+                ->addFrameFilter(function ($frame) {
+                    $function = $frame->getFunction();
+                    $class = $frame->getClass();
+                    if ($class == 'Whoops\Run' && $function == 'handleError') {
+                        return null;
+                    }
+                    return $frame;
+                })
+                ->pushHandler(
+                    (new \Whoops\Handler\PrettyPageHandler())
+                    ->setEditor($this->env->APP_KERNEL_WHOOPS_EDITOR())
+                )
+                ->register();
+        } else {
+            set_exception_handler(function ($exception) {
+                error_log(
+                    'Uncaught exception: ' . $exception->getMessage() . ' ' .
+                    'in ' . $exception->getFile() . ':' . $exception->getLine() . ' ' .
+                    "Stack trace:\n" . $exception->getTraceAsString()
+                );
+                (new SapiEmitter())->emit(Response::internalServerError());
+            });
+        }
     }
 
     private function emmit(Response $response): void

@@ -3,8 +3,8 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Shared\Container\Container;
-use App\Shared\Console\Kernel as ConsoleKernel;
-use App\Shared\Kernel\Kernel as MainKernel;
+use App\Shared\Console\Kernel;
+use App\Shared\Kernel\AppDir;
 
-Container::container()->get(MainKernel::class)->__invoke(appDir: __DIR__);
-exit(Container::container()->get(ConsoleKernel::class)->__invoke());
+Container::container()->get(AppDir::class)->set(__DIR__);
+exit(Container::container()->get(Kernel::class)->__invoke());

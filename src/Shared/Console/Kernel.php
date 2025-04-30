@@ -14,20 +14,25 @@ use App\Shared\Profiler\ProfileStop;
 class Kernel
 {
     public function __construct(
-        protected Application $application,
+        protected ApplicationProvider $applicationProvider,
         protected Debug $debug,
     ) {
     }
 
     public function __invoke(): int
     {
-        if ($this->debug->__invoke()) {
+        $debug = $this->debug->__invoke();
+
+        ini_set('log_errors', '1');
+        error_reporting($debug ? E_ALL : E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE & ~E_WARNING);
+
+        if ($debug) {
             Container::container()->get(ProfileStart::class)->__invoke();
         }
 
-        $exitCode = $this->application->run();
+        $exitCode = $this->applicationProvider->__invoke()->run();
 
-        if ($this->debug->__invoke()) {
+        if ($debug) {
             Container::container()->get(ProfileConsoleExitCode::class)->__invoke($exitCode);
             Container::container()->get(ProfileStop::class)->__invoke();
             Container::container()->get(ConsoleReporter::class)->__invoke();

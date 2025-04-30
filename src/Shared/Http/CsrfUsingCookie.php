@@ -48,10 +48,9 @@ class CsrfUsingCookie implements Csrf
     private function hasValidCsrfToken(): bool
     {
         $csrfId = $this->getCookieValue();
-        $body = $this->request->body();
-        $csrfToken = $body['_csrf'] ?? null;
+        $csrfToken = $this->request->csrf();
 
-        if (!is_string($csrfId) || !is_string($csrfToken)) {
+        if (!is_string($csrfId)) {
             return false;
         }
 

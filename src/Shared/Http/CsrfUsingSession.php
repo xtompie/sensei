@@ -9,18 +9,18 @@ use Ramsey\Uuid\Uuid;
 class CsrfUsingSession implements Csrf
 {
     public function __construct(
-        private SessionProperty $sessionProperty,
         private Request $request,
+        private SessionEntry $sessionEntry,
     ) {
-        $this->sessionProperty = $sessionProperty->withProperty('shared.csrf');
+        $this->sessionEntry = $sessionEntry->withProperty('shared.csrf');
     }
 
     public function get(): string
     {
-        $csrf = $this->sessionProperty->getAsString();
+        $csrf = $this->sessionEntry->getAsString();
         if (!$csrf) {
             $csrf = $this->generate();
-            $this->sessionProperty->set($csrf);
+            $this->sessionEntry->set($csrf);
         }
 
         return $csrf;
@@ -33,19 +33,11 @@ class CsrfUsingSession implements Csrf
 
     public function revoke(): void
     {
-        $this->sessionProperty->remove();
+        $this->sessionEntry->remove();
     }
 
     public function verify(): bool
     {
-        $body = $this->request->body();
-        if (!isset($body['_csrf'])) {
-            return false;
-        }
-        if (!is_string($body['_csrf'])) {
-            return false;
-        }
-
-        return hash_equals($this->get(), $body['_csrf']);
+        return hash_equals($this->get(), $this->request->csrf());
     }
 }
