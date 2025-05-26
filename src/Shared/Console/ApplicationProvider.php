@@ -4,15 +4,6 @@ declare(strict_types=1);
 
 namespace App\Shared\Console;
 
-use App\Shared\Schema\Provider as SchemaProvider;
-use App\Shared\Kernel\AppDir;
-use App\Shared\Env\Env;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
-use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;
-use Doctrine\Migrations\DependencyFactory;
-use Doctrine\Migrations\Provider\SchemaProvider as DoctrineSchemaProvider;
-use Doctrine\Migrations\Tools\Console\Command as DoctrineCommand;
 use Generator;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command as SymfonyCommnd;
@@ -25,7 +16,7 @@ final class ApplicationProvider
     public function __construct(
         private CommandDiscoverer $commandDiscoverer,
         private CommandDefinitionResolver $commandDefinitionResolver,
-        private SchemaProvider $schemaProvider,
+        private SymfonyCommandProviderDiscoverer $symfonyCommandProviderDiscoverer
     ) {
     }
 
@@ -36,7 +27,11 @@ final class ApplicationProvider
         foreach ($this->commands() as $command) {
             $application->add($this->symfony($command));
         }
-        $this->doctrine($application);
+        foreach ($this->symfonyCommandProviderDiscoverer->instances() as $provider) {
+            foreach ($provider->__invoke() as $command) {
+                $application->add($command);
+            }
+        }
         return $application;
     }
 
@@ -75,62 +70,6 @@ final class ApplicationProvider
         }
 
         return $bridge;
-    }
-
-    private function doctrine(Application $application): void
-    {
-        $container = Container::container();
-        $appDir = $container->get(AppDir::class);
-        $env = $container->get(Env::class);
-        $connection = DriverManager::getConnection(
-            params: [
-                'dbname' => $env->APP_DB_NAME(),
-                'driver' => 'pdo_mysql',
-                'host' => $env->APP_DB_HOST(),
-                'password' => $env->APP_DB_PASS(),
-                'user' => $env->APP_DB_USER(),
-            ],
-        );
-        $di = DependencyFactory::fromConnection(
-            configurationLoader: new ConfigurationArray([
-                'table_storage' => [
-                    'table_name' => 'doctrine_migration_versions',
-                    'version_column_name' => 'version',
-                    'version_column_length' => 191,
-                    'executed_at_column_name' => 'executed_at',
-                    'execution_time_column_name' => 'execution_time',
-                ],
-                'migrations_paths' => [
-                    'Migrations' => $appDir->__invoke() . '/tools/migrations',
-                ],
-                'all_or_nothing' => true,
-                'transactional' => true,
-                'check_database_platform' => true,
-                'organize_migrations' => 'none',
-                'connection' => null,
-                'em' => null,
-            ]),
-            connectionLoader: new ExistingConnection(
-                connection: $connection,
-            ),
-        );
-        $di->setDefinition(
-            id: DoctrineSchemaProvider::class,
-            service: fn () => $this->schemaProvider,
-        );
-        $application->addCommands([
-            (new DoctrineCommand\DiffCommand($di))->setName('app:db:diff'),
-            // (new DoctrineCommand\DumpSchemaCommand($di))->setName('app:db:dump-schema'),
-            // (new DoctrineCommand\ExecuteCommand($di))->setName('app:db:migrations:execute'),
-            // (new DoctrineCommand\GenerateCommand($di))->setName('app:db:migrations:generate'),
-            // (new DoctrineCommand\LatestCommand($di))->setName('app:db:migrations:latest'),
-            // (new DoctrineCommand\ListCommand($di))->setName('app:db:migrations:list'),
-            (new DoctrineCommand\MigrateCommand($di))->setName('app:db:migrate'),
-            // (new DoctrineCommand\RollupCommand($di))->setName('app:db:migrations:rollup'),
-            // (new DoctrineCommand\StatusCommand($di))->setName('app:db:migrations:status'),
-            // (new DoctrineCommand\SyncMetadataCommand($di))->setName('app:db:migrations:sync-metadata'),
-            // (new DoctrineCommand\VersionCommand($di))->setName('app:db:migrations:version'),
-        ]);
     }
 
     /**
