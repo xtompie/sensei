@@ -6,10 +6,12 @@ namespace App\Shared\Http;
 
 class Flash
 {
+    private SessionEntry $sessionEntry;
+
     public function __construct(
-        protected SessionEntry $sessionEntry,
+        SessionEntryFactory $sessionEntryFactory,
     ) {
-        $this->sessionEntry = $sessionEntry->withProperty('shared.flash');
+        $this->sessionEntry = $sessionEntryFactory->__invoke('shared.flash');
     }
 
     /**

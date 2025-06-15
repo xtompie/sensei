@@ -10,6 +10,8 @@ use App\Shared\Http\Csrf;
 use App\Shared\Http\Request;
 use App\Shared\Http\Url;
 use App\Shared\I18n\Translator;
+use App\Shared\Io\Data;
+use App\Shared\Io\Errors;
 use App\Shared\Kernel\AppDir;
 use App\Shared\Kernel\Debug;
 use Throwable;
@@ -141,6 +143,41 @@ final class Tpl
         return $this->service(\App\Sentry\System\Sentry::class)->__invoke($rid);
     }
 
+    public function plain(string $file): string
+    {
+        $content = file_get_contents($this->dir . $file);
+        return $content !== false ? $content : '';
+    }
+
+    public function js(string $file): string
+    {
+        return '<script>' . $this->plain($file) . '</script>';
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function scan(string $pattern): array
+    {
+        $files = [];
+        $globResult = glob($this->dir . $pattern);
+        if ($globResult !== false) {
+            foreach ($globResult as $file) {
+                $files[] = substr($file, strlen($this->dir));
+            }
+        }
+        return $files;
+    }
+
+    public function harvest(string $pattern): string
+    {
+        $out = '';
+        foreach ($this->scan($pattern) as $file) {
+            $out .= $this->render($file);
+        }
+        return $out;
+    }
+
     public function csrf(): string
     {
         return $this->csrf->get();
@@ -174,5 +211,18 @@ final class Tpl
     public function url(string $controller, array $parameters = []): string
     {
         return $this->url->__invoke(controller: $controller, parameters: $parameters);
+    }
+
+    public function errors(): Errors
+    {
+        return $this->service(Errors::class);
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function data(): array
+    {
+        return $this->service(Data::class)->get();
     }
 }

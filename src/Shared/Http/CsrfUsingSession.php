@@ -8,11 +8,13 @@ use Ramsey\Uuid\Uuid;
 
 class CsrfUsingSession implements Csrf
 {
+    private SessionEntry $sessionEntry;
+
     public function __construct(
         private Request $request,
-        private SessionEntry $sessionEntry,
+        SessionEntryFactory $sessionEntryFactory,
     ) {
-        $this->sessionEntry = $sessionEntry->withProperty('shared.csrf');
+        $this->sessionEntry = $sessionEntryFactory->__invoke('shared.csrf');
     }
 
     public function get(): string

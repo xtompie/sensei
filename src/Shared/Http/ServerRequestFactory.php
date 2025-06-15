@@ -30,10 +30,10 @@ class ServerRequestFactory extends DiactorosServerRequestFactory
      *
      * @see fromServer()
      *
-     * @param null|array<string,string> $server $_SERVER superglobal
-     * @param null|array<string,string> $query $_GET superglobal
-     * @param null|array<string,string|string[]> $body $_POST superglobal (values can be strings or arrays of strings)
-     * @param null|array<string,string> $cookies $_COOKIE superglobal
+     * @param null|array<mixed> $server $_SERVER superglobal
+     * @param null|array<mixed> $query $_GET superglobal
+     * @param null|array<mixed> $body $_POST superglobal (values can be strings or arrays of strings)
+     * @param null|array<mixed> $cookies $_COOKIE superglobal
      * @param null|array<string,array{name:string,type:string,tmp_name:string,error:int,size:int}> $files $_FILES superglobal
      *     If present, the
      *     generated request will be passed to this instance and the result

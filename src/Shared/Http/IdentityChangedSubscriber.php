@@ -17,6 +17,8 @@ class IdentityChangedSubscriber implements Subscriber
     public function __invoke(IdentityChanged $identityChanged): void
     {
         $this->csrf->revoke();
-        $this->session->regenerateId();
+        if ($this->session instanceof SessionNative) {
+            $this->session->regenerateId();
+        }
     }
 }

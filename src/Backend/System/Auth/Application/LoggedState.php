@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace App\Backend\System\Auth\Application;
 
 use App\Shared\Http\SessionEntry;
+use App\Shared\Http\SessionEntryFactory;
 
-class LoggedState
+final class LoggedState
 {
+    private SessionEntry $sessionEntry;
+
     public function __construct(
-        private SessionEntry $sessionEntry,
+        SessionEntryFactory $sessionEntryFactory,
     ) {
-        $this->sessionEntry = $sessionEntry->withProperty('backend.system.auth.id');
+        $this->sessionEntry = $sessionEntryFactory->__invoke('backend.system.auth.id');
     }
 
     public function __invoke(): ?string

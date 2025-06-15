@@ -22,7 +22,7 @@ class HookOptimisticLockVersion implements HookSync
 
     public function syncFutureProjection(array $present, array $future): array
     {
-        $future[$this->field] = $present[$this->field] + 1;
+        $future[$this->field] = $present[$this->field] + 1; // @phpstan-ignore-line
 
         return $future;
     }

@@ -12,9 +12,6 @@ final class Reliable
         if ($threshold < 1 || $threshold > $attempts) {
             throw new \InvalidArgumentException('Threshold must be between 1 and attempts.');
         }
-        if (!is_callable($callback)) {
-            throw new \InvalidArgumentException('Callback must be callable.');
-        }
 
         $successes = 0;
 

@@ -22,6 +22,7 @@ final class Request extends ServerRequest implements Provider
 
     public static function provide(string $abstract, Container $container): object
     {
+        /** @var array<string, array{name: string, type: string, tmp_name: string, error: int, size: int}> $_FILES */
         return ServerRequestFactory::fromGlobals(
             server: $_SERVER,
             query: $_GET,

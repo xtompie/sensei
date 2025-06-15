@@ -15,16 +15,18 @@ use Generator;
 abstract class Discoverer implements Optimizer
 {
     /**
-     * @param array<class-string<T>>|null $discovered
-     * @param array<class-string<T>>|null $classes
-     * @param array<T>|null $instances
+     * @param array<class-string<T>> $discovered
+     * @param array<class-string<T>> $classes
+     * @param array<T> $instances
      */
     public function __construct(
         private Source $source,
         private OptimizeDir $optimizeDir,
-        private ?array $discovered = null,
-        private ?array $classes = null,
-        private ?array $instances = null,
+        private array $discovered = [],
+        private array $classes = [],
+        private array $instances = [],
+        private bool $instancesReady = false,
+        private bool $classesReady = false,
     ) {
     }
 
@@ -45,7 +47,7 @@ abstract class Discoverer implements Optimizer
      */
     protected function discovered(): Generator
     {
-        if ($this->discovered === null) {
+        if ($this->discovered === []) {
             $this->discovered = $this->sort(array_values(iterator_to_array($this->source->classes(
                 instanceof: $this->instanceof(),
                 suffix: $this->suffix(),
@@ -77,12 +79,13 @@ abstract class Discoverer implements Optimizer
      */
     public function classes(): Generator
     {
-        if ($this->classes === null) {
+        if (!$this->classesReady) {
             if (file_exists($this->cache())) {
                 $this->classes = require $this->cache();
             } else {
                 $this->classes = iterator_to_array($this->discovered());
             }
+            $this->classesReady = true;
         }
 
         yield from $this->classes;
@@ -93,15 +96,15 @@ abstract class Discoverer implements Optimizer
      */
     public function instances(): Generator
     {
-        if ($this->instances === null) {
+        if (!$this->instancesReady) {
             $container = Container::container();
-            $this->instances = [];
             foreach ($this->classes() as $class) {
                 /** @var T $service */
                 /** @var class-string<object> $class */
                 $service = $container->get($class);
                 $this->instances[] = $service;
             }
+            $this->instancesReady = true;
         }
 
         yield from $this->instances;
