@@ -1,5 +1,6 @@
 {
+    "type": "project",
     "require": {
-        "friendsofphp/php-cs-fixer": "^3.20.0"
+        "friendsofphp/php-cs-fixer": "^3.75.0"
     }
 }
