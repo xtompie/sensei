@@ -1,0 +1,8 @@
+deptrac:
+  ruleset:
+    Backend: [ Shared, Media, Sentry ]
+    Example: [ Shared ]
+    Image: [ Media, Shared ]
+    Media: [ Sentry, Shared ]
+    Sentry: [ Shared ]
+    Shared: [ Sentry ]

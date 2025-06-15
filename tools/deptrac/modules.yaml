@@ -1,15 +1,7 @@
+imports:
+  - modules.list.yaml
+  - modules.map.yaml
 deptrac:
   paths:
     - ../../src
-  layers:
-    - { name: Example, collectors: [ { type: directory, value: src/Example/.* } ] }
-    - { name: Image, collectors: [ { type: directory, value: src/Image/.* } ] }
-    - { name: Media, collectors: [ { type: directory, value: src/Media/.* } ] }
-    - { name: Sentry, collectors: [ { type: directory, value: src/Sentry/.* } ] }
-    - { name: Shared, collectors: [ { type: directory, value: src/Shared/.* } ] }
-  ruleset:
-    Example: [ Shared ]
-    Image: [ Media, Shared ]
-    Media: [ Sentry, Shared ]
-    Sentry: [ Shared ]
-    Shared: [ Sentry ]
+
