@@ -29,8 +29,7 @@ class Auth
 
     public function passwordEquals(string $password): bool
     {
-        return $this->data['password'] !== null
-            && $this->data['password'] !== ''
+        return $this->data['password'] !== ''
             && password_verify($password, $this->data['password'])
         ;
     }
