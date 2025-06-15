@@ -13,8 +13,7 @@
         foreach (
             $this->service(\App\Backend\System\Resource\Repository\Repositories::class)
                 ->get($reltype)
-                ->findAll(where: ['id' => array_column($value, 'id')])
-            as $relmany_entities_entity
+                ->findAll(where: ['id' => array_column($value, 'id')]) as $relmany_entities_entity
         ) {
             $relmany_entities[$relmany_entities_entity['id']] = $relmany_entities_entity;
         }
