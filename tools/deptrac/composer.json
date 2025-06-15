@@ -1,4 +1,5 @@
 {
+    "type": "project",
     "require-dev": {
         "qossmic/deptrac": "^2.0"
     }
