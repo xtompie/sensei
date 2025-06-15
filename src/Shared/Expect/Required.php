@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Shared\Expect;
 
 use InvalidArgumentException;
-use App\Shared\Expect\Optional;
 
 final class Required
 {
