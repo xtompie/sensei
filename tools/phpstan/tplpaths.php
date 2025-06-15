@@ -5,6 +5,11 @@ function src(): string
     return realpath(__DIR__ . '/../../src');
 }
 
+function dest(): string
+{
+    return __DIR__ . '/tplpaths.neon';
+}
+
 function rel(string $path, string $base): string
 {
     $relative = substr($path, strlen($base) + 1);
@@ -42,20 +47,20 @@ function tpls(): Generator
     }
 }
 
-function out(string $content): void
+function writeln(string $content): void
 {
-    file_put_contents(__DIR__ . '/tplpaths.neon', $content, FILE_APPEND);
+    file_put_contents(dest(), $content . "\n", FILE_APPEND);
 }
 
 function clear(): void
 {
-    file_put_contents(__DIR__ . '/tplpaths.neon', '');
+    file_put_contents(dest(), '');
 }
 
 clear();
-out("parameters:\n");
-out("    paths:\n");
+writeln("parameters:");
+writeln("    paths:");
 
 foreach (tpls() as $path) {
-    out("        - '" . $path . "'\n");
+    writeln("        - '$path'");
 }
