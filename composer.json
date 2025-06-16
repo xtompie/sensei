@@ -48,7 +48,7 @@
         "db:migrate-no-i": "php console app:db:migrate --no-interaction --allow-no-migration",
         "deptrac-install": "composer install --working-dir=tools/deptrac",
         "deptrac-l": "tools/deptrac/vendor/bin/deptrac analyze --config-file=tools/deptrac/layers.yaml --cache-file=tools/deptrac/.layers.cache",
-        "deptrac-m": "php tools/deptrac/modules.list.php &&  ./tools/deptrac/vendor/bin/deptrac analyze --config-file=tools/deptrac/modules.yaml --cache-file=tools/deptrac/.modules.cache",
+        "deptrac-m": "php tools/deptrac/modules.list.php && ./tools/deptrac/vendor/bin/deptrac analyze --config-file=tools/deptrac/modules.yaml --cache-file=tools/deptrac/.modules.cache",
         "mrd": "php tools/mrd/mrd.php",
         "php-cs-fixer": "tools/php-cs-fixer/vendor/bin/php-cs-fixer --config=tools/php-cs-fixer/.php-cs-fixer.php fix src",
         "php-cs-fixer-install": "composer install --working-dir=tools/php-cs-fixer",
