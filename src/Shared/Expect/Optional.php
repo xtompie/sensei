@@ -4,27 +4,22 @@ declare(strict_types=1);
 
 namespace App\Shared\Expect;
 
-use App\Shared\Dig\Dig;
-
 final class Optional
 {
     /**
-     * @param array<string|int> $path
      * @return array<mixed>|null
      */
-    public static function array(mixed $data, array $path): ?array
+    public static function array(mixed $data): ?array
     {
-        $result = Dig::dig($data, $path);
-        return is_array($result) ? $result : null;
+        return is_array($data) ? $data : null;
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<int, int>|null
      */
-    public static function arrayIntInt(mixed $data, array $path): ?array
+    public static function arrayIntInt(mixed $data): ?array
     {
-        $result = self::array($data, $path);
+        $result = self::array($data);
         if ($result !== null) {
             foreach ($result as $key => $value) {
                 if (!is_int($key) || !is_int($value)) {
@@ -37,12 +32,11 @@ final class Optional
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<int, mixed>|null
      */
-    public static function arrayIntMixed(mixed $data, array $path): ?array
+    public static function arrayIntMixed(mixed $data): ?array
     {
-        $result = self::array($data, $path);
+        $result = self::array($data);
         if ($result !== null) {
             foreach ($result as $key => $_) {
                 if (!is_int($key)) {
@@ -54,12 +48,11 @@ final class Optional
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<int, string>|null
      */
-    public static function arrayIntString(mixed $data, array $path): ?array
+    public static function arrayIntString(mixed $data): ?array
     {
-        $result = self::array($data, $path);
+        $result = self::array($data);
         if ($result !== null) {
             foreach ($result as $key => $value) {
                 if (!is_int($key) || !is_string($value)) {
@@ -72,12 +65,11 @@ final class Optional
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<string, int>|null
      */
-    public static function arrayStringInt(mixed $data, array $path): ?array
+    public static function arrayStringInt(mixed $data): ?array
     {
-        $result = self::array($data, $path);
+        $result = self::array($data);
         if ($result !== null) {
             foreach ($result as $key => $value) {
                 if (!is_string($key) || !is_int($value)) {
@@ -90,12 +82,11 @@ final class Optional
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<string, mixed>|null
      */
-    public static function arrayStringMixed(mixed $data, array $path): ?array
+    public static function arrayStringMixed(mixed $data): ?array
     {
-        $result = self::array($data, $path);
+        $result = self::array($data);
         if ($result !== null) {
             foreach ($result as $key => $_) {
                 if (!is_string($key)) {
@@ -107,12 +98,11 @@ final class Optional
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<string, string>|null
      */
-    public static function arrayStringString(mixed $data, array $path): ?array
+    public static function arrayStringString(mixed $data): ?array
     {
-        $result = self::array($data, $path);
+        $result = self::array($data);
         if ($result !== null) {
             foreach ($result as $key => $value) {
                 if (!is_string($key) || !is_string($value)) {
@@ -124,39 +114,23 @@ final class Optional
         return $result;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
-    public static function bool(mixed $data, array $path): ?bool
+    public static function bool(mixed $data): ?bool
     {
-        $result = Dig::dig($data, $path);
-        return is_bool($result) ? $result : null;
+        return is_bool($data) ? $data : null;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
-    public static function float(mixed $data, array $path): ?float
+    public static function float(mixed $data): ?float
     {
-        $result = Dig::dig($data, $path);
-        return is_float($result) ? $result : null;
+        return is_float($data) ? $data : null;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
-    public static function int(mixed $data, array $path): ?int
+    public static function int(mixed $data): ?int
     {
-        $result = Dig::dig($data, $path);
-        return is_int($result) ? $result : null;
+        return is_int($data) ? $data : null;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
-    public static function string(mixed $data, array $path): ?string
+    public static function string(mixed $data): ?string
     {
-        $result = Dig::dig($data, $path);
-        return is_string($result) ? $result : null;
+        return is_string($data) ? $data : null;
     }
 }
