@@ -9,7 +9,6 @@ use InvalidArgumentException;
 final class Required
 {
     /**
-     * @param array<string|int> $path
      * @return array<mixed>
      */
     public static function array(mixed $data): array
@@ -22,7 +21,6 @@ final class Required
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<int, int>
      */
     public static function arrayIntInt(mixed $data): array
@@ -35,7 +33,6 @@ final class Required
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<int, mixed>
      */
     public static function arrayIntMixed(mixed $data): array
@@ -48,7 +45,6 @@ final class Required
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<int, string>
      */
     public static function arrayIntString(mixed $data): array
@@ -61,7 +57,6 @@ final class Required
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<string, int>
      */
     public static function arrayStringInt(mixed $data): array
@@ -74,7 +69,6 @@ final class Required
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<string, mixed>
      */
     public static function arrayStringMixed(mixed $data): array
@@ -87,7 +81,6 @@ final class Required
     }
 
     /**
-     * @param array<string|int> $path
      * @return array<string, string>
      */
     public static function arrayStringString(mixed $data): array
@@ -99,9 +92,6 @@ final class Required
         return $result;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
     public static function bool(mixed $data): bool
     {
         $result = Optional::bool($data);
@@ -111,9 +101,6 @@ final class Required
         return $result;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
     public static function float(mixed $data): float
     {
         $result = Optional::float($data);
@@ -123,9 +110,6 @@ final class Required
         return $result;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
     public static function int(mixed $data): int
     {
         $result = Optional::int($data);
@@ -135,9 +119,6 @@ final class Required
         return $result;
     }
 
-    /**
-     * @param array<string|int> $path
-     */
     public static function string(mixed $data): string
     {
         $result = Optional::string($data);
