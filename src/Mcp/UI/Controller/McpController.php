@@ -13,7 +13,6 @@ use App\Shared\Http\Route\POST;
 use App\Mcp\Application\Service\Server\Server;
 use App\Mcp\Application\Model\Specification;
 use App\Mcp\Application\Model\Tool;
-use App\Mcp\Application\Model\Method;
 use App\Mcp\Application\Model\Parameter;
 use App\Mcp\Application\Model\NumberType;
 
@@ -27,28 +26,23 @@ class McpController implements Controller
 
     public function __invoke(Request $request): Response
     {
-        return $this->server->__invoke($request, $this->specification(), '/mcp');
+        return $this->server->__invoke($request, $this->specification());
     }
 
     private function specification(): Specification
     {
         return new Specification(tools: [
             new Tool(
-                id: 'calculator',
-                description: 'A simple calculator for basic arithmetic operations',
-                methods: [
-                    new Method(
-                        name: 'add',
-                        description: 'Add two numbers together',
-                        handler: $this->add(...),
-                        parameters: [
-                            new Parameter(name: 'a', type: new NumberType(), required: true),
-                            new Parameter(name: 'b', type: new NumberType(), required: true),
-                        ],
-                        return: new NumberType()
-                    )
-                ]
-            )
+                name: 'calculator.add',
+                description: 'Add two numbers together',
+                handler: $this->add(...),
+                parameters: [
+                    new Parameter(name: 'a', type: new NumberType(), required: true),
+                    new Parameter(name: 'b', type: new NumberType(), required: true),
+                ],
+                return: new NumberType(),
+                title: 'Calculator Add'
+            ),
         ]);
     }
 

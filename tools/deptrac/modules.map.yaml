@@ -4,5 +4,6 @@ deptrac:
     Example: [ Shared ]
     Image: [ Media, Shared ]
     Media: [ Sentry, Shared ]
+    Mcp: [ Shared ]
     Sentry: [ Shared ]
     Shared: [ Sentry ]

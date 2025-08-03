@@ -12,47 +12,60 @@ use App\Mcp\Application\Model\NumberType;
 use App\Mcp\Application\Model\BooleanType;
 use App\Mcp\Application\Model\ArrayType;
 use App\Mcp\Application\Model\ObjectType;
+use InvalidArgumentException;
 
 final class HandleToolsList
 {
+    public function __construct(
+        private ResponseFactory $responseFactory,
+    ) {
+    }
+
     public function __invoke(Specification $specification): Response
     {
         $tools = [];
 
-        foreach ($specification->tools as $tool) {
-            $toolData = [
-                'name' => $tool->id,
-                'description' => $tool->description,
-                'inputSchema' => [
-                    'type' => 'object',
-                    'properties' => [],
-                    'required' => []
-                ]
+        foreach ($specification->tools() as $tool) {
+            $inputSchema = [
+                'type' => 'object',
+                'properties' => [],
+                'required' => [],
             ];
 
-            foreach ($tool->methods as $method) {
-                $methodSchema = [
-                    'type' => 'object',
-                    'properties' => [],
-                    'required' => []
-                ];
-
-                foreach ($method->parameters as $parameter) {
-                    $methodSchema['properties'][$parameter->name] = $this->typeToJsonSchema($parameter->type);
-                    if ($parameter->required) {
-                        $methodSchema['required'][] = $parameter->name;
-                    }
+            foreach ($tool->parameters() as $parameter) {
+                $inputSchema['properties'][$parameter->name] = $this->typeToJsonSchema($parameter->type);
+                if ($parameter->required) {
+                    $inputSchema['required'][] = $parameter->name;
                 }
-
-                $toolData['inputSchema']['properties'][$method->name] = $methodSchema;
             }
 
-            $tools[] = $toolData;
+            $toolDefinition = [
+                'name' => $tool->name(),
+                'description' => $tool->description(),
+                'inputSchema' => $inputSchema,
+            ];
+
+            if ($tool->title() !== null) {
+                $toolDefinition['title'] = $tool->title();
+            }
+
+            if ($tool->outputSchema() !== null) {
+                $toolDefinition['outputSchema'] = $this->typeToJsonSchema($tool->outputSchema());
+            }
+
+            if ($tool->annotations() !== null) {
+                $toolDefinition['annotations'] = $tool->annotations();
+            }
+
+            $tools[] = $toolDefinition;
         }
 
-        return Response::json(['tools' => $tools]);
+        return $this->responseFactory->success(['tools' => $tools]);
     }
 
+    /**
+     * @return array<string,mixed>
+     */
     private function typeToJsonSchema(Type $type): array
     {
         if ($type instanceof StringType) {
@@ -70,7 +83,7 @@ final class HandleToolsList
         if ($type instanceof ArrayType) {
             return [
                 'type' => 'array',
-                'items' => $this->typeToJsonSchema($type->items)
+                'items' => $this->typeToJsonSchema($type->items),
             ];
         }
 
@@ -78,7 +91,7 @@ final class HandleToolsList
             $schema = [
                 'type' => 'object',
                 'properties' => [],
-                'required' => []
+                'required' => [],
             ];
 
             foreach ($type->properties as $name => $propertyType) {
@@ -88,6 +101,6 @@ final class HandleToolsList
             return $schema;
         }
 
-        return ['type' => 'string'];
+        throw new InvalidArgumentException('Unsupported type for JSON schema conversion: ' . get_class($type));
     }
 }
