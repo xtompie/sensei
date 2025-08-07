@@ -50,6 +50,7 @@
         "deptrac-l": "tools/deptrac/vendor/bin/deptrac analyze --config-file=tools/deptrac/layers.yaml --cache-file=tools/deptrac/.layers.cache",
         "deptrac-m": "php tools/deptrac/modules.list.php && ./tools/deptrac/vendor/bin/deptrac analyze --config-file=tools/deptrac/modules.yaml --cache-file=tools/deptrac/.modules.cache",
         "mrd": "php tools/mrd/mrd.php",
+        "optimize": "php console app:optimize",
         "php-cs-fixer": "tools/php-cs-fixer/vendor/bin/php-cs-fixer --config=tools/php-cs-fixer/.php-cs-fixer.php fix src",
         "php-cs-fixer-install": "composer install --working-dir=tools/php-cs-fixer",
         "phpstan": "./tools/phpstan/vendor/bin/phpstan analyse --memory-limit=2G --configuration=tools/phpstan/phpstan.neon",
