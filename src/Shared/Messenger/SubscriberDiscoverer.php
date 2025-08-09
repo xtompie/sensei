@@ -11,17 +11,18 @@ use App\Shared\Optimize\OptimizeDir;
 use App\Shared\Optimize\Optimizer;
 use Generator;
 use ReflectionClass;
+use ReflectionMethod;
 
 class SubscriberDiscoverer implements Optimizer
 {
     /**
-     * @param array<class-string, array<class-string<Subscriber>>>|null $classes
-     * @param array<class-string, array<Subscriber>> $instances
+     * @param array<class-string, array<string>>|null $methods
+     * @param array<class-string, array<array{object, string}>> $instances
      */
     public function __construct(
         private Source $source,
         private OptimizeDir $optimizeDir,
-        private ?array $classes = null,
+        private ?array $methods = null,
         private array $instances = [],
     ) {
     }
@@ -39,76 +40,107 @@ class SubscriberDiscoverer implements Optimizer
         );
     }
 
-    private function initClasses(): void
+    private function initMethods(): void
     {
         if (file_exists($this->cache())) {
-            $this->classes = require $this->cache();
+            $this->methods = require $this->cache();
         } else {
-            $this->classes = $this->discover();
+            $this->methods = $this->discover();
         }
     }
 
     /**
-     * @return array<class-string, array<class-string<Subscriber>>>
+     * @return array<class-string, array<string>>
      */
     private function discover(): array
     {
         $index = [];
 
+        // Scan classes ending with "Subscriber"
         foreach ($this->source->classes(instanceof: Subscriber::class, suffix: 'Subscriber') as $subscriber) {
-            $invokeMethod = (new ReflectionClass($subscriber))->getMethod('__invoke');
-            $parameters = $invokeMethod->getParameters();
-            $messageParameter = $parameters[0];
-            $messageType = $messageParameter->getType();
-
-            if ($messageType instanceof \ReflectionNamedType && !$messageType->isBuiltin()) {
-                $messageClass = $messageType->getName();
-            } else {
-                continue;
-            }
-
-            /** @var class-string $messageClass */
-            $index[$messageClass][] = $subscriber;
+            $this->discoverClass($subscriber, $index);
         }
 
-        foreach ($index as $messageClass => &$subscribers) {
-            usort($subscribers, function ($a, $b) {
-                $priorityA = is_subclass_of($a, Priority::class) ? $a::priority() : 0;
-                $priorityB = is_subclass_of($b, Priority::class) ? $b::priority() : 0;
+        // Scan classes ending with "Sage" (for backward compatibility)
+        foreach ($this->source->classes(instanceof: Subscriber::class, suffix: 'Sage') as $sage) {
+            $this->discoverClass($sage, $index);
+        }
+
+        foreach ($index as $messageClass => &$subscriberHandlers) {
+            usort($subscriberHandlers, function ($a, $b) {
+                [$classA] = explode('::', $a);
+                [$classB] = explode('::', $b);
+                $priorityA = is_subclass_of($classA, Priority::class) ? $classA::priority() : 0;
+                $priorityB = is_subclass_of($classB, Priority::class) ? $classB::priority() : 0;
                 return $priorityB <=> $priorityA;
             });
         }
-        unset($subscribers);
+        unset($subscriberHandlers);
 
         return $index;
     }
 
     /**
-     * @param class-string $message
-     * @return Generator<int, class-string<Subscriber>>
+     * @param class-string $handlerClass
+     * @param array<class-string, array<string>> $index
      */
-    private function classes(string $message): Generator
+    private function discoverClass(string $handlerClass, array &$index): void
     {
-        if ($this->classes === null) {
-            $this->initClasses();
-        }
+        $reflection = new ReflectionClass($handlerClass);
+        $methods = $reflection->getMethods(ReflectionMethod::IS_PUBLIC);
 
-        if (isset($this->classes[$message])) {
-            yield from $this->classes[$message];
+        foreach ($methods as $method) {
+            // Skip magic methods except __invoke
+            if (str_starts_with($method->getName(), '__') && $method->getName() !== '__invoke') {
+                continue;
+            }
+
+            $parameters = $method->getParameters();
+            if (empty($parameters)) {
+                continue;
+            }
+
+            $messageParameter = $parameters[0];
+            $messageType = $messageParameter->getType();
+
+            if ($messageType instanceof \ReflectionNamedType && !$messageType->isBuiltin()) {
+                $messageClass = $messageType->getName();
+                /** @var class-string $messageClass */
+                $index[$messageClass][] = $handlerClass . '::' . $method->getName();
+            }
         }
     }
 
     /**
      * @param class-string $message
-     * @return Generator<int, Subscriber>
+     * @return Generator<int, string>
+     */
+    private function methods(string $message): Generator
+    {
+        if ($this->methods === null) {
+            $this->initMethods();
+        }
+
+        if (isset($this->methods[$message])) {
+            yield from $this->methods[$message];
+        }
+    }
+
+    /**
+     * @param class-string $message
+     * @return Generator<int, array{object, string}>
      */
     public function instances(string $message): Generator
     {
         if (!array_key_exists($message, $this->instances)) {
             $this->instances[$message] = [];
             $container = Container::container();
-            foreach ($this->classes($message) as $subscriber) {
-                $this->instances[$message][] = $container->get($subscriber);
+
+            foreach ($this->methods($message) as $methodSignature) {
+                [$subscriberClass, $methodName] = explode('::', $methodSignature);
+                /** @var class-string $subscriberClass */
+                $subscriberInstance = $container->get($subscriberClass);
+                $this->instances[$message][] = [$subscriberInstance, $methodName];
             }
         }
 
