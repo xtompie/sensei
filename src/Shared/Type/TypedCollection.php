@@ -52,7 +52,7 @@ abstract class TypedCollection
         if ($fn === null) {
             $fn = fn (mixed $v, int $k): bool => !empty($v);
         }
-        return new static(array_values(array_filter($this->collection, $fn, ARRAY_FILTER_USE_BOTH))); // @phpstan-ignore-line
+        return new static(array_values(array_filter($this->collection, $fn, ARRAY_FILTER_USE_BOTH)));
     }
 
     /**
