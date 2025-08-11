@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Http;
 
+use App\Shared\Typed\Typed;
 use Xtompie\Container\Container;
 use Xtompie\Container\Provider;
 use Laminas\Diactoros\ServerRequest;
@@ -11,7 +12,6 @@ use Laminas\Diactoros\UploadedFile;
 use RecursiveArrayIterator;
 use RecursiveIteratorIterator;
 use Xtompie\Result\ErrorCollection;
-use Xtompie\Typed\Typed;
 
 final class Request extends ServerRequest implements Provider
 {
