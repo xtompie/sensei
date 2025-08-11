@@ -36,7 +36,7 @@
         "xtompie/dao": "^1.10",
         "xtompie/monitor": "^1.3",
         "xtompie/result": "^1.9",
-        "xtompie/tpl": "^1.0",
+        "xtompie/tpl": "^2.0",
         "xtompie/typed": "^5.0",
         "xtompie/validation": "^4.2"
     },
@@ -74,7 +74,7 @@
         ],
         "setup": "composer install && php console app:env:setup",
         "test": "./vendor/bin/pest",
-        "tpl-audit": "./vendor/bin/xtompie-tpl-audit.sh -p src -s .tpl.php",
+        "tpl-audit": "./vendor/bin/xtompie-tpl-audit.php -p src -s .tpl.php",
         "tpl-cs-fixer": "tools/tpl-cs-fixer/vendor/bin/php-cs-fixer --config=tools/tpl-cs-fixer/.php-cs-fixer.php fix",
         "tpl-cs-fixer-install": "composer install --working-dir=tools/tpl-cs-fixer",
         "up": [

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df8586de5c5bfed67e61c64bf01c52e3",
+    "content-hash": "1c746f59e2754472496c5c2a88f28643",
     "packages": [
         {
             "name": "brick/math",
@@ -3869,20 +3869,20 @@
         },
         {
             "name": "xtompie/tpl",
-            "version": "1.0.0",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xtompie/tpl.git",
-                "reference": "3842498ddd2165acb6feb29364433e2e9240811a"
+                "reference": "133a51c339960f5eff4c7e96e5531e6ceeafd3e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xtompie/tpl/zipball/3842498ddd2165acb6feb29364433e2e9240811a",
-                "reference": "3842498ddd2165acb6feb29364433e2e9240811a",
+                "url": "https://api.github.com/repos/xtompie/tpl/zipball/133a51c339960f5eff4c7e96e5531e6ceeafd3e5",
+                "reference": "133a51c339960f5eff4c7e96e5531e6ceeafd3e5",
                 "shasum": ""
             },
             "bin": [
-                "bin/xtompie-tpl-audit.sh"
+                "bin/xtompie-tpl-audit.php"
             ],
             "type": "library",
             "autoload": {
@@ -3908,9 +3908,9 @@
             ],
             "support": {
                 "issues": "https://github.com/xtompie/tpl/issues",
-                "source": "https://github.com/xtompie/tpl/tree/1.0.0"
+                "source": "https://github.com/xtompie/tpl/tree/2.0.0"
             },
-            "time": "2024-09-07T13:28:12+00:00"
+            "time": "2025-07-09T19:53:21+00:00"
         },
         {
             "name": "xtompie/typed",
