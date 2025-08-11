@@ -6,7 +6,7 @@ namespace App\Shared\Http;
 
 class Flash
 {
-    private SessionEntry $sessionEntry;
+    protected SessionEntry $sessionEntry;
 
     public function __construct(
         SessionEntryFactory $sessionEntryFactory,
